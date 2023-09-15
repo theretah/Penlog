@@ -1,0 +1,32 @@
+﻿@page
+@using Penlog.Utility;
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="container px-0">
+    <div class="col-9 mx-0">
+        @foreach (var post in Model.Posts)
+        {
+            <div class="row">
+                <div class="card my-3">
+                    <div class="card-body">
+                        @{
+                            var firstSentence = Html.Raw(post.Content.ShortenString(30));
+                        }
+                        <a asp-page="Post" asp-route-id="@post.Id" class="text-decoration-none link-dark">
+                            <h5 class="card-title">@post.Title</h5>
+                            <p class="card-text">@firstSentence</p>
+                        </a>
+                        <br />
+                        <a asp-page="Users/Details" asp-route-id="@post.AuthorId" class="text-decoration-none fs-6 text-dark fw-bold">@post.Author.UserName</a>
+                        <p style="font-size:.85rem;" class="text-secondary my-0">@((post.LastUpdated == null) ? post.CreatedDate : post.LastUpdated)</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-3">
+    </div>
+</div>

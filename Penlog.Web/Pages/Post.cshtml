@@ -1,0 +1,21 @@
+﻿@page
+@model Penlog.Web.Pages.PostModel
+@{
+    var lastUpdated = Model.Post.LastUpdated;
+    var createdDate = Model.Post.CreatedDate;
+}
+<h1 class="display-2">@Model.Post.Title</h1>
+
+
+
+<p class="fs-5 lh-base">
+    @Html.Raw(Model.Post.Content)
+</p>
+
+<p class="lh-base text-secondary" style="font-size:.85rem;">
+    Last Updated: @((lastUpdated == null) ?
+    createdDate.ToString("MMM/d/yyyy") : lastUpdated.Value.ToString("MMM/d/yyyy"))
+</p>
+<p class="lh-base">
+    Author: @Model.Post.Author.UserName
+</p>

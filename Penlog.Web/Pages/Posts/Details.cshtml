@@ -1,0 +1,13 @@
+﻿@page "{id}"
+@using System.Net;
+@using Microsoft.AspNetCore.Components;
+@model Penlog.Web.Pages.Posts.DetailsModel
+
+@{
+    var createdDate = Model.Post.CreatedDate;
+    var lastUpdated = Model.Post.LastUpdated;
+    string dateTimeFormat = "mmm/dd/yyyy - HH:mm";
+}
+<h1 class="display-2">@Model.Post.Title</h1>
+
+@Html.Raw(Model.Post.Content)

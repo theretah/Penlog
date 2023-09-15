@@ -1,0 +1,24 @@
+﻿@page
+@model Penlog.Web.Pages.Admin.Roles.IndexModel
+
+@foreach (var role in Model.Roles)
+{
+    <div class="card my-2">
+        <div class="card-body">
+            <h5 class="card-title">@role.Name</h5>
+            <form method="post">
+                <button type="submit" asp-page-handler="Delete" asp-route-roleId="@role.Id" class="btn btn-danger">Delete @role.Name</button>
+            </form>
+            <a type="button" asp-page="Edit/" asp-route-roleId="@role.Id" class="btn btn-secondary">Edit</a>
+        </div>
+    </div>
+}
+
+<form method="post">
+    <div class="mb-3">
+        <label for="roleNameInput" class="form-label">Role Name: </label>
+        <input asp-for="RoleName" type="text" class="form-control form-control-lg" id="roleNameInput">
+        <span asp-validation-for="RoleName" class="text-danger"></span>
+    </div>
+    <button type="submit" asp-page-handler="Create" class="btn btn-primary">Create Role</button>
+</form>

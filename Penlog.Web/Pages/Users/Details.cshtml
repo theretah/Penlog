@@ -1,0 +1,36 @@
+﻿@page "{userId}"
+@using Penlog.Utility;
+@model Penlog.Web.Pages.Users.DetailsModel
+
+<div class="container">
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4">
+            <div class="text-center">
+                <h4>
+                    @Model.Author.UserName
+                </h4>
+            </div>
+        </div>
+        <div class="col-4"></div>
+    </div>
+    <div class="row text-center">
+        <p>
+            Posts: (@Model.Author.PostsCount)
+        </p>
+        @foreach (var post in Model.Posts)
+        {
+            var firstSentence = Html.Raw(post.Content.ShortenString(30));
+            <div class="card my-3">
+                <div class="card-body">
+                    <a asp-page="Post" asp-route-id="@post.Id" class="text-decoration-none link-dark">
+                        <h5 class="card-title">@post.Title</h5>
+                        <p class="card-text">@firstSentence</p>
+                    </a>
+                    <br />
+                    <p style="font-size:.85rem;" class="text-secondary my-0">@((post.LastUpdated == null) ? post.CreatedDate : post.LastUpdated)</p>
+                </div>
+            </div>
+        }
+    </div>
+</div>

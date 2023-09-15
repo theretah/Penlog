@@ -1,0 +1,14 @@
+﻿@page
+@model Penlog.Web.Pages.Admin.Users.IndexModel
+
+@foreach(var user in Model.Users)
+{
+    <div class="card my-2">
+        <div class="card-body">
+            <h5 class="card-title">@user.UserName</h5>
+            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+            <p>@user.PostsCount Posts</p>
+            <a asp-page="/Users/Details" asp-route-userId="@user.Id" class="btn btn-primary">Profile</a>
+        </div>
+    </div>
+}

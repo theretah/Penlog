@@ -1,0 +1,26 @@
+﻿@page "{id}"
+@model Penlog.Web.Pages.Posts.EditModel
+
+<form method="post">
+    <div class="mb-3">
+        <label for="titleInput" class="form-label">Title: </label>
+        <input asp-for="Post.Title" type="text" class="form-control form-control-lg" id="titleInput">
+        <span asp-validation-for="Post.Content" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label for="contentInput" class="form-label">Content: </label>
+        <textarea asp-for="Post.Content" class="form-control" id="contentInput" rows="15"></textarea>
+        <span asp-validation-for="Post.Content" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
+
+@section Scripts{
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+        });
+    </script>
+}
