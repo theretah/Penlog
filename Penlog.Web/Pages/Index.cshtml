@@ -20,7 +20,7 @@
                             <p class="card-text">@firstSentence</p>
                         </a>
                         <br />
-                        <a asp-page="Users/Details" asp-route-id="@post.AuthorId" class="text-decoration-none fs-6 text-dark fw-bold">@post.Author.UserName</a>
+                        <a asp-page="/Users/Details" asp-route-id="@post.AuthorId" class="text-decoration-none fs-6 text-dark fw-bold">@post.Author.UserName</a>
                         <p style="font-size:.85rem;" class="text-secondary my-0">@((post.LastUpdated == null) ? post.CreatedDate : post.LastUpdated)</p>
                     </div>
                 </div>

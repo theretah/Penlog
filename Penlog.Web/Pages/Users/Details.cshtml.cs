@@ -18,9 +18,9 @@ namespace Penlog.Web.Pages.Users
         }
         public IEnumerable<Post> Posts { get; set; }
         public AppUser Author { get; set; }
-        public void OnGet(string userId)
+        public void OnGet(string id)
         {
-            Author = unit.Users.Get(userId);
+            Author = unit.Users.Get(id);
             Posts = unit.Posts.GetAll(p => p.AuthorId == Author.Id);
         }
     }
