@@ -11,7 +11,7 @@ using Penlog.Utility;
 using System.ComponentModel.DataAnnotations;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
-namespace Penlog.Web.Areas.Identity.Pages.Account
+namespace Penlog.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {

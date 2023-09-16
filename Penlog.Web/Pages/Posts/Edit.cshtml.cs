@@ -5,7 +5,7 @@ using NuGet.Configuration;
 using Penlog.Data.Repository.IRepository;
 using Penlog.Model.Entities;
 
-namespace Penlog.Web.Pages.Posts
+namespace Penlog.Pages.Posts
 {
     [Authorize]
     public class EditModel : PageModel

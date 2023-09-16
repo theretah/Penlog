@@ -5,7 +5,7 @@ using Penlog.Data.Repository.IRepository;
 using Penlog.Model.Entities;
 using System.Data;
 
-namespace Penlog.Web.Pages.Admin.Users
+namespace Penlog.Pages.Admin.Users
 {
     [Authorize(Roles = "Admin")]
     public class IndexModel : PageModel

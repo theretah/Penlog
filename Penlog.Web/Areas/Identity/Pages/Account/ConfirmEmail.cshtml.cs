@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Penlog.Model.Entities;
 using System.Text;
 
-namespace Penlog.Web.Areas.Identity.Pages.Account
+namespace Penlog.Areas.Identity.Pages.Account
 {
     public class ConfirmEmailModel : PageModel
     {

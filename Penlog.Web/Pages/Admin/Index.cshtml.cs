@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Penlog.Web.Pages.Admin
+namespace Penlog.Pages.Admin
 {
     [Authorize(Roles = "Admin")]
     public class IndexModel : PageModel

@@ -10,7 +10,7 @@ using System.Globalization;
 using System.Text;
 using System.Text.Encodings.Web;
 
-namespace Penlog.Web.Areas.Identity.Pages.Account.Manage
+namespace Penlog.Areas.Identity.Pages.Account.Manage
 {
     public class EnableAuthenticatorModel : PageModel
     {

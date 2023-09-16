@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Penlog.Model.Entities;
 
-namespace Penlog.Web.Areas.Identity.Pages.Account.Manage
+namespace Penlog.Areas.Identity.Pages.Account.Manage
 {
     public class PersonalDataModel : PageModel
     {

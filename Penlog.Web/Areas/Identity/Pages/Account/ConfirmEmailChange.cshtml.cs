@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 
-namespace Penlog.Web.Areas.Identity.Pages.Account
+namespace Penlog.Areas.Identity.Pages.Account
 {
     public class ConfirmEmailChangeModel : PageModel
     {

@@ -10,7 +10,7 @@ using Penlog.Model.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
-namespace Penlog.Web.Areas.Identity.Pages.Account.Manage
+namespace Penlog.Areas.Identity.Pages.Account.Manage
 {
     [Authorize]
     public class IndexModel : PageModel

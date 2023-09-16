@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Penlog.Model.Entities;
 
-namespace Penlog.Web.Areas.Identity.Pages.Account
+namespace Penlog.Areas.Identity.Pages.Account
 {
     public class LogoutModel : PageModel
     {

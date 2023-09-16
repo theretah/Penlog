@@ -2,7 +2,7 @@
 using Penlog.Data.Repository.IRepository;
 using Penlog.Model.Entities;
 
-namespace Penlog.Web.Pages
+namespace Penlog.Pages
 {
     public class IndexModel : PageModel
     {

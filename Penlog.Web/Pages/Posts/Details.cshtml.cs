@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Penlog.Data.Repository.IRepository;
 using Penlog.Model.Entities;
 
-namespace Penlog.Web.Pages.Posts
+namespace Penlog.Pages.Posts
 {
     public class DetailsModel : PageModel
     {

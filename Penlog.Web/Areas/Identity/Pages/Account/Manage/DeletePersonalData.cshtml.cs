@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Penlog.Model.Entities;
 using System.ComponentModel.DataAnnotations;
 
-namespace Penlog.Web.Areas.Identity.Pages.Account.Manage
+namespace Penlog.Areas.Identity.Pages.Account.Manage
 {
     public class DeletePersonalDataModel : PageModel
     {

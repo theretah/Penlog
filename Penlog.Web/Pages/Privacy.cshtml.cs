@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Penlog.Web.Pages
+namespace Penlog.Pages
 {
     public class PrivacyModel : PageModel
     {

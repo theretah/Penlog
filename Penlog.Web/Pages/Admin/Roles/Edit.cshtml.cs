@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Penlog.Web.Pages.Admin.Roles
+namespace Penlog.Pages.Admin.Roles
 {
     [Authorize(Roles = "Admin")]
     public class EditModel : PageModel
