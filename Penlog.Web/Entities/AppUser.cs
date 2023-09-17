@@ -8,11 +8,10 @@ namespace Penlog.Model.Entities
         public int PostsCount { get; set; }
         public string? Biography { get; set; }
 
-        public IEnumerable<AppUser> Followers { get; set; }
         public int FollowersCount { get; set; }
-
-        public IEnumerable<AppUser> Followings { get; set; }
         public int FollowingsCount { get; set; }
-    }
 
+        public IEnumerable<AppUser> Followers { get; set; }
+        public IEnumerable<AppUser> Followings { get; set; }
+    }
 }

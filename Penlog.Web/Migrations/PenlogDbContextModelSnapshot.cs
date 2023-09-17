@@ -34,7 +34,7 @@ namespace Penlog.Data.Migrations
 
                     b.HasIndex("FollowingsId");
 
-                    b.ToTable("AppUserAppUser");
+                    b.ToTable("AppUserAppUser", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -277,7 +277,7 @@ namespace Penlog.Data.Migrations
 
                     b.HasIndex("AuthorId");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Posts", (string)null);
                 });
 
             modelBuilder.Entity("AppUserAppUser", b =>
