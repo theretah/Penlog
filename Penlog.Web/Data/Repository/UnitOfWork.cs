@@ -12,10 +12,12 @@ namespace Penlog.Data.Repository
             this.context = context;
             Posts = new PostRepository(context);
             Users = new UserRepository(context);
+            Follows = new FollowRepository(context);
         }
 
         public IPostRepository Posts { get; private set; }
         public IUserRepository Users { get; private set; }
+        public IFollowRepository Follows { get; private set; }
 
         public int Complete()
         {

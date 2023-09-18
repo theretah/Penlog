@@ -11,7 +11,14 @@ namespace Penlog.Model.Entities
         public int FollowersCount { get; set; }
         public int FollowingsCount { get; set; }
 
-        public IEnumerable<AppUser> Followers { get; set; }
-        public IEnumerable<AppUser> Followings { get; set; }
+        public IEnumerable<Follow> Follows { get; set; }
+    }
+    public class Follow
+    {
+        public string FollowerId { get; set; }
+        public AppUser Follower { get; set; }
+
+        public string FollowingId { get; set; }
+        public AppUser Following { get; set; }
     }
 }

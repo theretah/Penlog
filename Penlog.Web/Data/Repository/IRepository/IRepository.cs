@@ -8,7 +8,7 @@ namespace Penlog.Data.Repository.IRepository
         TEntity Get(int id);
         TEntity Get(string id);
         IEnumerable<TEntity> GetAll();
-        IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> predicate);
+        IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
 
         // 2 - Adding objects
         void Add(TEntity entity);

@@ -23,7 +23,7 @@ namespace Penlog.Pages.Posts
         public AppUser Author { get; set; }
         public void OnGet()
         {
-            Posts = unit.Posts.GetAll(p => p.AuthorId == userManager.GetUserAsync(User).Result.Id);
+            Posts = unit.Posts.Find(p => p.AuthorId == userManager.GetUserAsync(User).Result.Id);
         }
         public IActionResult OnPostDelete(int id)
         {

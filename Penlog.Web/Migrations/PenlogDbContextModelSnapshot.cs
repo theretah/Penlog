@@ -22,21 +22,6 @@ namespace Penlog.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("AppUserAppUser", b =>
-                {
-                    b.Property<string>("FollowersId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("FollowingsId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("FollowersId", "FollowingsId");
-
-                    b.HasIndex("FollowingsId");
-
-                    b.ToTable("AppUserAppUser", (string)null);
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -247,6 +232,21 @@ namespace Penlog.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Penlog.Model.Entities.Follow", b =>
+                {
+                    b.Property<string>("FollowerId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FollowingId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("FollowerId", "FollowingId");
+
+                    b.HasIndex("FollowingId");
+
+                    b.ToTable("Follows");
+                });
+
             modelBuilder.Entity("Penlog.Model.Entities.Post", b =>
                 {
                     b.Property<int>("Id")
@@ -277,22 +277,7 @@ namespace Penlog.Data.Migrations
 
                     b.HasIndex("AuthorId");
 
-                    b.ToTable("Posts", (string)null);
-                });
-
-            modelBuilder.Entity("AppUserAppUser", b =>
-                {
-                    b.HasOne("Penlog.Model.Entities.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("FollowersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Penlog.Model.Entities.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("FollowingsId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -346,6 +331,25 @@ namespace Penlog.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Penlog.Model.Entities.Follow", b =>
+                {
+                    b.HasOne("Penlog.Model.Entities.AppUser", "Follower")
+                        .WithMany("Follows")
+                        .HasForeignKey("FollowerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Penlog.Model.Entities.AppUser", "Following")
+                        .WithMany()
+                        .HasForeignKey("FollowingId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Follower");
+
+                    b.Navigation("Following");
+                });
+
             modelBuilder.Entity("Penlog.Model.Entities.Post", b =>
                 {
                     b.HasOne("Penlog.Model.Entities.AppUser", "Author")
@@ -359,6 +363,8 @@ namespace Penlog.Data.Migrations
 
             modelBuilder.Entity("Penlog.Model.Entities.AppUser", b =>
                 {
+                    b.Navigation("Follows");
+
                     b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618

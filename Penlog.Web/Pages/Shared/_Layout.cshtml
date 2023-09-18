@@ -4,6 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Penlog</title>
+
+    @*<link href="/Froala/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="/Froala/js/froala_editor.pkgd.min.js"></script>*@
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Penlog.styles.css" asp-append-version="true" />
@@ -51,7 +55,7 @@
                                 <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link btn btn-primary text-light" asp-area="Identity" asp-page="/Account/Register">Register</a>
+                                <a class="nav-link btn btn-outline-primary text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
                             </li>
                         }
                     </ul>

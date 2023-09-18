@@ -21,7 +21,7 @@ namespace Penlog.Data.Repository
             context.Set<TEntity>().AddRange(entities);
         }
 
-        public IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> predicate)
+        public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
         {
             return context.Set<TEntity>().Where(predicate);
         }
@@ -29,12 +29,10 @@ namespace Penlog.Data.Repository
         {
             return context.Set<TEntity>().Find(id);
         }
-
         public TEntity Get(string id)
         {
             return context.Set<TEntity>().Find(id);
         }
-
         public IEnumerable<TEntity> GetAll()
         {
             return context.Set<TEntity>().ToList();

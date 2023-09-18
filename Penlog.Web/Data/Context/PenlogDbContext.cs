@@ -19,9 +19,25 @@ namespace Penlog.Data.Context
                 .HasMany(a => a.Posts)
                 .WithOne(p => p.Author)
                 .HasForeignKey(p => p.AuthorId);
+
+            modelBuilder.Entity<Follow>()
+                .HasKey(f => new { f.FollowerId, f.FollowingId });
+
+            modelBuilder.Entity<Follow>()
+                .HasOne(f => f.Follower)
+                .WithMany(follower => follower.Follows)
+                .HasForeignKey(f => f.FollowerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Follow>()
+                .HasOne(f => f.Following)
+                .WithMany()
+                .HasForeignKey(f => f.FollowingId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         public DbSet<Post> Posts { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
+        public DbSet<Follow> Follows { get; set; }
     }
 }
