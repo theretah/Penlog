@@ -25,15 +25,7 @@ namespace Penlog.Pages.Users
             Author = unit.Users.Get(id);
             Posts = unit.Posts.Find(p => p.AuthorId == Author.Id);
 
-            var follower = usermanager.GetUserAsync(User).Result;
-
-            var follow = new Follow
-            {
-                FollowerId = follower.Id,
-                Follower = follower,
-                FollowingId = Author.Id,
-                Following = Author
-            };
+            var follow = GetFollowEntity(id);
 
             IsFollowing = unit.Follows
                 .Find(f => f.FollowerId == follow.FollowerId && f.FollowingId == follow.FollowingId)
@@ -42,39 +34,31 @@ namespace Penlog.Pages.Users
 
         public IActionResult OnPostFollow(string followingId)
         {
-            var follower = usermanager.GetUserAsync(User).Result;
-            var following = usermanager.FindByIdAsync(followingId).Result;
-
-            var follow = new Follow
-            {
-                FollowerId = follower.Id,
-                Follower = follower,
-                FollowingId = following.Id,
-                Following = following
-            };
-
-            unit.Follows.Add(follow);
+            unit.Follows.Add(GetFollowEntity(followingId));
             unit.Complete();
 
             return RedirectToPage();
         }
         public IActionResult OnPostUnFollow(string followingId)
         {
+            unit.Follows.Remove(GetFollowEntity(followingId));
+            unit.Complete();
+
+            return RedirectToPage();
+        }
+
+        public Follow GetFollowEntity(string followingId)
+        {
             var follower = usermanager.GetUserAsync(User).Result;
             var following = usermanager.FindByIdAsync(followingId).Result;
 
-            var follow = new Follow
+            return new Follow
             {
                 FollowerId = follower.Id,
                 Follower = follower,
                 FollowingId = following.Id,
                 Following = following
             };
-
-            unit.Follows.Remove(follow);
-            unit.Complete();
-
-            return RedirectToPage();
         }
     }
 }
