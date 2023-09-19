@@ -11,16 +11,28 @@
                     @Model.Author.UserName
                 </h4>
                 <form method="post">
-                    @if (Model.IsFollowing)
+                    @if (!User.Identity.IsAuthenticated)
                     {
-                        <button type="submit" asp-page-handler="UnFollow" asp-route-followingId="@Model.Author.Id"
-                                class="btn btn-outline-secondary">Following</button>
-
+                        <button type="submit" class="btn btn-primary" disabled>
+                            Follow
+                        </button>
                     }
                     else
                     {
-                        <button type="submit" asp-page-handler="Follow" asp-route-followingId="@Model.Author.Id"
-                                class="btn btn-primary">Follow</button>
+                        if (Model.IsFollowing)
+                        {
+                            <button type="submit" asp-page-handler="UnFollow" asp-route-followingId="@Model.Author.Id"
+                                    class="btn btn-outline-secondary">
+                                Following
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="submit" asp-page-handler="Follow" asp-route-followingId="@Model.Author.Id"
+                                    class="btn btn-primary">
+                                Follow
+                            </button>
+                        }
                     }
                 </form>
             </div>
