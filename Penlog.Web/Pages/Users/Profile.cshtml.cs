@@ -9,12 +9,12 @@ using System.Security.Claims;
 
 namespace Penlog.Pages.Users
 {
-    public class DetailsModel : PageModel
+    public class ProfileModel : PageModel
     {
         private readonly IUnitOfWork unit;
         private readonly UserManager<AppUser> usermanager;
 
-        public DetailsModel(IUnitOfWork unit, UserManager<AppUser> usermanager)
+        public ProfileModel(IUnitOfWork unit, UserManager<AppUser> usermanager)
         {
             this.unit = unit;
             this.usermanager = usermanager;
@@ -61,7 +61,11 @@ namespace Penlog.Pages.Users
 
             return RedirectToPage();
         }
+        public IActionResult OnPostChangeProfilePhoto()
+        {
 
+            return RedirectToPage();
+        }
         private Follow GetFollowEntity(string followingId)
         {
             var follower = GetFollower().Result;

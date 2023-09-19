@@ -126,9 +126,7 @@ namespace Penlog.Areas.Identity.Pages.Account
 
                     var defaultRole = _roleManager.FindByNameAsync("User").Result;
                     if (defaultRole != null)
-                    {
-                        var addRoleResult = await _userManager.AddToRoleAsync(user, defaultRole.Name);
-                    }
+                        await _userManager.AddToRoleAsync(user, defaultRole.Name);
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

@@ -1,0 +1,98 @@
+﻿@page "{id}"
+@inject Microsoft.AspNetCore.Identity.UserManager<Penlog.Model.Entities.AppUser> userManager
+@using Penlog.Utility;
+@model Penlog.Pages.Users.ProfileModel
+
+<div class="container">
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4">
+            <div class="text-center">
+                <form method="post" enctype="multipart/form-data">
+                    <input type="file" id="profilePhoto"/>
+                    <img src="@Model.Author.ProfilePhoto.Bytes" />
+                </form>
+                <h4>
+                    @Model.Author.UserName
+                </h4>
+                <form method="post">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        if (userManager.GetUserAsync(User).Result != Model.Author)
+                        {
+                            if (Model.IsFollowing)
+                            {
+                                <button type="submit" asp-page-handler="UnFollow" asp-route-followingId="@Model.Author.Id"
+                                        class="btn btn-outline-secondary">
+                                    Following
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="submit" asp-page-handler="Follow" asp-route-followingId="@Model.Author.Id"
+                                        class="btn btn-primary">
+                                    Follow
+                                </button>
+                            }
+                        }
+                    }
+                </form>
+            </div>
+        </div>
+        <div class="col-4"></div>
+    </div>
+    <div class="row text-center">
+        <p>@Model.Author.FollowersCount Followers &nbsp;&nbsp; @Model.Author.FollowingsCount Followings</p>
+        <p>
+            Posts: (@Model.Author.PostsCount)
+        </p>
+        @foreach (var post in Model.Posts)
+        {
+            var firstSentence = Html.Raw(post.Content.ShortenString(30));
+            <div class="card my-3">
+                <div class="card-body">
+                    <a asp-page="Post" asp-route-id="@post.Id" class="text-decoration-none link-dark">
+                        <h5 class="card-title">@post.Title</h5>
+                        <p class="card-text">@firstSentence</p>
+                    </a>
+                    @if (userManager.GetUserId(User) == post.AuthorId)
+                    {
+                        <br />
+                        <a asp-page="Details" asp-route-id="@post.Id" class="btn btn-outline-dark btn-light">Details</a>
+                        <a asp-page="Edit" asp-route-id="@post.Id" class="btn btn-outline-dark btn-light">Edit</a>
+
+                        string modalId = "deleteModal" + post.Id;
+
+                        <!-- Button trigger modal -->
+                        <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@modalId">
+                            Delete
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="@modalId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete @post.Title?</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure you want to delete this post?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <form method="post" asp-page-handler="Delete" asp-route-id="@post.Id" class="m-0 p-0">
+                                            <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <br />
+                    <p style="font-size:.85rem;" class="text-secondary my-0">@((post.LastUpdated == null) ? post.CreatedDate : post.LastUpdated)</p>
+                </div>
+            </div>
+        }
+    </div>
+</div>

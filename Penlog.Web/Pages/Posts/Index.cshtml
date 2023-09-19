@@ -9,14 +9,16 @@
         <div class="card-body">
             <h5 class="card-title">@post.Title</h5>
             <p class="card-text">@firstSentence</p>
+
             <br />
             <a asp-page="Details" asp-route-id="@post.Id" class="btn btn-outline-dark btn-light">Details</a>
             <a asp-page="Edit" asp-route-id="@post.Id" class="btn btn-outline-dark btn-light">Edit</a>
 
-            <!-- Button trigger modal -->
             @{
                 string modalId = "deleteModal" + post.Id;
             }
+
+            <!-- Button trigger modal -->
             <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@modalId">
                 Delete
             </button>
