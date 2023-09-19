@@ -21,7 +21,9 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(
         options.User.AllowedUserNameCharacters =
         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_ ";
     }
-).AddEntityFrameworkStores<PenlogDbContext>();
+).AddEntityFrameworkStores<PenlogDbContext>()
+.AddDefaultUI()
+.AddTokenProvider<DataProtectorTokenProvider<AppUser>>(TokenOptions.DefaultProvider);
 
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 var app = builder.Build();
