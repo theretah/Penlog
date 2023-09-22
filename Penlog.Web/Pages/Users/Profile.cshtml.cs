@@ -20,9 +20,11 @@ namespace Penlog.Pages.Users
             this.usermanager = usermanager;
         }
 
+        public IFormFile File { get; set; }
         public IEnumerable<Post> Posts { get; set; }
         public AppUser Author { get; set; }
         public bool IsFollowing { get; set; }
+        public string ProfileImageDataUrl { get; set; }
 
         public void OnGet(string id)
         {
@@ -30,10 +32,14 @@ namespace Penlog.Pages.Users
             Posts = unit.Posts.Find(p => p.AuthorId == Author.Id);
 
             var follow = GetFollowEntity(id);
-
             IsFollowing = unit.Follows
                 .Find(f => f.FollowerId == follow.FollowerId && f.FollowingId == follow.FollowingId)
-                .FirstOrDefault() != null;
+                    .FirstOrDefault() != null;
+
+            if (Author.ProfilePhoto == null)
+                ProfileImageDataUrl = "default-profile.jpg";
+
+            OnPostRetrieveProfilePhoto();
         }
         public IActionResult OnPostFollow(string followingId)
         {
@@ -61,10 +67,44 @@ namespace Penlog.Pages.Users
 
             return RedirectToPage();
         }
-        public IActionResult OnPostChangeProfilePhoto()
+        public IActionResult OnPostUploadProfilePhoto()
         {
+            if (!ModelState.IsValid)
+                return Page();
+
+            var user = usermanager.GetUserAsync(User).Result;
+            var file = Request.Form.Files.FirstOrDefault();
+            var ms = new MemoryStream();
+
+            file.CopyTo(ms);
+
+            var photo = new Photo
+            {
+                User = user,
+                UserId = user.Id,
+                Bytes = ms.ToArray(),
+                FileExtension = Path.GetExtension(File.FileName),
+                Description = file.FileName,
+                Size = file.Length
+            };
+
+            ms.Close();
+            ms.Dispose();
+
+            user.ProfilePhoto = photo;
+            unit.Photos.Add(photo);
+            unit.Complete();
 
             return RedirectToPage();
+        }
+        public void OnPostRetrieveProfilePhoto()
+        {
+            var photo = unit.Photos.Find(p => p.UserId == Author.Id).SingleOrDefault();
+            if (photo != null)
+            {
+                string imageBase64Data = Convert.ToBase64String(photo.Bytes);
+                ProfileImageDataUrl = string.Format("data:image/jpg;base64,{0}", imageBase64Data);
+            }
         }
         private Follow GetFollowEntity(string followingId)
         {
@@ -84,7 +124,7 @@ namespace Penlog.Pages.Users
         }
         private async Task<AppUser> GetFollower()
         {
-            // Follower is this user
+            // Follower is the logged in user
             return await usermanager.GetUserAsync(User);
         }
         private async Task<AppUser> GetFollowing(string followingId)

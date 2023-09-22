@@ -15,16 +15,37 @@
             <div class="row">
                 <div class="card my-3">
                     <div class="card-body">
-                        @{
-                            var firstSentence = Html.Raw(post.Content.ShortenString(30));
-                        }
                         <a asp-page="Post" asp-route-id="@post.Id" class="text-decoration-none link-dark">
                             <h5 class="card-title">@post.Title</h5>
-                            <p class="card-text">@firstSentence</p>
+                            <p class="card-text">@Html.Raw(post.Content.ShortenString(30))</p>
                         </a>
                         <br />
-                        <a asp-page="/Users/Profile" asp-route-id="@post.AuthorId" class="text-decoration-none fs-6 text-dark fw-bold">@post.Author.UserName</a>
-                        <p style="font-size:.85rem;" class="text-secondary my-0">@((post.LastUpdated == null) ? post.CreatedDate : post.LastUpdated)</p>
+                        @{
+                            string imageBase64Data = string.Empty;
+                            string imageDataUrl = string.Empty;
+
+                            if (post.Author.ProfilePhoto != null)
+                            {
+                                imageBase64Data = Convert.ToBase64String(post.Author.ProfilePhoto.Bytes);
+                                imageDataUrl = string.Format("data:image/jpg;base64,{0}", imageBase64Data);
+                            }
+                            else
+                            {
+                                imageDataUrl = "default-profile.jpg";
+                            }
+                        }
+                        <a asp-page="/Users/Profile" asp-route-id="@post.AuthorId" class="text-decoration-none fs-6 text-dark fw-bold">
+                            @if (imageDataUrl == "default-profile.jpg")
+                            {
+                                <img src="~/images/@imageDataUrl" width="30" height="30" style="border-radius:50%;" alt="Alternate Text" />
+                            }
+                            else
+                            {
+                                <img src="@imageDataUrl" width="30" height="30" style="border-radius:50%;" alt="Alternate Text" />
+                            }
+                            @post.Author.UserName
+                        </a>
+                        <p style="font-size:.85rem;" class="text-secondary my-0">Last Updated: @((post.LastUpdated == null) ? post.CreatedDate : post.LastUpdated)</p>
                     </div>
                 </div>
             </div>

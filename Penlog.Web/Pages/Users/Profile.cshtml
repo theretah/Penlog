@@ -8,10 +8,25 @@
         <div class="col-4"></div>
         <div class="col-4">
             <div class="text-center">
-                <form method="post" enctype="multipart/form-data">
-                    <input type="file" id="profilePhoto"/>
-                    <img src="@Model.Author.ProfilePhoto.Bytes" />
-                </form>
+                @{
+                    var profile = Model.ProfileImageDataUrl;
+                    if (profile == "default-profile.jpg")
+                    {
+                        <img style="border-radius:50%;" width="100" height="100" src="~/images/@profile" alt="Alternate Text" />
+                    }
+                    else
+                    {
+                        <img style="border-radius:50%;" width="100" height="100" src="@profile" alt="Alternate Text" />
+                    }
+
+                    if (Model.Author == userManager.GetUserAsync(User).Result)
+                    {
+                        <form method="post" asp-page-handler="UploadProfilePhoto" enctype="multipart/form-data">
+                            <input asp-for="File" accept="image/jpg, image/png"/>
+                            <input type="submit" />
+                        </form>
+                    }
+                }
                 <h4>
                     @Model.Author.UserName
                 </h4>
