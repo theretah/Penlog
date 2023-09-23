@@ -22,7 +22,7 @@
                     if (Model.Author == userManager.GetUserAsync(User).Result)
                     {
                         <form method="post" asp-page-handler="UploadProfilePhoto" enctype="multipart/form-data">
-                            <input asp-for="File" accept="image/jpg, image/png"/>
+                            <input asp-for="File" accept="image/jpg, image/png" />
                             <input type="submit" />
                         </form>
                     }
@@ -52,15 +52,29 @@
                         }
                     }
                 </form>
+
             </div>
         </div>
         <div class="col-4"></div>
     </div>
     <div class="row text-center">
-        <p>@Model.Author.FollowersCount Followers &nbsp;&nbsp; @Model.Author.FollowingsCount Followings</p>
-        <p>
-            Posts: (@Model.Author.PostsCount)
-        </p>
+        <div class="col-4"></div>
+        <div class="col-4">
+            <p>@Model.Author.FollowersCount Followers &nbsp;&nbsp; @Model.Author.FollowingsCount Followings</p>
+            <p>
+                @Model.Author.Biography
+            </p>
+            @if (Model.Author == userManager.GetUserAsync(User).Result)
+            {
+                <a class="btn btn-outline-dark" asp-page="EditBiography" asp-route-authorId="@Model.Author.Id">Edit Biography</a>
+            }
+            <p>
+                Posts: (@Model.Author.PostsCount)
+            </p>
+        </div>
+        <div class="col-4"></div>
+    </div>
+    <div class="row text-center">
         @foreach (var post in Model.Posts)
         {
             var firstSentence = Html.Raw(post.Content.ShortenString(30));
@@ -73,8 +87,8 @@
                     @if (userManager.GetUserId(User) == post.AuthorId)
                     {
                         <br />
-                        <a asp-page="Details" asp-route-id="@post.Id" class="btn btn-outline-dark btn-light">Details</a>
-                        <a asp-page="Edit" asp-route-id="@post.Id" class="btn btn-outline-dark btn-light">Edit</a>
+                        <a asp-page="/Posts/Details" asp-route-id="@post.Id" class="btn btn-outline-dark btn-light">Details</a>
+                        <a asp-page="/Posts/Edit" asp-route-id="@post.Id" class="btn btn-outline-dark btn-light">Edit</a>
 
                         string modalId = "deleteModal" + post.Id;
 
@@ -109,5 +123,6 @@
                 </div>
             </div>
         }
+
     </div>
 </div>
