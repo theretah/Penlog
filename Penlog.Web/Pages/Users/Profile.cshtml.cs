@@ -78,7 +78,7 @@ namespace Penlog.Pages.Users
 
             file.CopyTo(ms);
 
-            var photo = new Photo
+            var newPhoto = new Photo
             {
                 User = user,
                 UserId = user.Id,
@@ -91,8 +91,12 @@ namespace Penlog.Pages.Users
             ms.Close();
             ms.Dispose();
 
-            user.ProfilePhoto = photo;
-            unit.Photos.Add(photo);
+            var currentPhoto = unit.Photos.Find(p => p.UserId == user.Id).FirstOrDefault();
+            if (currentPhoto != null)
+                unit.Photos.Remove(currentPhoto);
+
+            user.ProfilePhoto = newPhoto;
+            unit.Photos.Add(newPhoto);
             unit.Complete();
 
             return RedirectToPage();
