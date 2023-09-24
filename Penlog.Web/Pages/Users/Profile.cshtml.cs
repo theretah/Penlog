@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.IdentityModel.Tokens;
 using NuGet.Configuration;
 using Penlog.Data.Repository.IRepository;
 using Penlog.Model.Entities;
+using Penlog.PageModels;
 using System.Security.Claims;
 
 namespace Penlog.Pages.Users
@@ -13,11 +15,13 @@ namespace Penlog.Pages.Users
     {
         private readonly IUnitOfWork unit;
         private readonly UserManager<AppUser> usermanager;
+        private readonly IFollowPageControls followPageControls;
 
-        public ProfileModel(IUnitOfWork unit, UserManager<AppUser> usermanager)
+        public ProfileModel(IUnitOfWork unit, UserManager<AppUser> usermanager, IFollowPageControls followPageControls)
         {
             this.unit = unit;
             this.usermanager = usermanager;
+            this.followPageControls = followPageControls;
         }
 
         public IFormFile File { get; set; }
@@ -26,12 +30,13 @@ namespace Penlog.Pages.Users
         public bool IsFollowing { get; set; }
         public string ProfileImageDataUrl { get; set; }
 
-        public void OnGet(string id)
+        public IActionResult OnGet(string id)
         {
             Author = usermanager.FindByIdAsync(id).Result;
+            var user = usermanager.GetUserAsync(User).Result;
             Posts = unit.Posts.Find(p => p.AuthorId == Author.Id);
 
-            var follow = GetFollowEntity(id);
+            var follow = followPageControls.GetFollowEntity(user.Id, id);
             IsFollowing = unit.Follows
                 .Find(f => f.FollowerId == follow.FollowerId && f.FollowingId == follow.FollowingId)
                     .FirstOrDefault() != null;
@@ -40,32 +45,18 @@ namespace Penlog.Pages.Users
                 ProfileImageDataUrl = "default-profile.jpg";
 
             OnPostRetrieveProfilePhoto();
+
+            return Page();
         }
-        public IActionResult OnPostFollow(string followingId)
+        public IActionResult OnPostFollow(string authorId, string followerId, string followingId)
         {
-            unit.Follows.Add(GetFollowEntity(followingId));
-
-            var follower = GetFollower().Result;
-            follower.FollowingsCount++;
-            var following = GetFollowing(followingId).Result;
-            following.FollowersCount++;
-
-            unit.Complete();
-
-            return RedirectToPage();
+            followPageControls.Follow(followerId, followingId);
+            return OnGet(authorId);
         }
-        public IActionResult OnPostUnFollow(string followingId)
+        public IActionResult OnPostUnFollow(string authorId, string followerId, string followingId)
         {
-            unit.Follows.Remove(GetFollowEntity(followingId));
-
-            var follower = GetFollower().Result;
-            follower.FollowingsCount--;
-            var following = GetFollowing(followingId).Result;
-            following.FollowersCount--;
-
-            unit.Complete();
-
-            return RedirectToPage();
+            followPageControls.UnFollow(followerId, followingId);
+            return OnGet(authorId);
         }
         public IActionResult OnPostUploadProfilePhoto()
         {
@@ -109,31 +100,6 @@ namespace Penlog.Pages.Users
                 string imageBase64Data = Convert.ToBase64String(photo.Bytes);
                 ProfileImageDataUrl = string.Format("data:image/jpg;base64,{0}", imageBase64Data);
             }
-        }
-        private Follow GetFollowEntity(string followingId)
-        {
-            var follower = GetFollower().Result;
-            var following = GetFollowing(followingId).Result;
-
-            if (follower == null)
-                return new Follow();
-
-            return new Follow
-            {
-                FollowerId = follower.Id,
-                Follower = follower,
-                FollowingId = following.Id,
-                Following = following
-            };
-        }
-        private async Task<AppUser> GetFollower()
-        {
-            // Follower is the logged in user
-            return await usermanager.GetUserAsync(User);
-        }
-        private async Task<AppUser> GetFollowing(string followingId)
-        {
-            return await usermanager.FindByIdAsync(followingId);
         }
     }
 }

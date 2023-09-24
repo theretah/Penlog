@@ -1,21 +1,56 @@
 ﻿@page
+@inject Microsoft.AspNetCore.Identity.UserManager<Penlog.Model.Entities.AppUser> userManager
 @model Penlog.Pages.PostModel
 @{
     var lastUpdated = Model.Post.LastUpdated;
     var createdDate = Model.Post.CreatedDate;
 }
+
+<a class="text-decoration-none text-dark" asp-page="Users/Profile" asp-route-id="@Model.Post.AuthorId">
+    @if (Model.ProfileImageDataUrl == "default-profile.jpg")
+    {
+        <img style="border-radius:50%;" width="50" height="50" src="~/images/@Model.ProfileImageDataUrl" alt="Alternate Text" />
+    }
+    else
+    {
+        <img style="border-radius:50%;" width="50" height="50" src="@Model.ProfileImageDataUrl" alt="Alternate Text" />
+    }
+    <span class="fw-bold">@Model.Post.Author.UserName</span>
+
+    <span class="text-secondary">
+        Last Updated:
+        @((lastUpdated == null) ? createdDate.ToString("MMM/d/yyyy") : lastUpdated.Value.ToString("MMM/d/yyyy"))
+    </span>
+</a>
+<form method="post">
+    @{
+        var user = userManager.GetUserAsync(User).Result;
+
+        if (User.Identity.IsAuthenticated)
+        {
+            if (user != Model.Post.Author)
+            {
+                if (Model.IsFollowing)
+                {
+                    <button type="submit" asp-page-handler="UnFollow" asp-route-postId="@Model.Post.Id" asp-route-followerId="@user.Id" asp-route-followingId="@Model.Post.AuthorId"
+                            class="btn btn-outline-secondary">
+                        Following
+                    </button>
+                }
+                else
+                {
+                    <button type="submit" asp-page-handler="Follow" asp-route-postId="@Model.Post.Id" asp-route-followerId="@user.Id" asp-route-followingId="@Model.Post.AuthorId"
+                            class="btn btn-primary">
+                        Follow
+                    </button>
+                }
+            }
+        }
+    }
+</form>
+
 <h1 class="display-2">@Model.Post.Title</h1>
-
-
 
 <p class="fs-5 lh-base">
     @Html.Raw(Model.Post.Content)
-</p>
-
-<p class="lh-base text-secondary" style="font-size:.85rem;">
-    Last Updated: @((lastUpdated == null) ?
-    createdDate.ToString("MMM/d/yyyy") : lastUpdated.Value.ToString("MMM/d/yyyy"))
-</p>
-<p class="lh-base">
-    Author: @Model.Post.Author.UserName
 </p>

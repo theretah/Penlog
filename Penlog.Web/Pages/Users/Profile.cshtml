@@ -9,14 +9,13 @@
         <div class="col-4">
             <div class="text-center">
                 @{
-                    var profile = Model.ProfileImageDataUrl;
-                    if (profile == "default-profile.jpg")
+                    if (Model.ProfileImageDataUrl == "default-profile.jpg")
                     {
-                        <img style="border-radius:50%;" width="100" height="100" src="~/images/@profile" alt="Alternate Text" />
+                        <img style="border-radius:50%;" width="100" height="100" src="~/images/@Model.ProfileImageDataUrl" alt="Alternate Text" />
                     }
                     else
                     {
-                        <img style="border-radius:50%;" width="100" height="100" src="@profile" alt="Alternate Text" />
+                        <img style="border-radius:50%;" width="100" height="100" src="@Model.ProfileImageDataUrl" alt="Alternate Text" />
                     }
 
                     if (Model.Author == userManager.GetUserAsync(User).Result)
@@ -31,23 +30,27 @@
                     @Model.Author.UserName
                 </h4>
                 <form method="post">
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        if (userManager.GetUserAsync(User).Result != Model.Author)
+                    @{
+                        var user = userManager.GetUserAsync(User).Result;
+
+                        if (User.Identity.IsAuthenticated)
                         {
-                            if (Model.IsFollowing)
+                            if (user != Model.Author)
                             {
-                                <button type="submit" asp-page-handler="UnFollow" asp-route-followingId="@Model.Author.Id"
-                                        class="btn btn-outline-secondary">
-                                    Following
-                                </button>
-                            }
-                            else
-                            {
-                                <button type="submit" asp-page-handler="Follow" asp-route-followingId="@Model.Author.Id"
-                                        class="btn btn-primary">
-                                    Follow
-                                </button>
+                                if (Model.IsFollowing)
+                                {
+                                    <button type="submit" asp-page-handler="UnFollow" asp-route-authorId="@Model.Author.Id" asp-route-followerId="@user.Id" asp-route-followingId="@Model.Author.Id"
+                                            class="btn btn-outline-secondary">
+                                        Following
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="submit" asp-page-handler="Follow" asp-route-authorId="@Model.Author.Id" asp-route-followerId="@user.Id" asp-route-followingId="@Model.Author.Id"
+                                            class="btn btn-primary">
+                                        Follow
+                                    </button>
+                                }
                             }
                         }
                     }
