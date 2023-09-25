@@ -36,10 +36,13 @@ namespace Penlog.Pages.Users
             var user = usermanager.GetUserAsync(User).Result;
             Posts = unit.Posts.Find(p => p.AuthorId == Author.Id);
 
-            var follow = followPageControls.GetFollowEntity(user.Id, id);
-            IsFollowing = unit.Follows
-                .Find(f => f.FollowerId == follow.FollowerId && f.FollowingId == follow.FollowingId)
-                    .FirstOrDefault() != null;
+            if (user != null)
+            {
+                var follow = followPageControls.GetFollowEntity(user.Id, id);
+                IsFollowing = unit.Follows
+                    .Find(f => f.FollowerId == follow.FollowerId && f.FollowingId == follow.FollowingId)
+                        .FirstOrDefault() != null;
+            }
 
             if (Author.ProfilePhoto == null)
                 ProfileImageDataUrl = "default-profile.jpg";

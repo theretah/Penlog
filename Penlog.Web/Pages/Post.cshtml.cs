@@ -27,12 +27,15 @@ namespace Penlog.Pages
         public IActionResult OnGet(int id)
         {
             Post = unit.Posts.GetWithAuthor(id);
-            var user = userManager.GetUserAsync(User).Result;
 
-            var follow = followPageControls.GetFollowEntity(user.Id, Post.AuthorId);
-            IsFollowing = unit.Follows
-                .Find(f => f.FollowerId == follow.FollowerId && f.FollowingId == follow.FollowingId)
-                    .FirstOrDefault() != null;
+            var user = userManager.GetUserAsync(User).Result;
+            if (user != null)
+            {
+                var follow = followPageControls.GetFollowEntity(user.Id, Post.AuthorId);
+                IsFollowing = unit.Follows
+                    .Find(f => f.FollowerId == follow.FollowerId && f.FollowingId == follow.FollowingId)
+                        .FirstOrDefault() != null;
+            }
 
             var photo = unit.Photos.Find(p => p.UserId == Post.AuthorId).SingleOrDefault();
             if (photo != null)
