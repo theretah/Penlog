@@ -55,7 +55,6 @@
                         }
                     }
                 </form>
-
             </div>
         </div>
         <div class="col-4"></div>
@@ -83,7 +82,7 @@
             var firstSentence = Html.Raw(post.Content.ShortenString(30));
             <div class="card my-3">
                 <div class="card-body">
-                    <a asp-page="Post" asp-route-id="@post.Id" class="text-decoration-none link-dark">
+                    <a asp-page="/Post" asp-route-id="@post.Id" class="text-decoration-none link-dark">
                         <h5 class="card-title">@post.Title</h5>
                         <p class="card-text">@firstSentence</p>
                     </a>
@@ -126,6 +125,5 @@
                 </div>
             </div>
         }
-
     </div>
 </div>

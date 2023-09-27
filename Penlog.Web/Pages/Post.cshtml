@@ -6,22 +6,34 @@
     var createdDate = Model.Post.CreatedDate;
 }
 
-<a class="text-decoration-none text-dark" asp-page="Users/Profile" asp-route-id="@Model.Post.AuthorId">
-    @if (Model.ProfileImageDataUrl == "default-profile.jpg")
-    {
-        <img style="border-radius:50%;" width="50" height="50" src="~/images/@Model.ProfileImageDataUrl" alt="Alternate Text" />
-    }
-    else
-    {
-        <img style="border-radius:50%;" width="50" height="50" src="@Model.ProfileImageDataUrl" alt="Alternate Text" />
-    }
-    <span class="fw-bold">@Model.Post.Author.UserName</span>
-
-    <span class="text-secondary">
-        Last Updated:
-        @((lastUpdated == null) ? createdDate.ToString("MMM/d/yyyy") : lastUpdated.Value.ToString("MMM/d/yyyy"))
-    </span>
-</a>
+<div class="card mb-3 border-0" style="max-width: 540px;">
+    <div class="row g-0">
+        <div class="col-md-2 text-center">
+            <div class="mt-1">
+                <a asp-page="Users/Profile" asp-route-id="@Model.Post.AuthorId">
+                    @if (Model.ProfileImageDataUrl == "default-profile.jpg")
+                    {
+                        <img width="80" height="80" style="border-radius:50%;" src="~/images/@Model.ProfileImageDataUrl" alt="Alternate Text" />
+                    }
+                    else
+                    {
+                        <img width="80" height="80" style="border-radius:50%;" src="@Model.ProfileImageDataUrl" alt="Alternate Text" />
+                    }
+                </a>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card-body p-1">
+                <a class="text-decoration-none text-dark" asp-page="Users/Profile" asp-route-id="@Model.Post.AuthorId">
+                    <h6 class="card-title fw-bold d-inline-block">@Model.Post.Author.UserName</h6>
+                </a>
+                <a href="#" class="btn btn-secondary p-1">Follow</a>
+                <p class="card-text my-0">@Model.Post.Author.Biography</p>
+                <p class="card-text my-0"><small class="text-body-secondary">Last updated on @((lastUpdated == null) ? createdDate.ToString("MMM/d/yyyy") : lastUpdated.Value.ToString("MMM/d/yyyy"))</small></p>
+            </div>
+        </div>
+    </div>
+</div>
 <form method="post">
     @{
         var user = userManager.GetUserAsync(User).Result;
