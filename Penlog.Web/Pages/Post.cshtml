@@ -1,15 +1,15 @@
 ﻿@page
+@using Penlog.Utility;
 @inject Microsoft.AspNetCore.Identity.UserManager<Penlog.Model.Entities.AppUser> userManager
 @model Penlog.Pages.PostModel
 @{
     var lastUpdated = Model.Post.LastUpdated;
     var createdDate = Model.Post.CreatedDate;
 }
-
 <div class="card mb-3 border-0" style="max-width: 540px;">
     <div class="row g-0">
         <div class="col-md-2 text-center">
-            <div class="mt-1">
+            <div class="mt-3">
                 <a asp-page="Users/Profile" asp-route-id="@Model.Post.AuthorId">
                     @if (Model.ProfileImageDataUrl == "default-profile.jpg")
                     {
@@ -24,45 +24,44 @@
         </div>
         <div class="col-md-8">
             <div class="card-body p-1">
-                <a class="text-decoration-none text-dark" asp-page="Users/Profile" asp-route-id="@Model.Post.AuthorId">
-                    <h6 class="card-title fw-bold d-inline-block">@Model.Post.Author.UserName</h6>
+                <a class="text-decoration-none text-dark d-inline-block" asp-page="Users/Profile" asp-route-id="@Model.Post.AuthorId">
+                    <h6 class="card-title fw-bold">@Model.Post.Author.UserName</h6>
                 </a>
-                <a href="#" class="btn btn-secondary p-1">Follow</a>
-                <p class="card-text my-0">@Model.Post.Author.Biography</p>
-                <p class="card-text my-0"><small class="text-body-secondary">Last updated on @((lastUpdated == null) ? createdDate.ToString("MMM/d/yyyy") : lastUpdated.Value.ToString("MMM/d/yyyy"))</small></p>
+                <form method="post" class="d-inline">
+                    @{
+                        var user = userManager.GetUserAsync(User).Result;
+
+                        if (User.Identity.IsAuthenticated)
+                        {
+                            if (user != Model.Post.Author)
+                            {
+                                if (Model.IsFollowing)
+                                {
+                                    <button type="submit" asp-page-handler="UnFollow" asp-route-postId="@Model.Post.Id" asp-route-followerId="@user.Id" asp-route-followingId="@Model.Post.AuthorId"
+                                            class="btn btn-outline-secondary p-1">
+                                        Following
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button type="submit" asp-page-handler="Follow" asp-route-postId="@Model.Post.Id" asp-route-followerId="@user.Id" asp-route-followingId="@Model.Post.AuthorId"
+                                            class="btn btn-primary p-1">
+                                        Follow
+                                    </button>
+                                }
+                            }
+                        }
+                    }
+                </form>
+                <p class="card-text text-secondary" style="font-size:.90rem;">@Model.Post.Author.Biography.ShortenString(10)</p>
+                <p class="card-text " style="font-size:.80rem;">
+                    Last updated on @((lastUpdated == null) ? createdDate.ToString("MMM/d/yyyy") : lastUpdated.Value.ToString("MMM/d/yyyy"))
+                </p>
             </div>
         </div>
     </div>
 </div>
-<form method="post">
-    @{
-        var user = userManager.GetUserAsync(User).Result;
-
-        if (User.Identity.IsAuthenticated)
-        {
-            if (user != Model.Post.Author)
-            {
-                if (Model.IsFollowing)
-                {
-                    <button type="submit" asp-page-handler="UnFollow" asp-route-postId="@Model.Post.Id" asp-route-followerId="@user.Id" asp-route-followingId="@Model.Post.AuthorId"
-                            class="btn btn-outline-secondary">
-                        Following
-                    </button>
-                }
-                else
-                {
-                    <button type="submit" asp-page-handler="Follow" asp-route-postId="@Model.Post.Id" asp-route-followerId="@user.Id" asp-route-followingId="@Model.Post.AuthorId"
-                            class="btn btn-primary">
-                        Follow
-                    </button>
-                }
-            }
-        }
-    }
-</form>
-
 <h1 class="display-2">@Model.Post.Title</h1>
-
 <p class="fs-5 lh-base">
     @Html.Raw(Model.Post.Content)
 </p>
