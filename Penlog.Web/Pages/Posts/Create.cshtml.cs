@@ -36,12 +36,13 @@ namespace Penlog.Pages.Posts
 
             Post.CreatedDate = DateTimeOffset.Now;
             Post.Author = Author;
-            
+
+            var user = userManager.GetUserAsync(User).Result;
 
             unit.Posts.Add(Post);
             unit.Complete();
 
-            return RedirectToPage("Index");
+            return RedirectToPage("../Users/Profile/", new { id = user.Id });
         }
     }
 }

@@ -14,13 +14,13 @@ namespace Penlog.Pages.Users
     public class ProfileModel : PageModel
     {
         private readonly IUnitOfWork unit;
-        private readonly UserManager<AppUser> usermanager;
+        private readonly UserManager<AppUser> userManager;
         private readonly IFollowPageControls followPageControls;
 
-        public ProfileModel(IUnitOfWork unit, UserManager<AppUser> usermanager, IFollowPageControls followPageControls)
+        public ProfileModel(IUnitOfWork unit, UserManager<AppUser> userManager, IFollowPageControls followPageControls)
         {
             this.unit = unit;
-            this.usermanager = usermanager;
+            this.userManager = userManager;
             this.followPageControls = followPageControls;
         }
 
@@ -32,8 +32,8 @@ namespace Penlog.Pages.Users
 
         public IActionResult OnGet(string id)
         {
-            Author = usermanager.FindByIdAsync(id).Result;
-            var user = usermanager.GetUserAsync(User).Result;
+            Author = userManager.FindByIdAsync(id).Result;
+            var user = userManager.GetUserAsync(User).Result;
             Posts = unit.Posts.Find(p => p.AuthorId == Author.Id);
 
             if (user != null)
@@ -51,6 +51,17 @@ namespace Penlog.Pages.Users
 
             return Page();
         }
+        public IActionResult OnPostDelete(int id)
+        {
+            var post = unit.Posts.Get(id);
+            unit.Posts.Remove(post);
+            var user = userManager.GetUserAsync(User).Result;
+            user.PostsCount--;
+
+            unit.Complete();
+
+            return OnGet(user.Id);
+        }
         public IActionResult OnPostFollow(string authorId, string followerId, string followingId)
         {
             followPageControls.Follow(followerId, followingId);
@@ -66,7 +77,7 @@ namespace Penlog.Pages.Users
             if (!ModelState.IsValid)
                 return Page();
 
-            var user = usermanager.GetUserAsync(User).Result;
+            var user = userManager.GetUserAsync(User).Result;
             var file = Request.Form.Files.FirstOrDefault();
             var ms = new MemoryStream();
 

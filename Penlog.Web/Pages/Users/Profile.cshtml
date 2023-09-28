@@ -8,23 +8,21 @@
         <div class="col-4"></div>
         <div class="col-4">
             <div class="text-center">
-                @{
-                    if (Model.ProfileImageDataUrl == "default-profile.jpg")
-                    {
-                        <img style="border-radius:50%;" width="100" height="100" src="~/images/@Model.ProfileImageDataUrl" alt="Alternate Text" />
-                    }
-                    else
-                    {
-                        <img style="border-radius:50%;" width="100" height="100" src="@Model.ProfileImageDataUrl" alt="Alternate Text" />
-                    }
+                @if (Model.ProfileImageDataUrl == "default-profile.jpg")
+                {
+                    <img style="border-radius:50%;" width="100" height="100" src="~/images/@Model.ProfileImageDataUrl" alt="Alternate Text" />
+                }
+                else
+                {
+                    <img style="border-radius:50%;" width="100" height="100" src="@Model.ProfileImageDataUrl" alt="Alternate Text" />
+                }
 
-                    if (Model.Author == userManager.GetUserAsync(User).Result)
-                    {
-                        <form method="post" asp-page-handler="UploadProfilePhoto" enctype="multipart/form-data">
-                            <input asp-for="File" accept="image/jpg, image/png" />
-                            <input type="submit" />
-                        </form>
-                    }
+                @if (Model.Author == userManager.GetUserAsync(User).Result)
+                {
+                    <form method="post" asp-page-handler="UploadProfilePhoto" enctype="multipart/form-data">
+                        <input asp-for="File" accept="image/jpg, image/png" />
+                        <input type="submit" />
+                    </form>
                 }
                 <h4>
                     @Model.Author.UserName
@@ -89,7 +87,6 @@
                     @if (userManager.GetUserId(User) == post.AuthorId)
                     {
                         <br />
-                        <a asp-page="/Posts/Details" asp-route-id="@post.Id" class="btn btn-outline-dark btn-light">Details</a>
                         <a asp-page="/Posts/Edit" asp-route-id="@post.Id" class="btn btn-outline-dark btn-light">Edit</a>
 
                         string modalId = "deleteModal" + post.Id;

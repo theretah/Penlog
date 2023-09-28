@@ -39,6 +39,11 @@ namespace Penlog.Data.Context
                 .HasOne(u => u.ProfilePhoto)
                 .WithOne(p => p.User)
                 .HasForeignKey<Photo>(u => u.UserId);
+
+            modelBuilder.Entity<Photo>()
+                .HasOne(p => p.Post)
+                .WithOne(p => p.PreviewPhoto)
+                .HasForeignKey<Post>(photo => photo.PreviewPhotoId);
         }
 
         public DbSet<Post> Posts { get; set; }

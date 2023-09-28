@@ -13,6 +13,11 @@ namespace Penlog.Model.Entities
         public DateTimeOffset? LastUpdated { get; set; }
 
         [ValidateNever]
+        public int? PreviewPhotoId { get; set; }
+        [ValidateNever]
+        public Photo? PreviewPhoto { get; set; }
+
+        [ValidateNever]
         public string AuthorId { get; set; }
         [ValidateNever]
         public AppUser Author { get; set; }
