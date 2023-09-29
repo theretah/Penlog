@@ -53,7 +53,13 @@
                         }
                     }
                 </form>
-                <p class="card-text text-secondary" style="font-size:.90rem;">@Model.Post.Author.Biography.ShortenString(10)</p>
+                @{
+                    var bio = Model.Post.Author.Biography;
+                    if (bio != null)
+                    {
+                        <p class="card-text text-secondary" style="font-size:.90rem;">@bio.ShortenString(10)</p>
+                    }
+                }
                 <p class="card-text " style="font-size:.80rem;">
                     Last updated on @((lastUpdated == null) ? createdDate.ToString("MMM/d/yyyy") : lastUpdated.Value.ToString("MMM/d/yyyy"))
                 </p>
@@ -62,6 +68,10 @@
     </div>
 </div>
 <h1 class="display-2">@Model.Post.Title</h1>
+@if (Model.PreviewImageDataUrl != null)
+{
+    <img width="1000" height="600" src="@Model.PreviewImageDataUrl" alt="Alternate Text" />
+}
 <p class="fs-5 lh-base">
     @Html.Raw(Model.Post.Content)
 </p>

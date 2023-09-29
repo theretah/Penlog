@@ -2,8 +2,8 @@
 
 namespace Penlog.Data.Repository.IRepository
 {
-    public interface IPhotoRepository : IRepository<Photo>
+    public interface IImageRepository : IRepository<Image>
     {
-        void Update(Photo photo);
+        void Update(Image image);
     }
 }

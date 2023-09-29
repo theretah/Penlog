@@ -1,10 +1,15 @@
 ﻿@page
 @model Penlog.Pages.Posts.CreateModel
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <div class="mb-3">
         <label for="titleInput" class="form-label">Title: </label>
         <input asp-for="Post.Title" type="text" class="form-control form-control-lg" id="titleInput">
         <span asp-validation-for="Post.Title" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label for="previewPhotoInput" class="form-label">Preview Photo: </label>
+        <input asp-for="File" type="file" class="form-control" id="previewPhotoInput" />
+        <span asp-validation-for="File" class="text-danger"></span>
     </div>
     <div class="mb-3">
         <label for="contentInput" class="form-label">Content: </label>

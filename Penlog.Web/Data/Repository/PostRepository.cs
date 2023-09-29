@@ -16,12 +16,12 @@ namespace Penlog.Data.Repository
 
         public IEnumerable<Post> GetAllWithAuthors()
         {
-            return context.Posts.Include(p => p.Author).ThenInclude(p => p.ProfilePhoto).ToList();
+            return context.Posts.Include(p => p.Author).ThenInclude(p => p.ProfileImage).ToList();
         }
 
         public Post GetWithAuthor(int id)
         {
-            return context.Posts.Include(p => p.Author).ThenInclude(p => p.ProfilePhoto).Where(p => p.Id == id).First();
+            return context.Posts.Include(p => p.Author).ThenInclude(p => p.ProfileImage).Where(p => p.Id == id).First();
         }
 
         public void Update(Post post)

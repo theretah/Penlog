@@ -4,7 +4,7 @@
     {
         IPostRepository Posts { get; }
         IFollowRepository Follows { get; }
-        IPhotoRepository Photos { get; }
+        IImageRepository Images { get; }
         int Complete();
     }
 }

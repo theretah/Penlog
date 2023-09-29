@@ -21,7 +21,11 @@ namespace Penlog.Pages.Posts
 
         [BindProperty]
         public Post Post { get; set; }
+
         public AppUser Author { get; set; }
+
+        [BindProperty]
+        public IFormFile File { get; set; }
 
         public void OnGet()
         {
@@ -31,18 +35,28 @@ namespace Penlog.Pages.Posts
             if (!ModelState.IsValid)
                 return Page();
 
+            var file = Request.Form.Files.FirstOrDefault();
+            var ms = new MemoryStream();
             Author = userManager.GetUserAsync(User).Result;
-            Author.PostsCount++;
 
+            file.CopyTo(ms);
+
+            Post.PreviewImage = new Image
+            {
+                Bytes = ms.ToArray(),
+                FileExtension = Path.GetExtension(File.FileName),
+                Description = file.FileName,
+                Size = file.Length
+            };
             Post.CreatedDate = DateTimeOffset.Now;
             Post.Author = Author;
 
-            var user = userManager.GetUserAsync(User).Result;
+            Author.PostsCount++;
 
             unit.Posts.Add(Post);
             unit.Complete();
 
-            return RedirectToPage("../Users/Profile/", new { id = user.Id });
+            return RedirectToPage("../Users/Profile/", new { id = Author.Id });
         }
     }
 }

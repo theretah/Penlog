@@ -1,13 +1,9 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.IdentityModel.Tokens;
-using NuGet.Configuration;
 using Penlog.Data.Repository.IRepository;
 using Penlog.Model.Entities;
 using Penlog.PageModels;
-using System.Security.Claims;
 
 namespace Penlog.Pages.Users
 {
@@ -33,9 +29,9 @@ namespace Penlog.Pages.Users
         public IActionResult OnGet(string id)
         {
             Author = userManager.FindByIdAsync(id).Result;
-            var user = userManager.GetUserAsync(User).Result;
             Posts = unit.Posts.Find(p => p.AuthorId == Author.Id);
 
+            var user = userManager.GetUserAsync(User).Result;
             if (user != null)
             {
                 var follow = followPageControls.GetFollowEntity(user.Id, id);
@@ -44,7 +40,7 @@ namespace Penlog.Pages.Users
                         .FirstOrDefault() != null;
             }
 
-            if (Author.ProfilePhoto == null)
+            if (Author.ProfileImage == null)
                 ProfileImageDataUrl = "default-profile.jpg";
 
             OnPostRetrieveProfilePhoto();
@@ -83,10 +79,8 @@ namespace Penlog.Pages.Users
 
             file.CopyTo(ms);
 
-            var newPhoto = new Photo
+            var newPhoto = new Image
             {
-                User = user,
-                UserId = user.Id,
                 Bytes = ms.ToArray(),
                 FileExtension = Path.GetExtension(File.FileName),
                 Description = file.FileName,
@@ -96,22 +90,22 @@ namespace Penlog.Pages.Users
             ms.Close();
             ms.Dispose();
 
-            var currentPhoto = unit.Photos.Find(p => p.UserId == user.Id).FirstOrDefault();
+            var currentPhoto = unit.Images.Find(i => i.Id == user.ProfileImage.Id).FirstOrDefault();
             if (currentPhoto != null)
-                unit.Photos.Remove(currentPhoto);
+                unit.Images.Remove(currentPhoto);
 
-            user.ProfilePhoto = newPhoto;
-            unit.Photos.Add(newPhoto);
+            user.ProfileImage = newPhoto;
+            unit.Images.Add(newPhoto);
             unit.Complete();
 
             return RedirectToPage();
         }
         public void OnPostRetrieveProfilePhoto()
         {
-            var photo = unit.Photos.Find(p => p.UserId == Author.Id).SingleOrDefault();
-            if (photo != null)
+            var image = unit.Images.Find(i => i.Id == Author.ProfileImageId).FirstOrDefault();
+            if (image != null)
             {
-                string imageBase64Data = Convert.ToBase64String(photo.Bytes);
+                string imageBase64Data = Convert.ToBase64String(image.Bytes);
                 ProfileImageDataUrl = string.Format("data:image/jpg;base64,{0}", imageBase64Data);
             }
         }

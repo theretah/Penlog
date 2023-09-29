@@ -4,18 +4,18 @@ using Penlog.Model.Entities;
 
 namespace Penlog.Data.Repository
 {
-    public class PhotoRepository : Repository<Photo>, IPhotoRepository
+    public class ImageRepository : Repository<Image>, IImageRepository
     {
         private readonly PenlogDbContext context;
 
-        public PhotoRepository(PenlogDbContext context) : base(context)
+        public ImageRepository(PenlogDbContext context) : base(context)
         {
             this.context = context;
         }
 
-        public void Update(Photo photo)
+        public void Update(Image image)
         {
-            context.Update(photo);
+            context.Update(image);
         }
     }
 }

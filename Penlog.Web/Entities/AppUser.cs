@@ -12,7 +12,8 @@ namespace Penlog.Model.Entities
         public int FollowersCount { get; set; }
         public int FollowingsCount { get; set; }
 
-        public Photo? ProfilePhoto { get; set; }
+        public int? ProfileImageId { get; set; }
+        public Image? ProfileImage { get; set; }
 
         public IEnumerable<Post> Posts { get; set; }
         public IEnumerable<Follow> Follows { get; set; }

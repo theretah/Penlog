@@ -22,16 +22,12 @@
                         <br />
                         @{
                             string imageBase64Data = string.Empty;
-                            string imageDataUrl = string.Empty;
+                            string imageDataUrl = "default-profile.jpg";
 
-                            if (post.Author.ProfilePhoto != null)
+                            if (post.Author.ProfileImage != null)
                             {
-                                imageBase64Data = Convert.ToBase64String(post.Author.ProfilePhoto.Bytes);
+                                imageBase64Data = Convert.ToBase64String(post.Author.ProfileImage.Bytes);
                                 imageDataUrl = string.Format("data:image/jpg;base64,{0}", imageBase64Data);
-                            }
-                            else
-                            {
-                                imageDataUrl = "default-profile.jpg";
                             }
                         }
                         <a asp-page="/Users/Profile" asp-route-id="@post.AuthorId" class="text-decoration-none text-dark fw-bold">

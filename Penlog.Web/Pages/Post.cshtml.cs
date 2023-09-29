@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using NuGet.Versioning;
 using Penlog.Data.Repository.IRepository;
 using Penlog.Model.Entities;
 using Penlog.PageModels;
@@ -22,6 +21,7 @@ namespace Penlog.Pages
         }
         public Post Post { get; set; }
         public string ProfileImageDataUrl { get; set; }
+        public string PreviewImageDataUrl { get; set; }
         public bool IsFollowing { get; set; }
 
         public IActionResult OnGet(int id)
@@ -37,11 +37,19 @@ namespace Penlog.Pages
                         .FirstOrDefault() != null;
             }
 
-            var photo = unit.Photos.Find(p => p.UserId == Post.AuthorId).SingleOrDefault();
+            var photo = unit.Images.Find(p => p.Id == Post.Author.ProfileImageId).SingleOrDefault();
+            ProfileImageDataUrl = "default-profile.jpg";
             if (photo != null)
             {
                 string imageBase64Data = Convert.ToBase64String(photo.Bytes);
                 ProfileImageDataUrl = string.Format("data:image/jpg;base64,{0}", imageBase64Data);
+            }
+
+            var previewImage = unit.Images.Find(p => p.Id == Post.PreviewImageId).SingleOrDefault();
+            if (previewImage != null)
+            {
+                string imageBase64Data = Convert.ToBase64String(previewImage.Bytes);
+                PreviewImageDataUrl = string.Format("data:image/jpg;base64,{0}", imageBase64Data);
             }
 
             return Page();
