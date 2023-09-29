@@ -7,5 +7,6 @@ namespace Penlog.Data.Repository.IRepository
         void Update(Post post);
         IEnumerable<Post> GetAllWithAuthors();
         Post GetWithAuthor(int id);
+        Post GetWithPreviewImage(int id);
     }
 }
