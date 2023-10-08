@@ -38,7 +38,6 @@ namespace Penlog.Pages.Posts
                 PreviewImageDataUrl = string.Format("data:image/jpg;base64,{0}", imageBase64Data);
             }
         }
-
         public IActionResult OnPost(int id)
         {
             if (!ModelState.IsValid)

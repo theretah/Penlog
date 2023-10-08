@@ -5,6 +5,7 @@
 @{
     var lastUpdated = Model.Post.LastUpdated;
     var createdDate = Model.Post.CreatedDate;
+    var user = userManager.GetUserAsync(User).Result;
 }
 <div class="card mb-3 border-0" style="max-width: 540px;">
     <div class="row g-0">
@@ -28,38 +29,32 @@
                     <h6 class="card-title fw-bold">@Model.Post.Author.UserName</h6>
                 </a>
                 <form method="post" class="d-inline">
-                    @{
-                        var user = userManager.GetUserAsync(User).Result;
-
-                        if (User.Identity.IsAuthenticated)
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        if (user != Model.Post.Author)
                         {
-                            if (user != Model.Post.Author)
+                            if (Model.IsFollowing)
                             {
-                                if (Model.IsFollowing)
-                                {
-                                    <button type="submit" asp-page-handler="UnFollow" asp-route-postId="@Model.Post.Id" asp-route-followerId="@user.Id" asp-route-followingId="@Model.Post.AuthorId"
-                                            class="btn btn-outline-secondary p-1">
-                                        Following
-                                    </button>
-                                }
-                                else
-                                {
-                                    <button type="submit" asp-page-handler="Follow" asp-route-postId="@Model.Post.Id" asp-route-followerId="@user.Id" asp-route-followingId="@Model.Post.AuthorId"
-                                            class="btn btn-primary p-1">
-                                        Follow
-                                    </button>
-                                }
+                                <button type="submit" asp-page-handler="UnFollow" asp-route-postId="@Model.Post.Id" asp-route-followerId="@user.Id" asp-route-followingId="@Model.Post.AuthorId"
+                                        class="btn btn-outline-secondary p-1">
+                                    Following
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="submit" asp-page-handler="Follow" asp-route-postId="@Model.Post.Id" asp-route-followerId="@user.Id" asp-route-followingId="@Model.Post.AuthorId"
+                                        class="btn btn-primary p-1">
+                                    Follow
+                                </button>
                             }
                         }
                     }
                 </form>
-                @{
-                    var bio = Model.Post.Author.Biography;
-                    if (bio != null)
-                    {
-                        <p class="card-text text-secondary" style="font-size:.90rem;">@bio.ShortenString(10)</p>
-                    }
+                @if (Model.Post.Author.Biography != null)
+                {
+                    <p class="card-text text-secondary" style="font-size:.90rem;">@Model.Post.Author.Biography.ShortenString(10)</p>
                 }
+
                 <p class="card-text " style="font-size:.80rem;">
                     Last updated on @((lastUpdated == null) ? createdDate.ToString("MMM/d/yyyy") : lastUpdated.Value.ToString("MMM/d/yyyy"))
                 </p>
@@ -72,6 +67,12 @@
 {
     <img width="1000" height="600" src="@Model.PreviewImageDataUrl" alt="Alternate Text" />
 }
+
 <p class="fs-5 lh-base">
     @Html.Raw(Model.Post.Content)
 </p>
+@if (User.Identity.IsAuthenticated && Model.Post.Author != user)
+{
+    @await Component.InvokeAsync("Like", new { postId = Model.Post.Id, userId = user.Id })
+}
+

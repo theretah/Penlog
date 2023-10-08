@@ -34,11 +34,27 @@ namespace Penlog.Data.Context
                 .WithMany()
                 .HasForeignKey(f => f.FollowingId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Like>()
+                .HasKey(l => new { l.PostId, l.UserId });
+
+            modelBuilder.Entity<Like>()
+                .HasOne(l => l.Post)
+                .WithMany(p => p.Likes)
+                .HasForeignKey(l => l.PostId)
+              .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Like>()
+              .HasOne(l => l.User)
+              .WithMany(p => p.Likes)
+              .HasForeignKey(l => l.UserId)
+              .OnDelete(DeleteBehavior.Restrict);
         }
 
         public DbSet<Post> Posts { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Follow> Follows { get; set; }
         public DbSet<Image> Images { get; set; }
+        public DbSet<Like> Likes { get; set; }
     }
 }

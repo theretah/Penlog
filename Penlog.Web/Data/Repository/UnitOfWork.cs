@@ -13,11 +13,13 @@ namespace Penlog.Data.Repository
             Posts = new PostRepository(context);
             Follows = new FollowRepository(context);
             Images = new ImageRepository(context);
+            Likes = new LikeRepository(context);
         }
 
         public IPostRepository Posts { get; private set; }
         public IFollowRepository Follows { get; private set; }
         public IImageRepository Images { get; private set; }
+        public ILikeRepository Likes { get; private set; }
 
         public int Complete()
         {

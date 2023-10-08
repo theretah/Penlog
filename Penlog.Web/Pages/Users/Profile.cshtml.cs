@@ -90,7 +90,7 @@ namespace Penlog.Pages.Users
             ms.Close();
             ms.Dispose();
 
-            var currentPhoto = unit.Images.Find(i => i.Id == user.ProfileImage.Id).FirstOrDefault();
+            var currentPhoto = unit.Images.Find(i => i.Id == user.ProfileImageId).FirstOrDefault();
             if (currentPhoto != null)
                 unit.Images.Remove(currentPhoto);
 

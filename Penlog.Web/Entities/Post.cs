@@ -15,11 +15,13 @@ namespace Penlog.Model.Entities
         [ValidateNever]
         public int? PreviewImageId { get; set; }
         [ValidateNever]
-        public Image? PreviewImage{ get; set; }
+        public Image? PreviewImage { get; set; }
 
         [ValidateNever]
         public string AuthorId { get; set; }
         [ValidateNever]
         public AppUser Author { get; set; }
+
+        public IEnumerable<Like> Likes { get; set; }
     }
 }

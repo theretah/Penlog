@@ -23,18 +23,25 @@ namespace Penlog.Pages
         public string ProfileImageDataUrl { get; set; }
         public string PreviewImageDataUrl { get; set; }
         public bool IsFollowing { get; set; }
+        public bool HasLiked { get; set; }
+        public AppUser AppUser { get; set; }
+        [BindProperty]
+        public bool RefreshFlag { get; set; }
 
         public IActionResult OnGet(int id)
         {
             Post = unit.Posts.GetWithAuthor(id);
 
-            var user = userManager.GetUserAsync(User).Result;
-            if (user != null)
+            AppUser = userManager.GetUserAsync(User).Result;
+            if (AppUser != null)
             {
-                var follow = followPageControls.GetFollowEntity(user.Id, Post.AuthorId);
+                var follow = followPageControls.GetFollowEntity(AppUser.Id, Post.AuthorId);
                 IsFollowing = unit.Follows
                     .Find(f => f.FollowerId == follow.FollowerId && f.FollowingId == follow.FollowingId)
                         .FirstOrDefault() != null;
+
+                var like = unit.Likes.Find(l => l.PostId == Post.Id && l.UserId == AppUser.Id).FirstOrDefault();
+                HasLiked = like != null;
             }
 
             var photo = unit.Images.Find(p => p.Id == Post.Author.ProfileImageId).SingleOrDefault();
@@ -53,6 +60,23 @@ namespace Penlog.Pages
             }
 
             return Page();
+        }
+        public async Task<IActionResult> OnPostLike(int postId)
+        {
+            Post = unit.Posts.GetWithAuthor(postId);
+            AppUser = userManager.GetUserAsync(User).Result;
+
+            var like = unit.Likes.Find(l => l.PostId == postId && l.UserId == AppUser.Id).FirstOrDefault();
+            if (like == null)
+            {
+                unit.Likes.Add(new Like { Post = Post, PostId = postId, User = AppUser, UserId = AppUser.Id });
+            }
+            else
+            {
+                unit.Likes.Remove(like);
+            }
+            unit.Complete();
+            return OnGet(postId);
         }
         public IActionResult OnPostFollow(int postId, string followerId, string followingId)
         {

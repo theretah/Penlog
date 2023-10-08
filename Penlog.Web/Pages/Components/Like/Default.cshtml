@@ -1,0 +1,21 @@
+﻿@model Penlog.Model.Entities.Like
+@inject Microsoft.AspNetCore.Identity.UserManager<Penlog.Model.Entities.AppUser> UserManager
+@inject Penlog.Data.Repository.IRepository.IUnitOfWork unit
+@{
+    var user = UserManager.GetUserAsync(User).Result;
+    var like = unit.Likes.Find(l => l.UserId == user.Id && l.PostId == Model.PostId).FirstOrDefault();
+}
+<form method="post" id="likeform">
+    @if (like == null)
+    {
+        <button type="submit" asp-page-handler="Like" asp-route-postId="@Model.PostId" class="btn btn-primary p-1">
+            Like
+        </button>
+    }
+    else
+    {
+        <button type="submit" asp-page-handler="Like" asp-route-postId="@Model.PostId" class="btn btn-outline-primary p-1">
+            DisLike
+        </button>
+    }
+</form>
