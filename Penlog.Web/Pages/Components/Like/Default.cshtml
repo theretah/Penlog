@@ -5,7 +5,7 @@
     var user = UserManager.GetUserAsync(User).Result;
     var like = unit.Likes.Find(l => l.UserId == user.Id && l.PostId == Model.PostId).FirstOrDefault();
 }
-<form method="post" id="likeform">
+<form method="post">
     @if (like == null)
     {
         <button type="submit" asp-page-handler="Like" asp-route-postId="@Model.PostId" class="btn btn-primary p-1">

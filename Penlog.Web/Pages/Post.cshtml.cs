@@ -24,7 +24,7 @@ namespace Penlog.Pages
         public string PreviewImageDataUrl { get; set; }
         public bool IsFollowing { get; set; }
         public bool HasLiked { get; set; }
-        public AppUser AppUser { get; set; }
+        public AppUser CurrentUser { get; set; }
         [BindProperty]
         public bool RefreshFlag { get; set; }
 
@@ -32,15 +32,15 @@ namespace Penlog.Pages
         {
             Post = unit.Posts.GetWithAuthor(id);
 
-            AppUser = userManager.GetUserAsync(User).Result;
-            if (AppUser != null)
+            CurrentUser = userManager.GetUserAsync(User).Result;
+            if (CurrentUser != null)
             {
-                var follow = followPageControls.GetFollowEntity(AppUser.Id, Post.AuthorId);
+                var follow = followPageControls.GetFollowEntity(CurrentUser.Id, Post.AuthorId);
                 IsFollowing = unit.Follows
                     .Find(f => f.FollowerId == follow.FollowerId && f.FollowingId == follow.FollowingId)
                         .FirstOrDefault() != null;
 
-                var like = unit.Likes.Find(l => l.PostId == Post.Id && l.UserId == AppUser.Id).FirstOrDefault();
+                var like = unit.Likes.Find(l => l.PostId == Post.Id && l.UserId == CurrentUser.Id).FirstOrDefault();
                 HasLiked = like != null;
             }
 
@@ -64,12 +64,12 @@ namespace Penlog.Pages
         public async Task<IActionResult> OnPostLike(int postId)
         {
             Post = unit.Posts.GetWithAuthor(postId);
-            AppUser = userManager.GetUserAsync(User).Result;
+            CurrentUser = userManager.GetUserAsync(User).Result;
 
-            var like = unit.Likes.Find(l => l.PostId == postId && l.UserId == AppUser.Id).FirstOrDefault();
+            var like = unit.Likes.Find(l => l.PostId == postId && l.UserId == CurrentUser.Id).FirstOrDefault();
             if (like == null)
             {
-                unit.Likes.Add(new Like { Post = Post, PostId = postId, User = AppUser, UserId = AppUser.Id });
+                unit.Likes.Add(new Like { Post = Post, PostId = postId, User = CurrentUser, UserId = CurrentUser.Id });
             }
             else
             {
