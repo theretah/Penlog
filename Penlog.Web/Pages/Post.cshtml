@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "{id}"
 @using Penlog.Utility;
 @inject Microsoft.AspNetCore.Identity.UserManager<Penlog.Model.Entities.AppUser> userManager
 @model Penlog.Pages.PostModel
@@ -7,12 +7,16 @@
     var createdDate = Model.Post.CreatedDate;
     var user = userManager.GetUserAsync(User).Result;
     bool isAuthenticated = User.Identity.IsAuthenticated;
+
+    var postId = Model.Post.Id;
+    var authorId = Model.Post.AuthorId;
+    var userId = user.Id;
 }
 <div class="card mb-3 border-0" style="max-width: 540px;">
     <div class="row g-0">
         <div class="col-md-2 text-center">
             <div class="mt-3">
-                <a asp-page="Users/Profile" asp-route-id="@Model.Post.AuthorId">
+                <a asp-page="Users/Profile" asp-route-id="@authorId">
                     @if (Model.ProfileImageDataUrl == "default-profile.jpg")
                     {
                         <img width="80" height="80" style="border-radius:50%;" src="~/images/@Model.ProfileImageDataUrl" alt="Alternate Text" />
@@ -26,12 +30,12 @@
         </div>
         <div class="col-md-8">
             <div class="card-body p-1">
-                <a class="text-decoration-none text-dark d-inline-block" asp-page="Users/Profile" asp-route-id="@Model.Post.AuthorId">
+                <a class="text-decoration-none text-dark d-inline-block" asp-page="Users/Profile" asp-route-id="@authorId">
                     <h6 class="card-title fw-bold">@Model.Post.Author.UserName</h6>
                 </a>
                 @if (isAuthenticated && user != Model.Post.Author)
                 {
-                    @await Component.InvokeAsync("Follow", new { postId = Model.Post.Id, followerId = user.Id, followingId = Model.Post.AuthorId });
+                    @await Component.InvokeAsync("Follow", new { postId = postId, followerId = userId, followingId = authorId });
                 }
                 @if (Model.Post.Author.Biography != null)
                 {
@@ -56,6 +60,36 @@
 </p>
 @if (isAuthenticated && Model.Post.Author != user)
 {
-    @await Component.InvokeAsync("Like", new { postId = Model.Post.Id, userId = user.Id })
+    @await Component.InvokeAsync("Like", new { postId = postId, userId = userId })
 }
 
+<div class="mt-5 p-5 bg-light">
+    <form method="post" asp-page-handler="Comment" asp-route-postId="@postId">
+        <h5>Write your comment</h5>
+        <div class="mb-3">
+            <label for="titleInput" class="form-label">Title: </label>
+            <input asp-for="CommentTitle" type="text" class="form-control" id="titleInput">
+            <span asp-validation-for="CommentTitle" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label for="contentInput" class="form-label">Content: </label>
+            <textarea asp-for="CommentText" type="text" class="form-control" id="contentInput"></textarea>
+            <span asp-validation-for="CommentText" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Post</button>
+    </form>
+</div>
+
+@foreach (var comment in Model.Comments)
+{
+    <div class="mt-2 p-2 bg-dark text-light">
+        <h5>@comment.Title</h5>
+        <p>@comment.Content</p>
+        <form method="post">
+            <button class="btn btn-danger" asp-route-postId="@postId" asp-page-handler="DeleteComment" 
+                    asp-route-commentId="@comment.Id">
+                Delete
+            </button>
+        </form>
+    </div>
+}

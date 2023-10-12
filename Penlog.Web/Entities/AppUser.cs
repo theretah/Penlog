@@ -18,5 +18,6 @@ namespace Penlog.Model.Entities
         public IEnumerable<Post> Posts { get; set; }
         public IEnumerable<Follow> Follows { get; set; }
         public IEnumerable<Like> Likes { get; set; }
+        public IEnumerable<Comment> Comments { get; set; }
     }
 }

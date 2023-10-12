@@ -6,6 +6,7 @@
         IFollowRepository Follows { get; }
         IImageRepository Images { get; }
         ILikeRepository Likes { get; }
+        ICommentRepository Comments { get; }
         int Complete();
     }
 }

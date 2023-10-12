@@ -19,25 +19,36 @@ namespace Penlog.Pages
             this.userManager = userManager;
             this.followPageControls = followPageControls;
         }
-        public Post Post { get; set; }
         public string ProfileImageDataUrl { get; set; }
         public string PreviewImageDataUrl { get; set; }
         public bool IsFollowing { get; set; }
         public bool HasLiked { get; set; }
-        public AppUser CurrentUser { get; set; }
+
         [BindProperty]
         public bool RefreshFlag { get; set; }
+        [BindProperty]
+        public string CommentTitle { get; set; }
+        [BindProperty]
+        public string CommentText { get; set; }
 
-        public IActionResult OnGet(int id)
+        public Post Post { get; set; }
+        public AppUser CurrentUser { get; set; }
+        public IEnumerable<Comment> Comments { get; set; }
+
+        public async Task OnGet(int id)
         {
-            Post = unit.Posts.GetWithAuthor(id);
+            ModelState.Clear();
+            CommentText = string.Empty;
+            CommentTitle = string.Empty;
 
-            CurrentUser = userManager.GetUserAsync(User).Result;
+            Post = unit.Posts.GetWithAuthor(id);
+            Comments = unit.Comments.Find(c => c.PostId == Post.Id && c.ParentId == null);
+
+            CurrentUser = await userManager.GetUserAsync(User);
             if (CurrentUser != null)
             {
-                var follow = followPageControls.GetFollowEntity(CurrentUser.Id, Post.AuthorId);
                 IsFollowing = unit.Follows
-                    .Find(f => f.FollowerId == follow.FollowerId && f.FollowingId == follow.FollowingId)
+                    .Find(f => f.FollowerId == CurrentUser.Id && f.FollowingId == Post.AuthorId)
                         .FirstOrDefault() != null;
 
                 var like = unit.Likes.Find(l => l.PostId == Post.Id && l.UserId == CurrentUser.Id).FirstOrDefault();
@@ -58,13 +69,11 @@ namespace Penlog.Pages
                 string imageBase64Data = Convert.ToBase64String(previewImage.Bytes);
                 PreviewImageDataUrl = string.Format("data:image/jpg;base64,{0}", imageBase64Data);
             }
-
-            return Page();
         }
         public async Task<IActionResult> OnPostLike(int postId)
         {
             Post = unit.Posts.GetWithAuthor(postId);
-            CurrentUser = userManager.GetUserAsync(User).Result;
+            CurrentUser = await userManager.GetUserAsync(User);
 
             var like = unit.Likes.Find(l => l.PostId == postId && l.UserId == CurrentUser.Id).FirstOrDefault();
             if (like == null)
@@ -76,17 +85,43 @@ namespace Penlog.Pages
                 unit.Likes.Remove(like);
             }
             unit.Complete();
-            return OnGet(postId);
+
+            return RedirectToPage(postId);
         }
         public IActionResult OnPostFollow(int postId, string followerId, string followingId)
         {
             followPageControls.Follow(followerId, followingId);
-            return OnGet(postId);
+            return RedirectToPage(postId);
         }
         public IActionResult OnPostUnFollow(int postId, string followerId, string followingId)
         {
             followPageControls.UnFollow(followerId, followingId);
-            return OnGet(postId);
+            return RedirectToPage(postId);
+        }
+        public IActionResult OnPostComment(int postId)
+        {
+            var userId = userManager.GetUserId(User);
+
+            unit.Comments.Add(new Comment
+            {
+                AuthorId = userId,
+                Title = CommentTitle,
+                Content = CommentText,
+                PublishDate = DateTimeOffset.Now,
+                ParentId = null,
+                PostId = postId
+            });
+            unit.Complete();
+
+            return RedirectToPage(postId);
+        }
+        public IActionResult OnPostDeleteComment(int postId, int commentId)
+        {
+            var comment = unit.Comments.Get(commentId);
+            unit.Comments.Remove(comment);
+            unit.Complete();
+
+            return RedirectToPage(postId);
         }
     }
 }

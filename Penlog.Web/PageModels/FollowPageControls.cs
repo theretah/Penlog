@@ -9,18 +9,18 @@ namespace Penlog.PageModels
 {
     public class FollowPageControls : IFollowPageControls
     {
-        private readonly IUnitOfWork unit;
         private readonly UserManager<AppUser> usermanager;
+        private readonly IUnitOfWork unit;
 
-        public FollowPageControls(IUnitOfWork unit, UserManager<AppUser> usermanager)
+        public FollowPageControls(UserManager<AppUser> usermanager, IUnitOfWork unit)
         {
-            this.unit = unit;
             this.usermanager = usermanager;
+            this.unit = unit;
         }
 
         public void Follow(string followerId, string followingId)
         {
-            unit.Follows.Add(GetFollowEntity(followerId, followingId));
+            unit.Follows.Add(new Follow { FollowerId = followerId, FollowingId = followingId });
 
             var follower = GetFollower(followerId).Result;
             follower.FollowingsCount++;
@@ -31,7 +31,7 @@ namespace Penlog.PageModels
         }
         public void UnFollow(string followerId, string followingId)
         {
-            unit.Follows.Remove(GetFollowEntity(followerId, followingId));
+            unit.Follows.Remove(new Follow { FollowerId = followerId, FollowingId = followingId });
 
             var follower = GetFollower(followerId).Result;
             follower.FollowingsCount--;
@@ -41,22 +41,22 @@ namespace Penlog.PageModels
             unit.Complete();
         }
 
-        public Follow GetFollowEntity(string followerId, string followingId)
-        {
-            var follower = GetFollower(followerId).Result;
-            var following = GetFollowing(followingId).Result;
+        //private Follow GetFollowEntity(string followerId, string followingId)
+        //{
+        //    var follower = GetFollower(followerId).Result;
+        //    var following = GetFollowing(followingId).Result;
 
-            if (follower == null)
-                return new Follow();
+        //    if (follower == null)
+        //        return new Follow();
 
-            return new Follow
-            {
-                FollowerId = followerId,
-                Follower = follower,
-                FollowingId = followingId,
-                Following = following
-            };
-        }
+        //    return new Follow
+        //    {
+        //        FollowerId = followerId,
+        //        Follower = follower,
+        //        FollowingId = followingId,
+        //        Following = following
+        //    };
+        //}
         private async Task<AppUser> GetFollower(string followerId)
         {
             // Follower must be the logged in user

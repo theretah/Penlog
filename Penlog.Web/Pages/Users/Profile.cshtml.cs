@@ -34,9 +34,8 @@ namespace Penlog.Pages.Users
             var user = userManager.GetUserAsync(User).Result;
             if (user != null)
             {
-                var follow = followPageControls.GetFollowEntity(user.Id, id);
                 IsFollowing = unit.Follows
-                    .Find(f => f.FollowerId == follow.FollowerId && f.FollowingId == follow.FollowingId)
+                    .Find(f => f.FollowerId == user.Id && f.FollowingId == id)
                         .FirstOrDefault() != null;
             }
 

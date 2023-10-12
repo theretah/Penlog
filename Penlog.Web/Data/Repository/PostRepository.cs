@@ -21,7 +21,7 @@ namespace Penlog.Data.Repository
 
         public Post GetWithAuthor(int id)
         {
-            return context.Posts.Include(p => p.Author).ThenInclude(p => p.ProfileImage).Where(p => p.Id == id).First();
+            return context.Posts.Include(p => p.Author).ThenInclude(p => p.ProfileImage).Where(p => p.Id == id).FirstOrDefault();
         }
 
         public Post GetWithPreviewImage(int id)

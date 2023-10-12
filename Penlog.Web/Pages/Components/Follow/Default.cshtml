@@ -3,7 +3,8 @@
 @inject Penlog.Data.Repository.IRepository.IUnitOfWork unit
 @{
     var user = UserManager.GetUserAsync(User).Result;
-    var follow = unit.Follows.Find(f => f.FollowerId == Model.FollowerId && f.FollowingId == Model.FollowingId).FirstOrDefault();
+    var follow = unit.Follows.Find(f => f.FollowerId == Model.FollowerId && f.FollowingId == Model.FollowingId)
+        .FirstOrDefault();
 }
 <form method="post" class="d-inline">
     @if (follow != null)

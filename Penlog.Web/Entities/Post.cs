@@ -23,5 +23,6 @@ namespace Penlog.Model.Entities
         public AppUser Author { get; set; }
 
         public IEnumerable<Like> Likes { get; set; }
+        public IEnumerable<Comment> Comments { get; set; }
     }
 }
