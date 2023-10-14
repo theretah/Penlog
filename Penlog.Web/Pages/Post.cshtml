@@ -1,6 +1,7 @@
 ﻿@page "{id}"
 @using Penlog.Utility;
 @inject Microsoft.AspNetCore.Identity.UserManager<Penlog.Model.Entities.AppUser> userManager
+@inject Penlog.Data.Repository.IRepository.IUnitOfWork unit
 @model Penlog.Pages.PostModel
 @{
     var lastUpdated = Model.Post.LastUpdated;
@@ -10,21 +11,18 @@
 
     var postId = Model.Post.Id;
     var authorId = Model.Post.AuthorId;
-    var userId = user.Id;
+    string userId = "";
+    if (user != null)
+    {
+        userId = user.Id;
+    }
 }
 <div class="card mb-3 border-0" style="max-width: 540px;">
     <div class="row g-0">
         <div class="col-md-2 text-center">
             <div class="mt-3">
                 <a asp-page="Users/Profile" asp-route-id="@authorId">
-                    @if (Model.ProfileImageDataUrl == "default-profile.jpg")
-                    {
-                        <img width="80" height="80" style="border-radius:50%;" src="~/images/@Model.ProfileImageDataUrl" alt="Alternate Text" />
-                    }
-                    else
-                    {
-                        <img width="80" height="80" style="border-radius:50%;" src="@Model.ProfileImageDataUrl" alt="Alternate Text" />
-                    }
+                    @await Component.InvokeAsync("ProfileImage", new { profileUser = Model.Post.Author })
                 </a>
             </div>
         </div>
@@ -62,34 +60,52 @@
 {
     @await Component.InvokeAsync("Like", new { postId = postId, userId = userId })
 }
-
-<div class="mt-5 p-5 bg-light">
-    <form method="post" asp-page-handler="Comment" asp-route-postId="@postId">
-        <h5>Write your comment</h5>
-        <div class="mb-3">
-            <label for="titleInput" class="form-label">Title: </label>
-            <input asp-for="CommentTitle" type="text" class="form-control" id="titleInput">
-            <span asp-validation-for="CommentTitle" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label for="contentInput" class="form-label">Content: </label>
-            <textarea asp-for="CommentText" type="text" class="form-control" id="contentInput"></textarea>
-            <span asp-validation-for="CommentText" class="text-danger"></span>
-        </div>
-        <button type="submit" class="btn btn-primary">Post</button>
-    </form>
-</div>
-
+@if (user != null)
+{
+    <div class="mt-5 p-5 bg-light">
+        <form method="post" asp-page-handler="Comment" asp-route-postId="@postId">
+            <h5>Write your comment</h5>
+            <div class="mb-3">
+                <label for="titleInput" class="form-label">Title: </label>
+                <input asp-for="CommentTitle" type="text" class="form-control" id="titleInput">
+                <span asp-validation-for="CommentTitle" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label for="contentInput" class="form-label">Content: </label>
+                <textarea asp-for="CommentText" type="text" class="form-control" id="contentInput"></textarea>
+                <span asp-validation-for="CommentText" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Post</button>
+        </form>
+    </div>
+}
+<br />
+<br />
+<hr />
+<h3>Comments</h3>
 @foreach (var comment in Model.Comments)
 {
-    <div class="mt-2 p-2 bg-dark text-light">
+
+    <div class="mt-2 p-2 bg-light text-dark">
+        @await Component.InvokeAsync("ProfileImage", new { profileUser = comment.Author })
+        <h4 class="text-primary">@comment.Author.UserName</h4>
         <h5>@comment.Title</h5>
         <p>@comment.Content</p>
-        <form method="post">
-            <button class="btn btn-danger" asp-route-postId="@postId" asp-page-handler="DeleteComment" 
-                    asp-route-commentId="@comment.Id">
-                Delete
-            </button>
-        </form>
+        @if (isAuthenticated)
+        {
+            <form method="post">
+                @if (user == Model.Post.Author)
+                {
+                    <button class="btn btn-danger" asp-route-postId="@postId" asp-page-handler="DeleteComment"
+                            asp-route-commentId="@comment.Id">
+                        Delete
+                    </button>
+                }
+                <button class="btn btn-primary" asp-route-postId="@postId" asp-page-handler="DeleteComment"
+                        asp-route-commentId="@comment.Id">
+                    Reply
+                </button>
+            </form>
+        }
     </div>
 }

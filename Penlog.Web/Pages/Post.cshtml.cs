@@ -19,7 +19,6 @@ namespace Penlog.Pages
             this.userManager = userManager;
             this.followPageControls = followPageControls;
         }
-        public string ProfileImageDataUrl { get; set; }
         public string PreviewImageDataUrl { get; set; }
         public bool IsFollowing { get; set; }
         public bool HasLiked { get; set; }
@@ -53,14 +52,6 @@ namespace Penlog.Pages
 
                 var like = unit.Likes.Find(l => l.PostId == Post.Id && l.UserId == CurrentUser.Id).FirstOrDefault();
                 HasLiked = like != null;
-            }
-
-            var photo = unit.Images.Find(p => p.Id == Post.Author.ProfileImageId).SingleOrDefault();
-            ProfileImageDataUrl = "default-profile.jpg";
-            if (photo != null)
-            {
-                string imageBase64Data = Convert.ToBase64String(photo.Bytes);
-                ProfileImageDataUrl = string.Format("data:image/jpg;base64,{0}", imageBase64Data);
             }
 
             var previewImage = unit.Images.Find(p => p.Id == Post.PreviewImageId).SingleOrDefault();

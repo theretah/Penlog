@@ -1,0 +1,10 @@
+﻿@model string
+
+@if (Model == "default-profile.jpg")
+{
+    <img width="80" height="80" style="border-radius:50%;" src="~/images/@Model" alt="Alternate Text" />
+}
+else
+{
+    <img width="80" height="80" style="border-radius:50%;" src="@Model" alt="Alternate Text" />
+}
