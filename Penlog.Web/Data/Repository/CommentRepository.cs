@@ -1,6 +1,8 @@
-﻿using Penlog.Data.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using Penlog.Data.Context;
 using Penlog.Data.Repository.IRepository;
 using Penlog.Model.Entities;
+using System.Linq.Expressions;
 
 namespace Penlog.Data.Repository
 {
@@ -16,6 +18,10 @@ namespace Penlog.Data.Repository
         public void Update(Comment comment)
         {
             context.Update(comment);
+        }
+        public IEnumerable<Comment> GetWithAuthors(Expression<Func<Comment, bool>>? predicate)
+        {
+            return context.Comments.Where(predicate).Include(c => c.Author).ToList();
         }
     }
 }

@@ -41,7 +41,7 @@ namespace Penlog.Pages
             CommentTitle = string.Empty;
 
             Post = unit.Posts.GetWithAuthor(id);
-            Comments = unit.Comments.Find(c => c.PostId == Post.Id && c.ParentId == null);
+            Comments = unit.Comments.GetWithAuthors(c => c.PostId == Post.Id);
 
             CurrentUser = await userManager.GetUserAsync(User);
             if (CurrentUser != null)
@@ -92,7 +92,6 @@ namespace Penlog.Pages
         public IActionResult OnPostComment(int postId)
         {
             var userId = userManager.GetUserId(User);
-
             unit.Comments.Add(new Comment
             {
                 AuthorId = userId,
@@ -100,6 +99,22 @@ namespace Penlog.Pages
                 Content = CommentText,
                 PublishDate = DateTimeOffset.Now,
                 ParentId = null,
+                PostId = postId
+            });
+            unit.Complete();
+
+            return RedirectToPage(postId);
+        }
+        public IActionResult OnPostReplyComment(int postId,int parentId)
+        {
+            var userId = userManager.GetUserId(User);
+            unit.Comments.Add(new Comment
+            {
+                AuthorId = userId,
+                Title = CommentTitle,
+                Content = CommentText,
+                PublishDate = DateTimeOffset.Now,
+                ParentId = parentId,
                 PostId = postId
             });
             unit.Complete();

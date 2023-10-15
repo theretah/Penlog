@@ -6,4 +6,5 @@
         public string FollowingId{ get; set; }
         public int PostId { get; set; }
     }
+
 }

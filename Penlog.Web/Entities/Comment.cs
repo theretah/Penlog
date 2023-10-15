@@ -16,5 +16,7 @@
         public string? Title { get; set; }
         public string Content { get; set; }
         public DateTimeOffset PublishDate { get; set; }
+
+        public IEnumerable<Comment>? Replies { get; set; }
     }
 }
