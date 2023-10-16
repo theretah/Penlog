@@ -85,34 +85,38 @@
 <h3>Comments</h3>
 @{
     var comments = Model.Comments.Where(c => c.ParentId == null);
+    int commentNumber = 1;
     foreach (var comment in comments)
     {
         <div class="mt-2 p-2 bg-light text-dark">
             <div class="card">
-                @await Component.InvokeAsync("ProfileImage", new { profileUser = comment.Author, widthAndHeight = profileImageWidthAndHeight })
-                <h5 class="card-header">@comment.Author.UserName</h5>
+                <h5 class="card-header">
+                    @await Component.InvokeAsync("ProfileImage", new { profileUser = comment.Author, widthAndHeight = profileImageWidthAndHeight })
+                    @comment.Author.UserName
+                </h5>
                 <div class="card-body">
                     <h5 class="card-title">@comment.Title</h5>
                     <p class="card-text">@comment.Content</p>
                     @if (isAuthenticated)
                     {
+                        string commentId = "comment" + commentNumber;
                         <form method="post">
                             @if (user == comment.Author)
                             {
-                                <button class="btn btn-danger" asp-page-handler="DeleteComment" asp-route-postId="@postId"
+                                <button class="btn btn-danger p-1" asp-page-handler="DeleteComment" asp-route-postId="@postId"
                                         asp-route-commentId="@comment.Id">
                                     Delete
                                 </button>
                             }
                         </form>
                         <p class="d-inline-flex gap-1">
-                            <button class="btn btn-primary" type="button"
-                                    data-bs-toggle="collapse" data-bs-target="#replyCollapse" aria-expanded="false"
+                            <button class="btn btn-primary p-1" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#@commentId" aria-expanded="false"
                                     aria-controls="replyCollapse">
                                 Reply
                             </button>
                         </p>
-                        <div class="collapse" id="replyCollapse">
+                        <div class="collapse" id="@commentId">
                             <div class="card card-body">
                                 <form method="post" asp-page-handler="ReplyComment" asp-route-postId="@postId"
                                       asp-route-parentId="@comment.Id" asp-route-commentId="@comment.Id">
@@ -131,14 +135,18 @@
                                 </form>
                             </div>
                         </div>
+                        commentNumber++;
 
                         var replies = Model.Comments.Where(c => c.ParentId == comment.Id);
-
+                        int replyNumber = 1;
                         @foreach (var reply in replies)
                         {
                             <div class="mx-5 my-1 bg-white text-dark">
                                 <div class="card">
-                                    <h5 class="card-header">Featured</h5>
+                                    <h5 class="card-header">
+                                        @await Component.InvokeAsync("ProfileImage", new { profileUser = comment.Author, widthAndHeight = profileImageWidthAndHeight })
+                                        @comment.Author.UserName
+                                    </h5>
                                     <div class="card-body">
                                         <h5 class="card-title">@reply.Title</h5>
                                         <p class="card-text">@reply.Content</p>
@@ -147,23 +155,26 @@
                                             <form method="post">
                                                 @if (user == reply.Author)
                                                 {
-                                                    <button class="btn btn-danger" asp-page-handler="DeleteComment" asp-route-postId="@postId"
+                                                    <button class="btn btn-danger p-1" asp-page-handler="DeleteComment" asp-route-postId="@postId"
                                                             asp-route-commentId="@reply.Id">
                                                         Delete
                                                     </button>
                                                 }
                                             </form>
+
+                                            string replyId = "reply" + replyNumber;
+
                                             <p class="d-inline-flex gap-1">
-                                                <button class="btn btn-primary" type="button"
-                                                        data-bs-toggle="collapse" data-bs-target="#replyCollapse" aria-expanded="false"
+                                                <button class="btn btn-primary p-1" type="button"
+                                                        data-bs-toggle="collapse" data-bs-target="#@replyId" aria-expanded="false"
                                                         aria-controls="replyCollapse">
                                                     Reply
                                                 </button>
                                             </p>
-                                            <div class="collapse" id="replyCollapse">
+                                            <div class="collapse" id="@replyId">
                                                 <div class="card card-body">
                                                     <form method="post" asp-page-handler="ReplyComment" asp-route-postId="@postId"
-                                                          asp-route-parentId="@reply.Id" asp-route-commentId="@reply.Id">
+                                                          asp-route-parentId="@comment.Id" asp-route-commentId="@reply.Id">
                                                         <h5>Write your reply</h5>
                                                         <div class="mb-3">
                                                             <label for="replyTitleInput" class="form-label">Title: </label>
@@ -179,22 +190,15 @@
                                                     </form>
                                                 </div>
                                             </div>
+                                            replyNumber++;
                                         }
                                     </div>
                                 </div>
-                                @await Component.InvokeAsync("ProfileImage", new { profileUser = comment.Author, widthAndHeight = profileImageWidthAndHeight })
-                                <h4 class="text-primary">@comment.Author.UserName</h4>
-                                <h5></h5>
-                                <p></p>
                             </div>
                         }
                     }
                 </div>
             </div>
-            <h4 class="text-primary">@comment.Author.UserName</h4>
-            <h5></h5>
-            <p></p>
-
         </div>
     }
 }

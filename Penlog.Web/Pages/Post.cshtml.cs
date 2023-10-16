@@ -105,7 +105,7 @@ namespace Penlog.Pages
 
             return RedirectToPage(postId);
         }
-        public IActionResult OnPostReplyComment(int postId,int parentId)
+        public IActionResult OnPostReplyComment(int postId, int parentId)
         {
             var userId = userManager.GetUserId(User);
             unit.Comments.Add(new Comment
