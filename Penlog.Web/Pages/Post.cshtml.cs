@@ -125,6 +125,12 @@ namespace Penlog.Pages
         {
             var comment = unit.Comments.Get(commentId);
             unit.Comments.Remove(comment);
+
+            var children = unit.Comments.Find(c => c.ParentId == commentId);
+            foreach (var child in children)
+            {
+                unit.Comments.Remove(child);
+            }
             unit.Complete();
 
             return RedirectToPage(postId);

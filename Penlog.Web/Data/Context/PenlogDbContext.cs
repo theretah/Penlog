@@ -61,6 +61,12 @@ namespace Penlog.Data.Context
                 .WithOne(c => c.Author)
                 .HasForeignKey(c => c.AuthorId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.Parent)
+                .WithMany(p => p.Replies)
+                .HasForeignKey(r => r.ParentId)
+                .IsRequired(false);
         }
         public DbSet<Post> Posts { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }

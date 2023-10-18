@@ -83,17 +83,25 @@
 <br />
 <hr />
 <h3>Comments</h3>
+
 @{
-    var comments = Model.Comments.Where(c => c.ParentId == null);
+    var comments = Model.Comments.Where(c => c.ParentId == null).OrderBy(c => c.PublishDate);
+    if (comments.Count() == 0)
+    {
+        <p>No comments for this post yet.</p>
+    }
     int commentNumber = 1;
     foreach (var comment in comments)
     {
         <div class="mt-2 p-2 bg-light text-dark">
             <div class="card">
-                <h5 class="card-header">
-                    @await Component.InvokeAsync("ProfileImage", new { profileUser = comment.Author, widthAndHeight = profileImageWidthAndHeight })
-                    @comment.Author.UserName
-                </h5>
+                <a class="text-decoration-none" asp-page="/Users/Profile" asp-route-id="@comment.AuthorId">
+                    <h5 class="card-header text-primary">
+                        @await Component.InvokeAsync("ProfileImage",
+         new { profileUser = comment.Author, widthAndHeight = profileImageWidthAndHeight })
+                        @comment.Author.UserName
+                    </h5>
+                </a>
                 <div class="card-body">
                     <h5 class="card-title">@comment.Title</h5>
                     <p class="card-text">@comment.Content</p>
@@ -128,7 +136,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="contentInput" class="form-label">Content: </label>
-                                        <textarea asp-for="CommentText" type="text" class="form-control" id="contentInput"></textarea>
+                                        <textarea asp-for="CommentText" class="form-control" id="contentInput"></textarea>
                                         <span asp-validation-for="CommentText" class="text-danger"></span>
                                     </div>
                                     <button type="submit" class="btn btn-primary">Post</button>
@@ -136,17 +144,23 @@
                             </div>
                         </div>
                         commentNumber++;
-
-                        var replies = Model.Comments.Where(c => c.ParentId == comment.Id);
+                    }
+                    @{
+                        var replies = Model.Comments.Where(c => c.ParentId == comment.Id)
+                            .OrderBy(c => c.PublishDate);
                         int replyNumber = 1;
-                        @foreach (var reply in replies)
+
+                        foreach (var reply in replies)
                         {
                             <div class="mx-5 my-1 bg-white text-dark">
                                 <div class="card">
-                                    <h5 class="card-header">
-                                        @await Component.InvokeAsync("ProfileImage", new { profileUser = comment.Author, widthAndHeight = profileImageWidthAndHeight })
-                                        @comment.Author.UserName
-                                    </h5>
+                                    <a class="text-decoration-none" asp-page="/Users/Profile" asp-route-id="@reply.AuthorId">
+                                        <h5 class="card-header text-primary">
+                                            @await Component.InvokeAsync("ProfileImage",
+                                             new { profileUser = comment.Author, widthAndHeight = profileImageWidthAndHeight })
+                                            @comment.Author.UserName
+                                        </h5>
+                                    </a>
                                     <div class="card-body">
                                         <h5 class="card-title">@reply.Title</h5>
                                         <p class="card-text">@reply.Content</p>
@@ -195,6 +209,7 @@
                                     </div>
                                 </div>
                             </div>
+
                         }
                     }
                 </div>
