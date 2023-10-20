@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Penlog.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace Penlog.Model.Entities
@@ -24,5 +25,6 @@ namespace Penlog.Model.Entities
 
         public IEnumerable<Like> Likes { get; set; }
         public IEnumerable<Comment> Comments { get; set; }
+        public IEnumerable<PostCategory> Categories { get; set; }
     }
 }

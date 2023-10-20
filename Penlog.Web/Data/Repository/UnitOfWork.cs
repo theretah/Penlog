@@ -1,5 +1,7 @@
-﻿using Penlog.Data.Context;
+﻿using Microsoft.AspNetCore.Identity;
+using Penlog.Data.Context;
 using Penlog.Data.Repository.IRepository;
+using Penlog.Model.Entities;
 
 namespace Penlog.Data.Repository
 {
@@ -7,14 +9,17 @@ namespace Penlog.Data.Repository
     {
         private readonly PenlogDbContext context;
 
-        public UnitOfWork(PenlogDbContext context)
+        public UnitOfWork(PenlogDbContext context, UserManager<AppUser> userManager)
         {
             this.context = context;
             Posts = new PostRepository(context);
-            Follows = new FollowRepository(context);
+            Follows = new FollowRepository(context, userManager);
             Images = new ImageRepository(context);
             Likes = new LikeRepository(context);
             Comments = new CommentRepository(context);
+            PostCategories = new PostCategoryRepository(context);
+            UserCategories = new UserCategoryRepository(context);
+            Categories = new CategoryRepository(context);
         }
 
         public IPostRepository Posts { get; private set; }
@@ -22,6 +27,9 @@ namespace Penlog.Data.Repository
         public IImageRepository Images { get; private set; }
         public ILikeRepository Likes { get; private set; }
         public ICommentRepository Comments { get; private set; }
+        public IUserCategoryRepository UserCategories { get; private set; }
+        public IPostCategoryRepository PostCategories { get; private set; }
+        public ICategoryRepository Categories { get; private set; }
 
         public int Complete()
         {

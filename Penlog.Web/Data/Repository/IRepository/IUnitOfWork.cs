@@ -7,6 +7,9 @@
         IImageRepository Images { get; }
         ILikeRepository Likes { get; }
         ICommentRepository Comments { get; }
+        IUserCategoryRepository UserCategories { get; }
+        IPostCategoryRepository PostCategories { get; }
+        ICategoryRepository Categories { get; }
         int Complete();
     }
 }

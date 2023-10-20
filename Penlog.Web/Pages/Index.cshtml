@@ -26,8 +26,7 @@
 
                             if (post.Author.ProfileImage != null)
                             {
-                                imageBase64Data = Convert.ToBase64String(post.Author.ProfileImage.Bytes);
-                                imageDataUrl = string.Format("data:image/jpg;base64,{0}", imageBase64Data);
+                                imageDataUrl = ImageUtilities.GenerateImageDataUrl(post.Author.ProfileImage.Bytes);
                             }
                         }
                         <a asp-page="/Users/Profile" asp-route-id="@post.AuthorId" class="text-decoration-none text-dark fw-bold">

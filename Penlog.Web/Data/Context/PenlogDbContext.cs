@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Penlog.Entities;
 using Penlog.Model.Entities;
 
 namespace Penlog.Data.Context
@@ -67,12 +67,43 @@ namespace Penlog.Data.Context
                 .WithMany(p => p.Replies)
                 .HasForeignKey(r => r.ParentId)
                 .IsRequired(false);
+
+            modelBuilder.Entity<PostCategory>()
+                .HasKey(pc => new { pc.CategoryId, pc.PostId });
+
+            modelBuilder.Entity<PostCategory>()
+                .HasOne(pc => pc.Category)
+                .WithMany(c => c.Posts)
+                .HasForeignKey(pc => pc.CategoryId);
+
+            modelBuilder.Entity<PostCategory>()
+                .HasOne(pc => pc.Post)
+                .WithMany(p => p.Categories)
+                .HasForeignKey(pc => pc.PostId);
+
+            modelBuilder.Entity<UserCategory>()
+               .HasKey(pc => new { pc.CategoryId, pc.UserId });
+
+            modelBuilder.Entity<UserCategory>()
+                .HasOne(pc => pc.Category)
+                .WithMany(c => c.Followers)
+                .HasForeignKey(pc => pc.CategoryId);
+
+            modelBuilder.Entity<UserCategory>()
+                .HasOne(pc => pc.User)
+                .WithMany(p => p.FavoriteCategories)
+                .HasForeignKey(pc => pc.UserId);
         }
         public DbSet<Post> Posts { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
-        public DbSet<Follow> Follows { get; set; }
+
         public DbSet<Image> Images { get; set; }
+        public DbSet<Follow> Follows { get; set; }
         public DbSet<Like> Likes { get; set; }
         public DbSet<Comment> Comments { get; set; }
+
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<PostCategory> PostCategories { get; set; }
+        public DbSet<UserCategory> UserCategories { get; set; }
     }
 }

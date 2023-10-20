@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Penlog.Entities;
 
 namespace Penlog.Model.Entities
 {
@@ -19,5 +20,6 @@ namespace Penlog.Model.Entities
         public IEnumerable<Follow> Follows { get; set; }
         public IEnumerable<Like> Likes { get; set; }
         public IEnumerable<Comment> Comments { get; set; }
+        public IEnumerable<UserCategory> FavoriteCategories { get; set; }
     }
 }

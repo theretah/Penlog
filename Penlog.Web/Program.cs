@@ -4,7 +4,6 @@ using Penlog.Data.Context;
 using Penlog.Data.Repository;
 using Penlog.Data.Repository.IRepository;
 using Penlog.Model.Entities;
-using Penlog.PageModels;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("PenlogConnection");
@@ -27,7 +26,6 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(
 .AddTokenProvider<DataProtectorTokenProvider<AppUser>>(TokenOptions.DefaultProvider);
 
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
-builder.Services.AddTransient<IFollowPageControls, FollowPageControls>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

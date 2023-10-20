@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Penlog.Data.Repository.IRepository;
 using Penlog.Model.Entities;
-using Penlog.PageModels;
+using Penlog.Utility;
 
 namespace Penlog.Pages
 {
@@ -11,13 +11,11 @@ namespace Penlog.Pages
     {
         private readonly IUnitOfWork unit;
         private readonly UserManager<AppUser> userManager;
-        private readonly IFollowPageControls followPageControls;
 
-        public PostModel(IUnitOfWork unit, UserManager<AppUser> userManager, IFollowPageControls followPageControls)
+        public PostModel(IUnitOfWork unit, UserManager<AppUser> userManager)
         {
             this.unit = unit;
             this.userManager = userManager;
-            this.followPageControls = followPageControls;
         }
         public string PreviewImageDataUrl { get; set; }
         public bool IsFollowing { get; set; }
@@ -57,8 +55,7 @@ namespace Penlog.Pages
             var previewImage = unit.Images.Find(p => p.Id == Post.PreviewImageId).SingleOrDefault();
             if (previewImage != null)
             {
-                string imageBase64Data = Convert.ToBase64String(previewImage.Bytes);
-                PreviewImageDataUrl = string.Format("data:image/jpg;base64,{0}", imageBase64Data);
+                PreviewImageDataUrl = ImageUtilities.GenerateImageDataUrl(previewImage.Bytes);
             }
         }
         public async Task<IActionResult> OnPostLike(int postId)
@@ -81,12 +78,16 @@ namespace Penlog.Pages
         }
         public IActionResult OnPostFollow(int postId, string followerId, string followingId)
         {
-            followPageControls.Follow(followerId, followingId);
+            unit.Follows.Follow(followerId, followingId);
+            unit.Complete();
+
             return RedirectToPage(postId);
         }
         public IActionResult OnPostUnFollow(int postId, string followerId, string followingId)
         {
-            followPageControls.UnFollow(followerId, followingId);
+            unit.Follows.UnFollow(followerId, followingId);
+            unit.Complete();
+
             return RedirectToPage(postId);
         }
         public IActionResult OnPostComment(int postId)

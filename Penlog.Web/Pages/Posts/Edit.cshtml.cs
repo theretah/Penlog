@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using NuGet.Configuration;
 using Penlog.Data.Repository.IRepository;
 using Penlog.Model.Entities;
+using Penlog.Utility;
 
 namespace Penlog.Pages.Posts
 {
@@ -34,8 +35,7 @@ namespace Penlog.Pages.Posts
             var previewImage = unit.Images.Find(p => p.Id == Post.PreviewImageId).SingleOrDefault();
             if (previewImage != null)
             {
-                string imageBase64Data = Convert.ToBase64String(previewImage.Bytes);
-                PreviewImageDataUrl = string.Format("data:image/jpg;base64,{0}", imageBase64Data);
+                PreviewImageDataUrl = ImageUtilities.GenerateImageDataUrl(previewImage.Bytes);
             }
         }
         public IActionResult OnPost(int id)

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Penlog.Data.Repository.IRepository;
 using Penlog.Model.Entities;
-using Penlog.PageModels;
 
 namespace Penlog.Pages.Users
 {
@@ -11,13 +10,11 @@ namespace Penlog.Pages.Users
     {
         private readonly IUnitOfWork unit;
         private readonly UserManager<AppUser> userManager;
-        private readonly IFollowPageControls followPageControls;
 
-        public ProfileModel(IUnitOfWork unit, UserManager<AppUser> userManager, IFollowPageControls followPageControls)
+        public ProfileModel(IUnitOfWork unit, UserManager<AppUser> userManager)
         {
             this.unit = unit;
             this.userManager = userManager;
-            this.followPageControls = followPageControls;
         }
 
         public IFormFile File { get; set; }
@@ -59,12 +56,16 @@ namespace Penlog.Pages.Users
         }
         public IActionResult OnPostFollow(string authorId, string followerId, string followingId)
         {
-            followPageControls.Follow(followerId, followingId);
+            unit.Follows.Follow(followerId, followingId);
+            unit.Complete();
+
             return OnGet(authorId);
         }
         public IActionResult OnPostUnFollow(string authorId, string followerId, string followingId)
         {
-            followPageControls.UnFollow(followerId, followingId);
+            unit.Follows.UnFollow(followerId, followingId);
+            unit.Complete();
+
             return OnGet(authorId);
         }
         public IActionResult OnPostUploadProfilePhoto()

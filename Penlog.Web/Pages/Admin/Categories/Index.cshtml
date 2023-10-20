@@ -1,0 +1,48 @@
+﻿@page
+@model Penlog.Pages.Admin.Categories.IndexModel
+@using Penlog.Utility;
+
+<div class="container">
+    <div class="row">
+        @foreach (var category in Model.Categories)
+        {
+            string imageDataUrl = ImageUtilities.GenerateImageDataUrl(category.Picture.Bytes);
+
+            <div class="card" style="width: 18rem;">
+                <img src="@imageDataUrl" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a asp-page="Details" asp-route-categoryId="@category.Id">@category.Title</a>
+                    </h5>
+                    <p class="card-text">@category.Description.ShortenString(30)</p>
+                    <form method="post">
+                        <button asp-page-handler="Delete" asp-route-categoryId="@category.Id" class="btn btn-danger">Delete</button>
+                    </form>
+                    <a asp-page="Edit" asp-route-id="@category.Id" class="btn btn-secondary">Edit</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<h1>Add new category</h1>
+
+<form method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="titleInput" class="form-label">Title: </label>
+        <input asp-for="Category.Title" type="text" class="form-control form-control-lg" id="titleInput">
+        <span asp-validation-for="Category.Title" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label for="photoInput" class="form-label">Photo: </label>
+        <input asp-for="File" type="file" class="form-control" id="photoInput" />
+        <span asp-validation-for="File" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label for="descriptionInput" class="form-label">Description: </label>
+        <textarea asp-for="Category.Description" class="form-control" id="descriptionInput" rows="15">
+     </textarea>
+        <span asp-validation-for="Category.Description" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary" asp-page-handler="Add">Create</button>
+</form>
