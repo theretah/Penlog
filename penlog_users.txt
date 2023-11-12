@@ -1,0 +1,19 @@
+someuser
+someuser@gmail.com
+Aa@10001000
+
+admin			Role: Admin
+admin@gmail.com
+Bb@20002000
+
+anotheruser
+another@gmail.com	
+Cc@30003000
+
+user
+user@gmail.com
+Dd@40004000
+
+person
+person@gmail.com
+Ee@50005000

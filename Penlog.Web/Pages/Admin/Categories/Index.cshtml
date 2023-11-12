@@ -2,28 +2,6 @@
 @model Penlog.Pages.Admin.Categories.IndexModel
 @using Penlog.Utility;
 
-<div class="container">
-    <div class="row">
-        @foreach (var category in Model.Categories)
-        {
-            string imageDataUrl = ImageUtilities.GenerateImageDataUrl(category.Picture.Bytes);
-
-            <div class="card" style="width: 18rem;">
-                <img src="@imageDataUrl" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <a asp-page="Details" asp-route-categoryId="@category.Id">@category.Title</a>
-                    </h5>
-                    <p class="card-text">@category.Description.ShortenString(30)</p>
-                    <form method="post">
-                        <button asp-page-handler="Delete" asp-route-categoryId="@category.Id" class="btn btn-danger">Delete</button>
-                    </form>
-                    <a asp-page="Edit" asp-route-id="@category.Id" class="btn btn-secondary">Edit</a>
-                </div>
-            </div>
-        }
-    </div>
-</div>
 
 <h1>Add new category</h1>
 
@@ -32,6 +10,13 @@
         <label for="titleInput" class="form-label">Title: </label>
         <input asp-for="Category.Title" type="text" class="form-control form-control-lg" id="titleInput">
         <span asp-validation-for="Category.Title" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label for="photoInput" class="form-label">Parent Category (Optional): </label>
+        <select class="form-control" asp-for="Category.ParentId" asp-items="Model.ParentCategorySelectList">
+            <option value="@null">None</option>
+        </select>
+        <span asp-validation-for="Category.ParentId" class="text-danger"></span>
     </div>
     <div class="mb-3">
         <label for="photoInput" class="form-label">Photo: </label>
@@ -46,3 +31,27 @@
     </div>
     <button type="submit" class="btn btn-primary" asp-page-handler="Add">Create</button>
 </form>
+<br />
+<hr />
+<h1>All Categories</h1>
+<div class="container">
+    <div class="row">
+        @foreach (var category in Model.Categories)
+        {
+            string imageDataUrl = ImageUtilities.GenerateImageDataUrl(category.Picture.Bytes);
+
+            <div class="card mx-1" style="width: 18rem;">
+                <img src="@imageDataUrl" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a class=" text-decoration-none text-black" asp-page="Details" asp-route-categoryId="@category.Id">@category.Title</a>
+                    </h5>
+                    <form method="post" class="d-inline">
+                        <button asp-page-handler="Delete" asp-route-categoryId="@category.Id" class="btn btn-danger p-1">Delete</button>
+                    </form>
+                    <a asp-page="Edit" asp-route-id="@category.Id" class="btn btn-secondary p-1">Edit</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>

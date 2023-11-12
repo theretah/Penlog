@@ -2,8 +2,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Hosting;
 using Penlog.Data.Repository.IRepository;
+using Penlog.Entities;
 using Penlog.Model.Entities;
 
 namespace Penlog.Pages.Posts
@@ -26,8 +28,17 @@ namespace Penlog.Pages.Posts
         [BindProperty]
         public IFormFile File { get; set; }
 
+        public IEnumerable<Category> Categories { get; set; }
+
+        [BindProperty]
+        public int?[] SelectedCategories { get; set; }
+
+        public SelectList CategoriesSelectList { get; set; }
+
         public void OnGet()
         {
+            Categories = unit.Categories.GetAll();
+            CategoriesSelectList = new SelectList(Categories, nameof(Category.Id), nameof(Category.Title));
         }
         public IActionResult OnPost()
         {
@@ -53,6 +64,25 @@ namespace Penlog.Pages.Posts
             Post.Author = author;
 
             author.PostsCount++;
+
+            foreach (var categoryId in SelectedCategories)
+            {
+                if (categoryId == null)
+                    break;
+
+                var category = unit.Categories.Get(categoryId.Value);
+                unit.PostCategories.Add(new PostCategory
+                {
+                    Post = Post,
+                    Category = category
+                });
+
+                unit.UserCategories.Add(new UserCategory
+                {
+                    User = Post.Author,
+                    Category = category
+                });
+            }
 
             unit.Posts.Add(Post);
             unit.Complete();

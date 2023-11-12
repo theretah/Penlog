@@ -23,8 +23,11 @@ namespace Penlog.Model.Entities
         [ValidateNever]
         public AppUser Author { get; set; }
 
+        [ValidateNever]
         public IEnumerable<Like> Likes { get; set; }
+        [ValidateNever]
         public IEnumerable<Comment> Comments { get; set; }
+        [ValidateNever]
         public IEnumerable<PostCategory> Categories { get; set; }
     }
 }

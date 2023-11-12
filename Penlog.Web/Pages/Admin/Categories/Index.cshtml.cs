@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Penlog.Data.Repository.IRepository;
 using Penlog.Entities;
 using Penlog.Model.Entities;
@@ -22,10 +23,14 @@ namespace Penlog.Pages.Admin.Categories
         [BindProperty]
         public IFormFile File { get; set; }
 
+        public SelectList ParentCategorySelectList { get; set; }
+
         public void OnGet()
         {
             Categories = unit.Categories.GetAll();
             Images = unit.Images.GetAll();
+            ParentCategorySelectList = new SelectList(unit.Categories.GetAll(),
+                nameof(Category.Id), nameof(Category.Title));
         }
 
         public IActionResult OnPostAdd()

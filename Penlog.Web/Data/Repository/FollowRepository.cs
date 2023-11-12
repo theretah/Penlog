@@ -39,7 +39,6 @@ namespace Penlog.Data.Repository
         }
         private async Task<AppUser> GetFollower(string followerId)
         {
-            // Follower must be the logged in user
             return await usermanager.FindByIdAsync(followerId);
         }
         private async Task<AppUser> GetFollowing(string followingId)
