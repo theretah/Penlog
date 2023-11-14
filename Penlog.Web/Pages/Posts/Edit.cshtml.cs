@@ -2,8 +2,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NuGet.Configuration;
 using Penlog.Data.Repository.IRepository;
+using Penlog.Entities;
 using Penlog.Model.Entities;
 using Penlog.Utility;
 
@@ -27,11 +29,22 @@ namespace Penlog.Pages.Posts
         [BindProperty]
         public IFormFile File { get; set; }
 
+        [BindProperty]
+        public int?[] SelectedCategories { get; set; }
+
+        public SelectList CategoriesSelectList { get; set; }
+
+        public IList<PostCategory> PostCategories { get; set; }
+
         public string PreviewImageDataUrl { get; set; }
 
         public void OnGet(int id)
         {
             Post = unit.Posts.GetWithPreviewImage(id);
+            PostCategories = unit.PostCategories.FindWithCategory(pc => pc.PostId == Post.Id).ToList();
+
+            CategoriesSelectList = new SelectList(unit.Categories.GetAll(), nameof(Category.Id), nameof(Category.Title));
+
             var previewImage = unit.Images.Find(p => p.Id == Post.PreviewImageId).SingleOrDefault();
             if (previewImage != null)
             {
@@ -44,6 +57,8 @@ namespace Penlog.Pages.Posts
                 return Page();
 
             var post = unit.Posts.Get(id);
+            var postCategories = unit.PostCategories.Find(pc => pc.PostId == id);
+           
 
             var author = userManager.GetUserAsync(User).Result;
 
@@ -63,7 +78,21 @@ namespace Penlog.Pages.Posts
             post.Title = Post.Title;
             post.Content = Post.Content;
             post.LastUpdated = DateTimeOffset.Now;
-            
+
+            foreach (var postCategory in postCategories)
+            {
+                unit.PostCategories.Remove(postCategory);
+            }
+            foreach (var categoryId in SelectedCategories)
+            {
+                var category = unit.Categories.Get(categoryId.Value);
+                unit.PostCategories.Add(new PostCategory
+                {
+                    Post = post,
+                    Category = category
+                });
+            }
+
             unit.Posts.Update(post);
             unit.Complete();
 

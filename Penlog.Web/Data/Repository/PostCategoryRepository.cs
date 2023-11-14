@@ -1,6 +1,9 @@
-﻿using Penlog.Data.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using Penlog.Data.Context;
 using Penlog.Data.Repository.IRepository;
 using Penlog.Entities;
+using Penlog.Model.Entities;
+using System.Linq.Expressions;
 
 namespace Penlog.Data.Repository
 {
@@ -16,6 +19,10 @@ namespace Penlog.Data.Repository
         public void Update(PostCategory postCategory)
         {
             context.Update(postCategory);
+        }
+        public IEnumerable<PostCategory> FindWithCategory(Expression<Func<PostCategory, bool>> predicate)
+        {
+            return context.PostCategories.Include(pc => pc.Category).Where(predicate).ToList();
         }
     }
 }

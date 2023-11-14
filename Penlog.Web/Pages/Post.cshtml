@@ -50,12 +50,23 @@
 <h1 class="display-2">@Model.Post.Title</h1>
 @if (Model.PreviewImageDataUrl != null)
 {
-    <img width="1000" height="600" src="@Model.PreviewImageDataUrl" alt="Alternate Text" />
+    <img style="max-height:400px;" src="@Model.PreviewImageDataUrl" alt="Alternate Text" />
 }
 
 <p class="fs-5 lh-base">
     @Html.Raw(Model.Post.Content)
 </p>
+
+<p class="fs-5">Categories</p>
+@foreach (var postCategory in Model.PostCategories)
+{
+    <p class="fs-6 d-inline">
+        @postCategory.Category.Title - 
+    </p>
+}
+
+
+
 @if (isAuthenticated && Model.Post.Author != user)
 {
     @await Component.InvokeAsync("Like", new { postId = postId, userId = userId })

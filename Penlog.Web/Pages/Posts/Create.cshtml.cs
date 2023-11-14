@@ -28,8 +28,6 @@ namespace Penlog.Pages.Posts
         [BindProperty]
         public IFormFile File { get; set; }
 
-        public IEnumerable<Category> Categories { get; set; }
-
         [BindProperty]
         public int?[] SelectedCategories { get; set; }
 
@@ -37,8 +35,7 @@ namespace Penlog.Pages.Posts
 
         public void OnGet()
         {
-            Categories = unit.Categories.GetAll();
-            CategoriesSelectList = new SelectList(Categories, nameof(Category.Id), nameof(Category.Title));
+            CategoriesSelectList = new SelectList(unit.Categories.GetAll(), nameof(Category.Id), nameof(Category.Title));
         }
         public IActionResult OnPost()
         {

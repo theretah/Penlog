@@ -5,7 +5,7 @@
     <div class="mb-3">
         <label for="titleInput" class="form-label">Title: </label>
         <input asp-for="Post.Title" type="text" class="form-control form-control-lg" id="titleInput">
-        <span asp-validation-for="Post.Content" class="text-danger"></span>
+        <span asp-validation-for="Post.Title" class="text-danger"></span>
     </div>
     @if (Model.Post.PreviewImage != null)
     {
@@ -27,7 +27,27 @@
             <span asp-validation-for="File" class="text-danger"></span>
         </div>
     }
-
+    <div class="mb-3">
+        <label for="SelectedCategories" class="form-label">Categories: </label>
+        <select asp-for="SelectedCategories" class="form-control" multiple="multiple">
+            <option value="@null"> - None - </option>
+            @{
+                int i = 0;
+                foreach (var category in Model.CategoriesSelectList)
+                {
+                    if (Model.PostCategories[i++].Category.Title == category.Text)
+                    {
+                        <option selected value="@category.Value">@category.Text</option>
+                    }
+                    else
+                    {
+                        <option value="@category.Value">@category.Text</option>
+                    }
+                }
+            }
+        </select>
+        <span asp-validation-for="SelectedCategories" class="text-danger"></span>
+    </div>
     <div class="mb-3">
         <label for="contentInput" class="form-label">Content: </label>
         <textarea asp-for="Post.Content" class="form-control" id="contentInput" rows="15"></textarea>

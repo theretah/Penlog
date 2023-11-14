@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Penlog.Data.Repository.IRepository;
+using Penlog.Entities;
 using Penlog.Model.Entities;
 using Penlog.Utility;
 
@@ -31,6 +32,7 @@ namespace Penlog.Pages
         public Post Post { get; set; }
         public AppUser CurrentUser { get; set; }
         public IEnumerable<Comment> Comments { get; set; }
+        public IEnumerable<PostCategory> PostCategories { get; set; }
 
         public async Task OnGet(int id)
         {
@@ -40,6 +42,7 @@ namespace Penlog.Pages
 
             Post = unit.Posts.GetWithAuthor(id);
             Comments = unit.Comments.GetWithAuthors(c => c.PostId == Post.Id);
+            PostCategories = unit.PostCategories.FindWithCategory(pc => pc.PostId == Post.Id);
 
             CurrentUser = await userManager.GetUserAsync(User);
             if (CurrentUser != null)
