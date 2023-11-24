@@ -168,8 +168,8 @@
                                     <a class="text-decoration-none" asp-page="/Users/Profile" asp-route-id="@reply.AuthorId">
                                         <h5 class="card-header text-primary">
                                             @await Component.InvokeAsync("ProfileImage",
-                                             new { profileUser = comment.Author, widthAndHeight = profileImageWidthAndHeight })
-                                            @comment.Author.UserName
+                                             new { profileUser = reply.Author, widthAndHeight = profileImageWidthAndHeight })
+                                            @reply.Author.UserName
                                         </h5>
                                     </a>
                                     <div class="card-body">

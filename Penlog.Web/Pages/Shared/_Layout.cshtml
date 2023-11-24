@@ -7,7 +7,7 @@
     <title>@ViewData["Title"] - Penlog</title>
 
     @*<link href="/Froala/css/froala_editor.pkgd.min.css" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="/Froala/js/froala_editor.pkgd.min.js"></script>*@
+        <script type="text/javascript" src="/Froala/js/froala_editor.pkgd.min.js"></script>*@
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -21,7 +21,11 @@
                     <div class="container">
                         <ul class="navbar-nav flex-grow-1">
                             <a class="navbar-brand" asp-area="" asp-page="/Index">Penlog</a>
-                            @if (User.Identity.IsAuthenticated)
+                            @{
+                                var isAuthenticated = User.Identity.IsAuthenticated;
+                                var isAdmin = User.IsInRole("Admin");
+                            }
+                            @if (isAuthenticated)
                             {
                                 <li class="nav-item mx-1">
                                     <a class="nav-link btn text-dark" asp-area="" asp-page="/Posts/Create">Create a Post</a>
@@ -29,19 +33,22 @@
                                 <li class="nav-item mx-1">
                                     <a class="nav-link btn text-dark" asp-area="" asp-page="/Users/Profile" asp-route-id="@userManager.GetUserAsync(User).Result.Id">Profile</a>
                                 </li>
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <li class="nav-item mx-1">
-                                        <a class="nav-link btn text-dark" asp-area="" asp-page="/Admin/Index">Admin</a>
-                                    </li>
-                                }
+                            }
+                            <li class="nav-item mx-1">
+                                <a class="nav-link btn text-dark" asp-area="" asp-page="/Search">Search</a>
+                            </li>
+                            @if (isAuthenticated && isAdmin)
+                            {
+                                <li class="nav-item mx-1">
+                                    <a class="nav-link btn text-dark" asp-area="" asp-page="/Admin/Index">Admin</a>
+                                </li>
                             }
                         </ul>
                     </div>
                 </div>
                 <div class="col-3">
                     <ul class="navbar-nav flex-grow-1">
-                        @if (User.Identity.IsAuthenticated)
+                        @if (isAuthenticated)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index">@User.Identity.Name</a>
