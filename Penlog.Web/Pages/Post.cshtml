@@ -1,5 +1,6 @@
 ﻿@page "{id}"
 @using Penlog.Utility;
+@using System.Text;
 @inject Microsoft.AspNetCore.Identity.UserManager<Penlog.Model.Entities.AppUser> userManager
 @model Penlog.Pages.PostModel
 @{
@@ -58,12 +59,18 @@
 </p>
 
 <p class="fs-5">Categories</p>
-@foreach (var postCategory in Model.PostCategories)
-{
-    <p class="fs-6 d-inline">
-        @postCategory.Category.Title - 
-    </p>
+@{
+    var postCategories = new string[Model.PostCategories.Count()];
+    int i = 0;
+    foreach (var postCategory in Model.PostCategories)
+    {
+        postCategories[i] = postCategory.Category.Title;
+        <p class="fs-6 d-inline">
+            @postCategories[i++]
+        </p>
+    }
 }
+
 
 
 

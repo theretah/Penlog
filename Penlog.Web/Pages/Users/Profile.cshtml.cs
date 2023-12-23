@@ -47,6 +47,11 @@ namespace Penlog.Pages.Users
         {
             var post = unit.Posts.Get(id);
             unit.Posts.Remove(post);
+            var comments = unit.Comments.Find(c => c.PostId == id);
+            unit.Comments.RemoveRange(comments);
+            var likes = unit.Likes.Find(l => l.PostId == id);
+            unit.Likes.RemoveRange(likes);
+
             var user = userManager.GetUserAsync(User).Result;
             user.PostsCount--;
 

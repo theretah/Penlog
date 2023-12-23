@@ -15,23 +15,23 @@ namespace Penlog.Pages
         {
             this.unit = unit;
         }
+        [BindProperty(SupportsGet = true)]
+        public string SearchString { get; set; }
 
         public IEnumerable<Category> Categories { get; set; }
         public IEnumerable<Post> Posts { get; set; }
 
-        [BindProperty(SupportsGet = true)]
-        public string SearchString { get; set; }
-
-        public void OnGet()
+        public void OnGet(string? searchString)
         {
-            if (!string.IsNullOrEmpty(SearchString))
+            var searchText = SearchString == null ? searchString : SearchString;
+            if (!string.IsNullOrEmpty(searchText))
             {
                 var posts = unit.Posts.GetAllWithAuthors()
-                    .Where(g => g.Title.ToLower().Contains(SearchString.ToLower()));
+                    .Where(g => g.Title.ToLower().Contains(searchText.ToLower()));
                 Posts = posts.ToList();
 
                 var categories = unit.Categories.GetAll()
-                    .Where(g => g.Title.ToLower().Contains(SearchString.ToLower()));
+                    .Where(g => g.Title.ToLower().Contains(searchText.ToLower()));
                 Categories = categories.ToList();
             }
         }

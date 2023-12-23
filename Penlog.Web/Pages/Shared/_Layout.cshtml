@@ -15,73 +15,107 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <div class="col-9">
-                    <div class="container">
+        <div class="row">
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
+                <div class="container">
+                    <div class="col-7">
+                        <div class="container">
+                            <ul class="navbar-nav flex-grow-1">
+                                <a class="navbar-brand p-0" asp-area="" asp-page="/Index">
+                                    <img src="/images/brand/Group 4.svg" width="41" height="46" alt="Alternate Text" />
+                                </a>
+                                @{
+                                    var isAuthenticated = User.Identity.IsAuthenticated;
+                                    var isAdmin = User.IsInRole("Admin");
+                                }
+                                @if (isAuthenticated)
+                                {
+                                    <li class="nav-item mx-1">
+                                        <a class="nav-link btn text-dark" asp-area="" asp-page="/Users/Profile" asp-route-id="@userManager.GetUserAsync(User).Result.Id">Profile</a>
+                                    </li>
+                                    <li class="nav-item mx-1">
+                                        <a class="nav-link btn text-primary" asp-area="" asp-page="/Posts/Create">Write a post</a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="nav-item mx-1">
+                                        <a class="nav-link btn text-primary" asp-area="Identity" asp-page="/Account/Login">Write a post</a>
+                                    </li>
+                                }
+                                @if (isAuthenticated && isAdmin)
+                                {
+                                    <li class="nav-item mx-1">
+                                        <a class="nav-link btn text-dark" asp-area="" asp-page="/Admin/Index">Admin</a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        @{
+                            string searchString = "";
+                        }
                         <ul class="navbar-nav flex-grow-1">
-                            <a class="navbar-brand" asp-area="" asp-page="/Index">Penlog</a>
-                            @{
-                                var isAuthenticated = User.Identity.IsAuthenticated;
-                                var isAdmin = User.IsInRole("Admin");
-                            }
+                            <form id="searchForm">
+                                <div class="input-group mb-3">
+                                    <input id="searchBox" asp-for="@searchString" size="35" class="form-control" placeholder="Search topics, posts, podcasts, authors...">
+                                    <button type="submit" asp-page="Search" asp-route-searchString="@searchString" class="btn btn-outline-secondary">
+                                        <img src="~/icons/search.svg" alt="Alternate Text" />
+                                    </button>
+                                </div>
+                            </form>
                             @if (isAuthenticated)
                             {
-                                <li class="nav-item mx-1">
-                                    <a class="nav-link btn text-dark" asp-area="" asp-page="/Posts/Create">Create a Post</a>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index">@User.Identity.Name</a>
                                 </li>
-                                <li class="nav-item mx-1">
-                                    <a class="nav-link btn text-dark" asp-area="" asp-page="/Users/Profile" asp-route-id="@userManager.GetUserAsync(User).Result.Id">Profile</a>
+                                <li class="nav-item">
+                                    <a class="nav-link btn btn-outline-danger text-dark" asp-area="Identity" asp-page="/Account/Logout">Logout</a>
                                 </li>
                             }
-                            <li class="nav-item mx-1">
-                                <a class="nav-link btn text-dark" asp-area="" asp-page="/Search">Search</a>
-                            </li>
-                            @if (isAuthenticated && isAdmin)
+                            else
                             {
-                                <li class="nav-item mx-1">
-                                    <a class="nav-link btn text-dark" asp-area="" asp-page="/Admin/Index">Admin</a>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link btn btn-primary text-light" asp-area="Identity" asp-page="/Account/Register">Register</a>
                                 </li>
                             }
                         </ul>
                     </div>
                 </div>
-                <div class="col-3">
-                    <ul class="navbar-nav flex-grow-1">
-                        @if (isAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index">@User.Identity.Name</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link btn btn-outline-danger text-dark" asp-area="Identity" asp-page="/Account/Logout">Logout</a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link btn btn-outline-primary text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-                            </li>
-                        }
-                    </ul>
+            </nav>
+        </div>
+        <div class="row">
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-primary border-bottom box-shadow mb-3">
+                <div class="container">
+                    <div class="col">
+                        <div class="container">
+                            <ul class="navbar-nav flex-grow-1">
+                                @if (!isAuthenticated)
+                                {
+                                    string[] categories = { "Coding", "Economics", "Art", "History", "Literature" };
+                                    @foreach (var category in categories)
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link btn text-light" asp-area="" asp-page="/Posts/Create">@category</a>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
+        </div>
     </header>
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - Penlog - <a asp-area="" asp-page="/Privacy">Privacy</a>
-        </div>
-    </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

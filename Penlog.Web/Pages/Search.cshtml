@@ -1,8 +1,8 @@
-﻿@page
+﻿@page "{searchString?}"
 @using Penlog.Utility
 @model Penlog.Pages.SearchModel
 <div class="container">
-    <div class="row">
+    @*<div class="row">
         <div class="col"></div>
         <div class="col">
             <form id="searchForm">
@@ -13,7 +13,7 @@
             </form>
         </div>
         <div class="col"></div>
-    </div>
+    </div>*@
 
     <h3 class="text-secondary">Browse posts, categories</h3>
     @if (!string.IsNullOrEmpty(Model.SearchString))
