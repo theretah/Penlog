@@ -25,8 +25,6 @@ namespace Penlog.Pages
         [BindProperty]
         public bool RefreshFlag { get; set; }
         [BindProperty]
-        public string CommentTitle { get; set; }
-        [BindProperty]
         public string CommentText { get; set; }
 
         public Post Post { get; set; }
@@ -38,7 +36,6 @@ namespace Penlog.Pages
         {
             ModelState.Clear();
             CommentText = string.Empty;
-            CommentTitle = string.Empty;
 
             Post = unit.Posts.GetWithAuthor(id);
             Comments = unit.Comments.GetWithAuthors(c => c.PostId == Post.Id);
@@ -99,7 +96,6 @@ namespace Penlog.Pages
             unit.Comments.Add(new Comment
             {
                 AuthorId = userId,
-                Title = CommentTitle,
                 Content = CommentText,
                 PublishDate = DateTimeOffset.Now,
                 ParentId = null,
@@ -115,7 +111,6 @@ namespace Penlog.Pages
             unit.Comments.Add(new Comment
             {
                 AuthorId = userId,
-                Title = CommentTitle,
                 Content = CommentText,
                 PublishDate = DateTimeOffset.Now,
                 ParentId = parentId,

@@ -60,7 +60,7 @@
                             <form id="searchForm">
                                 <div class="input-group mb-3">
                                     <input id="searchBox" asp-for="@searchString" size="35" class="form-control" placeholder="Search topics, posts, podcasts, authors...">
-                                    <button type="submit" asp-page="Search" asp-route-searchString="@searchString" class="btn btn-outline-secondary">
+                                    <button type="submit" asp-page="/Search" asp-route-searchString="@searchString" class="btn btn-outline-secondary">
                                         <img src="~/icons/search.svg" alt="Alternate Text" />
                                     </button>
                                 </div>
