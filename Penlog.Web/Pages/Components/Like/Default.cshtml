@@ -5,17 +5,16 @@
     var user = UserManager.GetUserAsync(User).Result;
     var like = unit.Likes.Find(l => l.UserId == user.Id && l.PostId == Model.PostId).FirstOrDefault();
 }
-<form method="post">
-    @if (like == null)
-    {
-        <button type="submit" asp-page-handler="Like" asp-route-postId="@Model.PostId" class="btn btn-primary p-1">
-            Like
-        </button>
-    }
-    else
-    {
-        <button type="submit" asp-page-handler="Like" asp-route-postId="@Model.PostId" class="btn btn-outline-primary p-1">
-            DisLike
-        </button>
-    }
+
+<form id="likeForm" method="post" class="d-inline">
+    <button id="likeImg" type="submit" asp-page-handler="Like" asp-route-postId="@Model.PostId" class="btn p-1">
+        @if (like == null)
+        {
+            <img src="~/icons/heart.svg" />
+        }
+        else
+        {
+            <img src="~/icons/heart-fill.svg" />
+        }
+    </button>
 </form>

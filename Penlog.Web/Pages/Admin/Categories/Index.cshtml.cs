@@ -35,17 +35,6 @@ namespace Penlog.Pages.Admin.Categories
 
         public IActionResult OnPostAdd()
         {
-            var ms = new MemoryStream();
-            File.CopyTo(ms);
-
-            Category.Picture = new Image
-            {
-                Bytes = ms.ToArray(),
-                FileExtension = Path.GetExtension(File.FileName),
-                Description = File.FileName,
-                Size = File.Length
-            };
-
             unit.Categories.Add(Category);
             unit.Complete();
 

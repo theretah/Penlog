@@ -1,27 +1,13 @@
 ﻿@page
 @model Penlog.Pages.Admin.Categories.IndexModel
-@using Penlog.Utility;
 
-
-<h1>Add new category</h1>
+<h1>Add New Category</h1>
 
 <form method="post" enctype="multipart/form-data">
     <div class="mb-3">
         <label for="titleInput" class="form-label">Title: </label>
         <input asp-for="Category.Title" type="text" class="form-control form-control-lg" id="titleInput">
         <span asp-validation-for="Category.Title" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label for="photoInput" class="form-label">Parent Category (Optional): </label>
-        <select class="form-control" asp-for="Category.ParentId" asp-items="Model.ParentCategorySelectList">
-            <option value="@null">None</option>
-        </select>
-        <span asp-validation-for="Category.ParentId" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label for="photoInput" class="form-label">Photo: </label>
-        <input asp-for="File" type="file" class="form-control" id="photoInput" />
-        <span asp-validation-for="File" class="text-danger"></span>
     </div>
     <div class="mb-3">
         <label for="descriptionInput" class="form-label">Description: </label>
@@ -33,18 +19,16 @@
 </form>
 <br />
 <hr />
+
 <h1>All Categories</h1>
 <div class="container">
     <div class="row">
         @foreach (var category in Model.Categories)
         {
-            string imageDataUrl = ImageUtilities.GenerateImageDataUrl(category.Picture.Bytes);
-
             <div class="card mx-1" style="width: 18rem;">
-                <img src="@imageDataUrl" class="card-img-top" alt="...">
                 <div class="card-body">
                     <h5 class="card-title">
-                        <a class=" text-decoration-none text-black" asp-page="Details" asp-route-categoryId="@category.Id">@category.Title</a>
+                        <a class="text-decoration-none text-black" asp-page="Details" asp-route-categoryId="@category.Id">@category.Title</a>
                     </h5>
                     <form method="post" class="d-inline">
                         <button asp-page-handler="Delete" asp-route-categoryId="@category.Id" class="btn btn-danger p-1">Delete</button>

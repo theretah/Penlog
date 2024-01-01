@@ -37,7 +37,7 @@
                                 <h6 class="card-title fw-bold">@author.UserName</h6>
                             </a>
                             <p class="card-text " style="font-size:.80rem;">
-                                Last updated on @((lastUpdated == null) ? createdDate.ToString("MMM/d/yyyy") : lastUpdated.Value.ToString("MMM/d/yyyy"))
+                                Last updated on @Penlog.Utilities.DateTimeUtilities.Span((lastUpdated == null) ? createdDate : lastUpdated.Value)
                             </p>
                         </div>
                     </div>
@@ -66,10 +66,24 @@
                 }
             }
 
+            <br />
             @if (isAuthenticated && author != user)
             {
                 @await Component.InvokeAsync("Like", new { postId = postId, userId = userId })
             }
+            else
+            {
+                <a type="submit" asp-area="Identity" asp-page="/Account/Login" class="btn p-1">
+                    <img src="~/icons/heart.svg" />
+                </a>
+            }
+            <p class="d-inline">@Model.Likes.Count()</p>
+
+            <a class="btn p-1 d-inline ms-3">
+                <img src="~/icons/chat.svg" alt="Alternate Text" />
+            </a>
+            <p class="d-inline">@Model.Post.Comments.Count()</p>
+
             @if (user != null)
             {
                 <div class="mt-5 p-4 bg-light">
@@ -77,7 +91,11 @@
                         <div class="row g-0">
                             <div class="col-1 text-start">
                                 <a asp-page="Users/Profile" asp-route-id="@userId">
-                                    @await Component.InvokeAsync("ProfileImage", new { profileUser = user, widthAndHeight = profileImageWidthAndHeight })
+                                    @await Component.InvokeAsync("ProfileImage", new
+                                    {
+                                        profileUser = user,
+                                        widthAndHeight = profileImageWidthAndHeight
+                                    })
                                 </a>
                             </div>
                             <div class="col-10 ms-2">
@@ -96,11 +114,11 @@
                     </form>
                 </div>
             }
+
             <br />
             <br />
             <hr />
             <h3>Comments</h3>
-
             @{
                 var comments = Model.Comments.Where(c => c.ParentId == null).OrderBy(c => c.PublishDate);
                 if (comments.Count() == 0)
@@ -114,30 +132,20 @@
                         <div class="card">
                             <a class="text-decoration-none" asp-page="/Users/Profile" asp-route-id="@comment.AuthorId">
                                 <h5 class="card-header text-primary">
-                                    @await Component.InvokeAsync("ProfileImage",
-                     new { profileUser = comment.Author, widthAndHeight = profileImageWidthAndHeight })
+                                    @await Component.InvokeAsync("ProfileImage", new { profileUser = comment.Author, widthAndHeight = profileImageWidthAndHeight })
                                     @comment.Author.UserName
                                     <br />
                                     <span style="font-size:.80rem;">
                                         @Penlog.Utilities.DateTimeUtilities.Span(comment.PublishDate)
                                     </span>
                                 </h5>
-
                             </a>
                             <div class="card-body">
                                 <p class="card-text">@comment.Content</p>
                                 @if (isAuthenticated)
                                 {
                                     string commentId = "comment" + commentNumber;
-                                    <form method="post">
-                                        @if (user == comment.Author)
-                                        {
-                                            <button class="btn btn-danger p-1" asp-page-handler="DeleteComment" asp-route-postId="@postId"
-                                                    asp-route-commentId="@comment.Id">
-                                                Delete
-                                            </button>
-                                        }
-                                    </form>
+
                                     <p class="d-inline-flex gap-1">
                                         <button class="btn btn-primary p-1" type="button"
                                                 data-bs-toggle="collapse" data-bs-target="#@commentId" aria-expanded="false"
@@ -149,7 +157,9 @@
                                         <div class="card card-body">
                                             <form method="post" asp-page-handler="ReplyComment" asp-route-postId="@postId"
                                                   asp-route-parentId="@comment.Id" asp-route-commentId="@comment.Id">
-                                                <h5>Write your reply</h5>
+                                                @user.UserName
+                                                Replying to
+                                                <a class="text-decoration-none" asp-page="/Users/Profile" asp-route-id="@comment.AuthorId">@comment.Author.UserName</a>
                                                 <div class="mb-3">
                                                     <textarea asp-for="CommentText" class="form-control" id="contentInput"></textarea>
                                                     <span asp-validation-for="CommentText" class="text-danger"></span>
@@ -159,12 +169,21 @@
                                         </div>
                                     </div>
                                     commentNumber++;
+                                    @if (user == comment.Author)
+                                    {
+                                        <form method="post">
+                                            <button class="btn btn-danger p-1" asp-page-handler="DeleteComment" asp-route-postId="@postId"
+                                                    asp-route-commentId="@comment.Id">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    }
                                 }
                                 @{
                                     var replies = Model.Comments.Where(c => c.ParentId == comment.Id)
                                         .OrderBy(c => c.PublishDate);
-                                    int replyNumber = 1;
 
+                                    int replyNumber = 1;
                                     foreach (var reply in replies)
                                     {
                                         <div class="mx-5 my-1 bg-white text-dark">
@@ -173,7 +192,9 @@
                                                     <h5 class="card-header text-primary">
                                                         @await Component.InvokeAsync("ProfileImage",
                                                          new { profileUser = reply.Author, widthAndHeight = profileImageWidthAndHeight })
-                                                        @reply.Author.UserName Replying to @comment.Author.UserName
+                                                        @reply.Author.UserName
+                                                        <span class="text-black"> replying to</span>
+                                                        <a class="text-decoration-none" asp-page="/Users/Profile" asp-route-id="@comment.AuthorId">@comment.Author.UserName</a>
                                                         <br />
                                                         <span style="font-size:.80rem;">
                                                             @Penlog.Utilities.DateTimeUtilities.Span(reply.PublishDate)
@@ -184,16 +205,6 @@
                                                     <p class="card-text">@reply.Content</p>
                                                     @if (isAuthenticated)
                                                     {
-                                                        <form method="post">
-                                                            @if (user == reply.Author)
-                                                            {
-                                                                <button class="btn btn-danger p-1" asp-page-handler="DeleteComment" asp-route-postId="@postId"
-                                                                        asp-route-commentId="@reply.Id">
-                                                                    Delete
-                                                                </button>
-                                                            }
-                                                        </form>
-
                                                         string replyId = "reply" + replyNumber;
 
                                                         <p class="d-inline-flex gap-1">
@@ -207,16 +218,27 @@
                                                             <div class="card card-body">
                                                                 <form method="post" asp-page-handler="ReplyComment" asp-route-postId="@postId"
                                                                       asp-route-parentId="@comment.Id" asp-route-commentId="@reply.Id">
-                                                                    <h5>Write your reply</h5>
+                                                                    @user.UserName
+                                                                    <span class="text-black"> Replying to</span>
+                                                                    <a class="text-decoration-none" asp-page="/Users/Profile" asp-route-id="@comment.AuthorId">@comment.Author.UserName</a>
                                                                     <div class="mb-3">
                                                                         <textarea asp-for="CommentText" type="text" class="form-control" id="replyContentInput"></textarea>
                                                                         <span asp-validation-for="CommentText" class="text-danger"></span>
                                                                     </div>
-                                                                    <button type="submit" class="btn btn-primary">Reply</button>
+                                                                    <button type="submit" class="btn btn-primary">Post</button>
                                                                 </form>
                                                             </div>
                                                         </div>
                                                         replyNumber++;
+                                                        @if (user == reply.Author)
+                                                        {
+                                                            <form method="post" class="d-inline">
+                                                                <button class="btn btn-danger p-1" asp-page-handler="DeleteComment" asp-route-postId="@postId"
+                                                                        asp-route-commentId="@reply.Id">
+                                                                    Delete
+                                                                </button>
+                                                            </form>
+                                                        }
                                                     }
                                                 </div>
                                             </div>

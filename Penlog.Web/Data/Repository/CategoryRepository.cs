@@ -21,7 +21,7 @@ namespace Penlog.Data.Repository
 
         public Category GetWithPicture(int id)
         {
-            return context.Categories.Include(c => c.Picture).Where(c => c.Id == id).FirstOrDefault();
+            return context.Categories.Where(c => c.Id == id).FirstOrDefault();
         }
     }
 }

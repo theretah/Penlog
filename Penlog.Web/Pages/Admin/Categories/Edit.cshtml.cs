@@ -29,16 +29,6 @@ namespace Penlog.Pages.Admin.Categories
 
             var category = unit.Categories.GetWithPicture(id);
 
-            var ms = new MemoryStream();
-            File.CopyTo(ms);
-
-            category.Picture = new Image
-            {
-                Bytes = ms.ToArray(),
-                FileExtension = Path.GetExtension(File.FileName),
-                Description = File.FileName,
-                Size = File.Length
-            };
             category.Description = Category.Description;
             category.Title = Category.Title;
 

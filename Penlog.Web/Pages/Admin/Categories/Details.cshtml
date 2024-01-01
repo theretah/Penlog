@@ -1,8 +1,5 @@
 ﻿@page
 @model Penlog.Pages.Admin.Categories.DetailsModel
-@{
-    var imageDataUrl = Penlog.Utility.ImageUtilities.GenerateImageDataUrl(Model.Category.Picture.Bytes);
-}
 <div class="row">
     <h3>@Model.Category.Title</h3>
     <p>@Model.Category.Description</p>

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Penlog.Data.Context;
 
@@ -11,9 +12,11 @@ using Penlog.Data.Context;
 namespace Penlog.Data.Migrations
 {
     [DbContext(typeof(PenlogDbContext))]
-    partial class PenlogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240101194203_removeSubCategoriesANDPictureFromCategory")]
+    partial class removeSubCategoriesANDPictureFromCategory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
