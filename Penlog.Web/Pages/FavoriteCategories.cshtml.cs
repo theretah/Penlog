@@ -12,7 +12,9 @@ namespace Penlog.Pages
         {
             this.unit = unit;
         }
+
         public IEnumerable<Category> Categories { get; set; }
+
         public void OnGet()
         {
             Categories = unit.Categories.GetAll();

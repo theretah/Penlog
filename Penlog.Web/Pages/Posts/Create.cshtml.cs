@@ -74,11 +74,15 @@ namespace Penlog.Pages.Posts
                     Category = category
                 });
 
-                unit.UserCategories.Add(new UserCategory
+                var uc = unit.UserCategories.Find(uc => uc.CategoryId == categoryId && uc.UserId == author.Id);
+                if (uc == null)
                 {
-                    User = Post.Author,
-                    Category = category
-                });
+                    unit.UserCategories.Add(new UserCategory
+                    {
+                        User = Post.Author,
+                        Category = category
+                    });
+                }
             }
 
             unit.Posts.Add(Post);

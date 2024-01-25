@@ -7,7 +7,7 @@ namespace Penlog.Utilities
         public static string Span(DateTimeOffset dateTime)
         {
             var timeSpan = DateTime.Now - dateTime;
-            //var ts2 = DateTime.Now - new DateTime(12, 3, 29);
+
             if (timeSpan.TotalSeconds >= 30240000 * 2)
                 return (timeSpan.Days / 365) + " years ago";
             if (timeSpan.TotalSeconds >= 30240000)
@@ -19,9 +19,9 @@ namespace Penlog.Utilities
                 return (timeSpan.Days / 30) + " month ago";
 
             if (timeSpan.TotalSeconds >= 604800 * 2)
-                return (timeSpan.Days / 52) + " weeks ago";
+                return (timeSpan.Days / 7) + " weeks ago";
             if (timeSpan.TotalSeconds >= 604800)
-                return (timeSpan.Days / 52) + " week ago";
+                return (timeSpan.Days / 7) + " week ago";
 
             if (timeSpan.TotalSeconds >= 86400 * 2)
                 return (timeSpan.Days) + " days ago";

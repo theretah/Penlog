@@ -1,0 +1,17 @@
+Penlog - Read about it
+Penlog is an online platform where people can write about topic they know, and read about topic they may not know.
+
+-Authentication-
+Users can sign up to follow their favorite authors, like or save their favorite post, or comment where they have 
+a question. An anonymous user can only read posts and visit profiles.
+
+-Posts-
+A signed in user can post about any topic, which can be made from at most 3 categories. A post can be liked, saved,
+be commented on, or reported of not following guidelines.
+
+-Users-
+A signed in user can visit their profile page, where all their posts are contained. Along with the number of users
+they are follow or are being followed by them. They also can see posts they have liked or saved.
+
+-Categories-
+A signed in user should recieve recommendations based on his interesting topics.

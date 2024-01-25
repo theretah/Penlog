@@ -52,7 +52,7 @@
             <p class="fs-5 lh-base">
                 @Html.Raw(Model.Post.Content)
             </p>
-
+            <hr />
             <p class="fs-5">Categories</p>
             @{
                 var postCategories = new string[Model.PostCategories.Count()];
@@ -82,8 +82,8 @@
             <a class="btn p-1 d-inline ms-3">
                 <img src="~/icons/chat.svg" alt="Alternate Text" />
             </a>
-            <p class="d-inline">@Model.Post.Comments.Count()</p>
-
+            <p class="d-inline">@Model.Comments.Count()</p>
+            <hr />
             @if (user != null)
             {
                 <div class="mt-5 p-4 bg-light">
@@ -113,10 +113,14 @@
                         <button type="submit" class="btn btn-primary float-end">Submit</button>
                     </form>
                 </div>
+                <br />
+                <br />
+            }
+            else
+            {
+                <h5>You must be signed in to comment.</h5>
             }
 
-            <br />
-            <br />
             <hr />
             <h3>Comments</h3>
             @{
