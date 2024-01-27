@@ -1,7 +1,6 @@
 ﻿@page "{id}"
-@using Penlog.Utility;
-@using System.Text;
-@inject Microsoft.AspNetCore.Identity.UserManager<Penlog.Model.Entities.AppUser> userManager
+@using Penlog.ExtensionMethods;
+@inject Microsoft.AspNetCore.Identity.UserManager<Entities.AppUser> userManager
 @model Penlog.Pages.PostModel
 @{
     var lastUpdated = Model.Post.LastUpdated;
@@ -129,129 +128,18 @@
                 {
                     <p>No comments for this post yet.</p>
                 }
+
                 int commentNumber = 1;
                 foreach (var comment in comments)
                 {
-                    <div class="mt-2 p-2 bg-light text-dark">
-                        <div class="card">
-                            <a class="text-decoration-none" asp-page="/Users/Profile" asp-route-id="@comment.AuthorId">
-                                <h5 class="card-header text-primary">
-                                    @await Component.InvokeAsync("ProfileImage", new { profileUser = comment.Author, widthAndHeight = profileImageWidthAndHeight })
-                                    @comment.Author.UserName
-                                    <br />
-                                    <span style="font-size:.80rem;">
-                                        @Penlog.Utilities.DateTimeUtilities.Span(comment.PublishDate)
-                                    </span>
-                                </h5>
-                            </a>
-                            <div class="card-body">
-                                <p class="card-text">@comment.Content</p>
-                                @if (isAuthenticated)
-                                {
-                                    string commentId = "comment" + commentNumber;
-
-                                    <p class="d-inline-flex gap-1">
-                                        <button class="btn btn-primary p-1" type="button"
-                                                data-bs-toggle="collapse" data-bs-target="#@commentId" aria-expanded="false"
-                                                aria-controls="replyCollapse">
-                                            Reply
-                                        </button>
-                                    </p>
-                                    <div class="collapse" id="@commentId">
-                                        <div class="card card-body">
-                                            <form method="post" asp-page-handler="ReplyComment" asp-route-postId="@postId"
-                                                  asp-route-parentId="@comment.Id" asp-route-commentId="@comment.Id">
-                                                @user.UserName
-                                                Replying to
-                                                <a class="text-decoration-none" asp-page="/Users/Profile" asp-route-id="@comment.AuthorId">@comment.Author.UserName</a>
-                                                <div class="mb-3">
-                                                    <textarea asp-for="CommentText" class="form-control" id="contentInput"></textarea>
-                                                    <span asp-validation-for="CommentText" class="text-danger"></span>
-                                                </div>
-                                                <button type="submit" class="btn btn-primary">Post</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    commentNumber++;
-                                    @if (user == comment.Author)
-                                    {
-                                        <form method="post">
-                                            <button class="btn btn-danger p-1" asp-page-handler="DeleteComment" asp-route-postId="@postId"
-                                                    asp-route-commentId="@comment.Id">
-                                                Delete
-                                            </button>
-                                        </form>
-                                    }
-                                }
-                                @{
-                                    var replies = Model.Comments.Where(c => c.ParentId == comment.Id)
-                                        .OrderBy(c => c.PublishDate);
-
-                                    int replyNumber = 1;
-                                    foreach (var reply in replies)
-                                    {
-                                        <div class="mx-5 my-1 bg-white text-dark">
-                                            <div class="card">
-                                                <a class="text-decoration-none" asp-page="/Users/Profile" asp-route-id="@reply.AuthorId">
-                                                    <h5 class="card-header text-primary">
-                                                        @await Component.InvokeAsync("ProfileImage",
-                                                         new { profileUser = reply.Author, widthAndHeight = profileImageWidthAndHeight })
-                                                        @reply.Author.UserName
-                                                        <span class="text-black"> replying to</span>
-                                                        <a class="text-decoration-none" asp-page="/Users/Profile" asp-route-id="@comment.AuthorId">@comment.Author.UserName</a>
-                                                        <br />
-                                                        <span style="font-size:.80rem;">
-                                                            @Penlog.Utilities.DateTimeUtilities.Span(reply.PublishDate)
-                                                        </span>
-                                                    </h5>
-                                                </a>
-                                                <div class="card-body">
-                                                    <p class="card-text">@reply.Content</p>
-                                                    @if (isAuthenticated)
-                                                    {
-                                                        string replyId = "reply" + replyNumber;
-
-                                                        <p class="d-inline-flex gap-1">
-                                                            <button class="btn btn-primary p-1" type="button"
-                                                                    data-bs-toggle="collapse" data-bs-target="#@replyId" aria-expanded="false"
-                                                                    aria-controls="replyCollapse">
-                                                                Reply
-                                                            </button>
-                                                        </p>
-                                                        <div class="collapse" id="@replyId">
-                                                            <div class="card card-body">
-                                                                <form method="post" asp-page-handler="ReplyComment" asp-route-postId="@postId"
-                                                                      asp-route-parentId="@comment.Id" asp-route-commentId="@reply.Id">
-                                                                    @user.UserName
-                                                                    <span class="text-black"> Replying to</span>
-                                                                    <a class="text-decoration-none" asp-page="/Users/Profile" asp-route-id="@comment.AuthorId">@comment.Author.UserName</a>
-                                                                    <div class="mb-3">
-                                                                        <textarea asp-for="CommentText" type="text" class="form-control" id="replyContentInput"></textarea>
-                                                                        <span asp-validation-for="CommentText" class="text-danger"></span>
-                                                                    </div>
-                                                                    <button type="submit" class="btn btn-primary">Post</button>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                        replyNumber++;
-                                                        @if (user == reply.Author)
-                                                        {
-                                                            <form method="post" class="d-inline">
-                                                                <button class="btn btn-danger p-1" asp-page-handler="DeleteComment" asp-route-postId="@postId"
-                                                                        asp-route-commentId="@reply.Id">
-                                                                    Delete
-                                                                </button>
-                                                            </form>
-                                                        }
-                                                    }
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-                                }
-                            </div>
-                        </div>
-                    </div>
+                    var replies = Model.Comments.Where(c => c.ParentId == comment.Id)
+                        .OrderBy(c => c.PublishDate);
+                    @await Component.InvokeAsync("Comment", new
+                    {
+                        commentId = comment.Id,
+                        commentText = Model.CommentText,
+                        replies = replies
+                    })
                 }
             }
         </div>

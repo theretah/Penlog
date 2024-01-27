@@ -2,7 +2,7 @@
 using Penlog.Entities;
 using System.ComponentModel.DataAnnotations;
 
-namespace Penlog.Model.Entities
+namespace Penlog.Entities
 {
     public class Post
     {

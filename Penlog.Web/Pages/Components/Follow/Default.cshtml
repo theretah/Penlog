@@ -1,5 +1,6 @@
 ﻿@model Penlog.ViewModels.FollowVM
-@inject Microsoft.AspNetCore.Identity.UserManager<Penlog.Model.Entities.AppUser> UserManager
+@using Penlog.Entities
+@inject Microsoft.AspNetCore.Identity.UserManager<AppUser> UserManager
 @inject Penlog.Data.Repository.IRepository.IUnitOfWork unit
 @{
     var user = UserManager.GetUserAsync(User).Result;

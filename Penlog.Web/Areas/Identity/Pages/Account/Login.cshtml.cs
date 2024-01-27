@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Penlog.Model.Entities;
-using Penlog.Utility;
 using System.ComponentModel.DataAnnotations;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
+using Penlog.Utilities;
+using Penlog.Entities;
 
 namespace Penlog.Areas.Identity.Pages.Account
 {

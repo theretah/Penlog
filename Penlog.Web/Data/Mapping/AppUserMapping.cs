@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Penlog.Model.Entities;
+using Penlog.Entities;
 using System.Reflection.Emit;
 
 namespace Penlog.Data.Mapping

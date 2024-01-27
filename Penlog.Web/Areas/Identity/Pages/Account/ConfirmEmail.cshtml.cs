@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using Penlog.Model.Entities;
+using Penlog.Entities;
 using System.Text;
 
 namespace Penlog.Areas.Identity.Pages.Account

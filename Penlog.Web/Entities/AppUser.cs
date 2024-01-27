@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Penlog.Entities;
 
-namespace Penlog.Model.Entities
+namespace Penlog.Entities
 {
     public class AppUser : IdentityUser
     {

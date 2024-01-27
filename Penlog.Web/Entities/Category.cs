@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using Penlog.Model.Entities;
+using Penlog.Entities;
 using System.Reflection.Metadata.Ecma335;
 
 namespace Penlog.Entities

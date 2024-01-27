@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Penlog.Entities;
-using Penlog.Model.Entities;
 using System.Reflection;
 
 namespace Penlog.Data.Context
@@ -12,20 +11,21 @@ namespace Penlog.Data.Context
             : base(options)
         {
         }
+
+        public virtual DbSet<Post> Posts { get; set; }
+        public virtual DbSet<AppUser> AppUsers { get; set; }
+        public virtual DbSet<Image> Images { get; set; }
+        public virtual DbSet<Follow> Follows { get; set; }
+        public virtual DbSet<Like> Likes { get; set; }
+        public virtual DbSet<Comment> Comments { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<PostCategory> PostCategories { get; set; }
+        public virtual DbSet<UserCategory> UserCategories { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
-
-        public DbSet<Post> Posts { get; set; }
-        public DbSet<AppUser> AppUsers { get; set; }
-        public DbSet<Image> Images { get; set; }
-        public DbSet<Follow> Follows { get; set; }
-        public DbSet<Like> Likes { get; set; }
-        public DbSet<Comment> Comments { get; set; }
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<PostCategory> PostCategories { get; set; }
-        public DbSet<UserCategory> UserCategories { get; set; }
     }
 }

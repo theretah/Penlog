@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using NuGet.Configuration;
 using Penlog.Data.Repository.IRepository;
 using Penlog.Entities;
-using Penlog.Model.Entities;
-using Penlog.Utility;
+using Penlog.Utilities;
+using Penlog.Entities;
 
 namespace Penlog.Pages.Posts
 {

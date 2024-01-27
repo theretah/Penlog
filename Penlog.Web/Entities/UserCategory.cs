@@ -1,6 +1,4 @@
-﻿using Penlog.Model.Entities;
-
-namespace Penlog.Entities
+﻿namespace Penlog.Entities
 {
     public class UserCategory
     {

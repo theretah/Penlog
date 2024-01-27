@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Penlog.Model.Entities;
+using Penlog.Entities;
 using Penlog.ViewModels;
 
 namespace Penlog.Pages.Shared.Components
@@ -12,4 +12,5 @@ namespace Penlog.Pages.Shared.Components
             return View(followModel);
         }
     }
+
 }

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Penlog.Data.Repository.IRepository;
-using Penlog.Model.Entities;
+using Penlog.Entities;
 using System.Data;
 
 namespace Penlog.Pages.Admin.Users

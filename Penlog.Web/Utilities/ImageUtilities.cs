@@ -1,6 +1,4 @@
-﻿using Penlog.Entities;
-
-namespace Penlog.Utility
+﻿namespace Penlog.Utilities
 {
     public static class ImageUtilities
     {

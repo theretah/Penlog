@@ -1,6 +1,6 @@
 ﻿using Penlog.Data.Context;
 using Penlog.Data.Repository.IRepository;
-using Penlog.Model.Entities;
+using Penlog.Entities;
 
 namespace Penlog.Data.Repository
 {

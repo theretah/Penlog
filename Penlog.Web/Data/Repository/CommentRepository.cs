@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Penlog.Data.Context;
 using Penlog.Data.Repository.IRepository;
-using Penlog.Model.Entities;
+using Penlog.Entities;
 using System.Linq.Expressions;
 
 namespace Penlog.Data.Repository

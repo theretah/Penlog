@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Hosting;
 using Penlog.Data.Repository.IRepository;
 using Penlog.Entities;
-using Penlog.Model.Entities;
+using Penlog.Entities;
 
 namespace Penlog.Pages.Posts
 {

@@ -1,6 +1,7 @@
 ﻿@page "{id}"
-@inject Microsoft.AspNetCore.Identity.UserManager<Penlog.Model.Entities.AppUser> userManager
-@using Penlog.Utility;
+@inject Microsoft.AspNetCore.Identity.UserManager<AppUser> userManager
+@using Penlog.ExtensionMethods;
+@using Penlog.Entities;
 @model Penlog.Pages.Users.ProfileModel
 
 <div class="container">

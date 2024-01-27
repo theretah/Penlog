@@ -1,21 +1,21 @@
 ﻿@page "{searchString?}"
-@using Penlog.Utility
+@using Penlog.Utilities
 @model Penlog.Pages.SearchModel
 <div class="container">
     @*<div class="row">
-        <div class="col"></div>
-        <div class="col">
-            <form id="searchForm">
-                <div class="input-group mb-3">
-                    <input id="searchBox" type="search" asp-for="SearchString" class="form-control" placeholder="Search for posts, categories">
-                    <input type="submit" value="Search" class="input-group-text bt btn-primary" id="basic-addon1" />
-                </div>
-            </form>
-        </div>
-        <div class="col"></div>
-    </div>*@
+            <div class="col"></div>
+            <div class="col">
+                <form id="searchForm">
+                    <div class="input-group mb-3">
+                        <input id="searchBox" type="search" asp-for="SearchString" class="form-control" placeholder="Search for posts, categories">
+                        <input type="submit" value="Search" class="input-group-text bt btn-primary" id="basic-addon1" />
+                    </div>
+                </form>
+            </div>
+            <div class="col"></div>
+        </div>*@
 
-    <h3 class="text-secondary">Browse posts, categories</h3>
+    <h3 class="text-secondary">Browse posts, categories, users</h3>
     @if (!string.IsNullOrEmpty(Model.SearchString))
     {
         if (Model.Posts.Count() != 0)
@@ -27,35 +27,7 @@
                         @foreach (var post in Model.Posts)
                         {
                             <div class="row">
-                                <div class="card my-3">
-                                    <div class="card-body">
-                                        <a asp-page="Post" asp-route-id="@post.Id" class="text-decoration-none link-dark">
-                                            <h5 class="card-title">@post.Title</h5>
-                                        </a>
-                                        <br />
-                                        @{
-                                            string imageBase64Data = string.Empty;
-                                            string imageDataUrl = "default-profile.jpg";
-
-                                            if (post.Author.ProfileImage != null)
-                                            {
-                                                imageDataUrl = ImageUtilities.GenerateImageDataUrl(post.Author.ProfileImage.Bytes);
-                                            }
-                                        }
-                                        <a asp-page="/Users/Profile" asp-route-id="@post.AuthorId" class="text-decoration-none text-dark fw-bold">
-                                            @if (imageDataUrl == "default-profile.jpg")
-                                            {
-                                                <img src="~/images/@imageDataUrl" width="30" height="30" style="border-radius:50%;" alt="Alternate Text" />
-                                            }
-                                            else
-                                            {
-                                                <img src="@imageDataUrl" width="30" height="30" style="border-radius:50%;" alt="Alternate Text" />
-                                            }
-                                            <span style="font-size:.85rem;">@post.Author.UserName</span>
-                                        </a>
-                                        <p style="font-size:.85rem;" class="text-secondary my-0">Last Updated: @((post.LastUpdated == null) ? post.CreatedDate : post.LastUpdated)</p>
-                                    </div>
-                                </div>
+                                @await Component.InvokeAsync("Post", new { postId = post.Id })
                             </div>
                         }
                     </div>

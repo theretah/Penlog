@@ -1,4 +1,6 @@
-﻿namespace Penlog.Model.Entities
+﻿using Penlog.Entities;
+
+namespace Penlog.Entities
 {
     public class Comment
     {

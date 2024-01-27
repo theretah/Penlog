@@ -5,7 +5,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Penlog.Model.Entities;
+using Penlog.Entities;
 
 namespace Penlog.Areas.Identity.Pages.Account
 {

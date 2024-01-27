@@ -1,0 +1,36 @@
+﻿@model Penlog.Entities.Post
+@inject Microsoft.AspNetCore.Identity.UserManager<AppUser> UserManager
+@inject Penlog.Data.Repository.IRepository.IUnitOfWork unit
+@using Penlog.Utilities
+@using Penlog.ExtensionMethods
+@using Penlog.Entities
+<div class="card my-3">
+    <div class="card-body">
+        <a asp-page="Post" asp-route-id="@Model.Id" class="text-decoration-none link-dark">
+            <h5 class="card-title">@Model.Title</h5>
+            <p class="card-text text-secondary">@Html.Raw(Model.Content.ShortenString(30))</p>
+        </a>
+        <br />
+        @{
+            string imageBase64Data = string.Empty;
+            string imageDataUrl = "default-profile.jpg";
+
+            if (Model.Author.ProfileImage != null)
+            {
+                imageDataUrl = ImageUtilities.GenerateImageDataUrl(Model.Author.ProfileImage.Bytes);
+            }
+        }
+        <a asp-page="/Users/Profile" asp-route-id="@Model.AuthorId" class="text-decoration-none text-dark fw-bold">
+            @if (imageDataUrl == "default-profile.jpg")
+            {
+                <img src="~/images/@imageDataUrl" width="30" height="30" style="border-radius:50%;" alt="Alternate Text" />
+            }
+            else
+            {
+                <img src="@imageDataUrl" width="30" height="30" style="border-radius:50%;" alt="Alternate Text" />
+            }
+            <span style="font-size:.85rem;">@Model.Author.UserName</span>
+        </a>
+        <p style="font-size:.85rem;" class="text-secondary my-0">Last Updated: @((Model.LastUpdated == null) ? Model.CreatedDate : Model.LastUpdated)</p>
+    </div>
+</div>

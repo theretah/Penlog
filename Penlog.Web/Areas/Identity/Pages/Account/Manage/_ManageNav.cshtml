@@ -1,4 +1,4 @@
-﻿@using Penlog.Model.Entities;
+﻿@using Penlog.Entities;
 @inject SignInManager<AppUser> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();

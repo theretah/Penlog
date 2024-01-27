@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Penlog.Data.Repository.IRepository;
-using Penlog.Model.Entities;
+using Penlog.Entities;
 
 namespace Penlog.Pages
 {

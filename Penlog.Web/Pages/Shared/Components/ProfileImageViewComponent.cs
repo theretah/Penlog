@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Penlog.Data.Repository.IRepository;
-using Penlog.Model.Entities;
+using Penlog.Entities;
 using Penlog.ViewModels;
 
 namespace Penlog.Pages.Shared.Components

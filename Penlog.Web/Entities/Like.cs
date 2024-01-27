@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Penlog.Entities;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Penlog.Model.Entities
+namespace Penlog.Entities
 {
     public class Like
     {

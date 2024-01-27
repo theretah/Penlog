@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Penlog.Data.Repository.IRepository;
 using Penlog.Entities;
-using Penlog.Model.Entities;
-using Penlog.Utility;
+using Penlog.Utilities;
 
 namespace Penlog.Pages
 {
@@ -21,7 +20,6 @@ namespace Penlog.Pages
         public string PreviewImageDataUrl { get; set; }
         public bool IsFollowing { get; set; }
         public bool HasLiked { get; set; }
-        public IEnumerable<Like> Likes { get; set; }
 
         [BindProperty]
         public bool RefreshFlag { get; set; }
@@ -30,6 +28,7 @@ namespace Penlog.Pages
 
         public Post Post { get; set; }
         public AppUser CurrentUser { get; set; }
+        public IEnumerable<Like> Likes { get; set; }
         public IEnumerable<Comment> Comments { get; set; }
         public IEnumerable<PostCategory> PostCategories { get; set; }
 

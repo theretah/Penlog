@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Penlog.Data.Context;
 using Penlog.Data.Repository;
 using Penlog.Data.Repository.IRepository;
-using Penlog.Model.Entities;
+using Penlog.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("PenlogConnection");

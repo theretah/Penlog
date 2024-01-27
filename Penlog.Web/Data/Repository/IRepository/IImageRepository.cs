@@ -1,4 +1,4 @@
-﻿using Penlog.Model.Entities;
+﻿using Penlog.Entities;
 
 namespace Penlog.Data.Repository.IRepository
 {

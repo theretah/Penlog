@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Penlog.Data.Repository.IRepository;
 using Penlog.Entities;
-using Penlog.Model.Entities;
+using Penlog.Entities;
 
 namespace Penlog.Pages.Admin.Categories
 {
