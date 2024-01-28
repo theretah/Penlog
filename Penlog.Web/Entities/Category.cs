@@ -16,5 +16,7 @@ namespace Penlog.Entities
         public IEnumerable<PostCategory> Posts { get; set; }
         [ValidateNever]
         public IEnumerable<UserCategory> Followers { get; set; }
+        [ValidateNever]
+        public IEnumerable<FavoriteCategory> FavoriteFollowers { get; set; }
     }
 }

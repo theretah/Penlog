@@ -18,9 +18,8 @@ namespace Penlog.Data.Mapping
 
             builder
                  .HasOne(pc => pc.User)
-                .WithMany(p => p.FavoriteCategories)
+                .WithMany(p => p.UserCategories)
                 .HasForeignKey(pc => pc.UserId);
         }
     }
-
 }

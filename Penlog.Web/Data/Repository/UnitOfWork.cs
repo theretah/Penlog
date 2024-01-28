@@ -20,6 +20,7 @@ namespace Penlog.Data.Repository
             PostCategories = new PostCategoryRepository(context);
             UserCategories = new UserCategoryRepository(context);
             Categories = new CategoryRepository(context);
+            FavoriteCategories = new FavoriteCategoryRepository(context);
         }
 
         public IPostRepository Posts { get; private set; }
@@ -30,6 +31,7 @@ namespace Penlog.Data.Repository
         public IUserCategoryRepository UserCategories { get; private set; }
         public IPostCategoryRepository PostCategories { get; private set; }
         public ICategoryRepository Categories { get; private set; }
+        public IFavoriteCategoryRepository FavoriteCategories { get; private set; }
 
         public int Complete()
         {

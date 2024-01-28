@@ -10,6 +10,7 @@
         IUserCategoryRepository UserCategories { get; }
         IPostCategoryRepository PostCategories { get; }
         ICategoryRepository Categories { get; }
+        IFavoriteCategoryRepository FavoriteCategories { get; }
         int Complete();
     }
 }

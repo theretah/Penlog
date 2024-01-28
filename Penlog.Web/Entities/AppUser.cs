@@ -18,6 +18,7 @@ namespace Penlog.Entities
         public IEnumerable<Follow> Follows { get; set; }
         public IEnumerable<Like> Likes { get; set; }
         public IEnumerable<Comment> Comments { get; set; }
-        public IEnumerable<UserCategory> FavoriteCategories { get; set; }
+        public IEnumerable<UserCategory> UserCategories { get; set; }
+        public IEnumerable<FavoriteCategory> FavoriteCategories { get; set; }
     }
 }

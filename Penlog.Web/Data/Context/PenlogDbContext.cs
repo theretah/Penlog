@@ -21,6 +21,7 @@ namespace Penlog.Data.Context
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<PostCategory> PostCategories { get; set; }
         public virtual DbSet<UserCategory> UserCategories { get; set; }
+        public virtual DbSet<FavoriteCategory> FavoriteCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

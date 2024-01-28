@@ -4,6 +4,7 @@
 @using Penlog.Utilities
 @using Penlog.ExtensionMethods
 @using Penlog.Entities
+
 @{
     string imageBase64Data = string.Empty;
     string imageDataUrl = "default-profile.jpg";
@@ -25,19 +26,12 @@
         </div>
         <div class="col-md-8">
             <div class="card-body">
-                <a asp-page="Post" asp-route-id="@Model.Id">
-                    <h5 class="card-title">@Model.Title</h5>
+                <a asp-page="Post" asp-route-id="@Model.Id" class="text-decoration-none text-dark">
+                    <h5 class="card-title text-primary">@Model.Title</h5>
+                    <p class="card-text">@Html.Raw(Model.Content.ShortenString(35))</p>
                 </a>
-                <p class="card-text">@Html.Raw(Model.Content.ShortenString(30))</p>
                 <a asp-page="/Users/Profile" asp-route-id="@Model.AuthorId" class="text-decoration-none text-dark fw-bold">
-                    @if (imageDataUrl == "default-profile.jpg")
-                    {
-                        <img src="~/images/@imageDataUrl" width="30" height="30" style="border-radius:50%;" alt="Alternate Text" />
-                    }
-                    else
-                    {
-                        <img src="@imageDataUrl" width="30" height="30" style="border-radius:50%;" alt="Alternate Text" />
-                    }
+                    @await Component.InvokeAsync("ProfileImage", new { profileUser = Model.Author, widthAndHeight = 30 })
                     <span style="font-size:.85rem;">@Model.Author.UserName</span>
                 </a>
                 <p class="card-text"><small class="text-muted">Last updated: @span</small></p>

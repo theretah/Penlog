@@ -3,6 +3,8 @@
 @{
     var isAuthenticated = User.Identity.IsAuthenticated;
     var isAdmin = User.IsInRole("Admin");
+
+    var user = userManager.GetUserAsync(User).Result;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -70,7 +72,10 @@
                             @if (isAuthenticated)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index">@User.Identity.Name</a>
+                                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index">
+                                        @await Component.InvokeAsync("ProfileImage", new { profileUser = user, widthAndHeight = 30 })
+                                        @User.Identity.Name
+                                    </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link btn btn-outline-danger text-dark" asp-area="Identity" asp-page="/Account/Logout">Logout</a>
