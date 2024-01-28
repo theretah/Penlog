@@ -6,5 +6,4 @@
         public int ImageWidth { get; set; }
         public int ImageHeight { get; set; }
     }
-
 }

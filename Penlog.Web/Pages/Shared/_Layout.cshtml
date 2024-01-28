@@ -1,5 +1,9 @@
 ﻿@inject Microsoft.AspNetCore.Identity.UserManager<AppUser> userManager
 @using Penlog.Entities
+@{
+    var isAuthenticated = User.Identity.IsAuthenticated;
+    var isAdmin = User.IsInRole("Admin");
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,10 +29,7 @@
                                 <a class="navbar-brand p-0" asp-area="" asp-page="/Index">
                                     <img src="/images/brand/Group 4.svg" width="41" height="46" alt="Alternate Text" />
                                 </a>
-                                @{
-                                    var isAuthenticated = User.Identity.IsAuthenticated;
-                                    var isAdmin = User.IsInRole("Admin");
-                                }
+
                                 @if (isAuthenticated)
                                 {
                                     <li class="nav-item mx-1">

@@ -3,20 +3,16 @@
 @using Penlog.ExtensionMethods;
 @using Penlog.Entities;
 @model Penlog.Pages.Users.ProfileModel
-
+@{
+    var user = userManager.GetUserAsync(User).Result;
+    int profileImageWidthAndHeight = 100;
+}
 <div class="container">
     <div class="row">
         <div class="col-4"></div>
         <div class="col-4">
             <div class="text-center">
-                @if (Model.ProfileImageDataUrl == "default-profile.jpg")
-                {
-                    <img style="border-radius:50%;" width="100" height="100" src="~/images/@Model.ProfileImageDataUrl" alt="Alternate Text" />
-                }
-                else
-                {
-                    <img style="border-radius:50%;" width="100" height="100" src="@Model.ProfileImageDataUrl" alt="Alternate Text" />
-                }
+                @await Component.InvokeAsync("ProfileImage", new { profileUser = Model.Author, widthAndHeight = profileImageWidthAndHeight })
 
                 @if (Model.Author == userManager.GetUserAsync(User).Result)
                 {
@@ -29,27 +25,23 @@
                     @Model.Author.UserName
                 </h4>
                 <form method="post">
-                    @{
-                        var user = userManager.GetUserAsync(User).Result;
-
-                        if (User.Identity.IsAuthenticated)
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        if (user != Model.Author)
                         {
-                            if (user != Model.Author)
+                            if (Model.IsFollowing)
                             {
-                                if (Model.IsFollowing)
-                                {
-                                    <button type="submit" asp-page-handler="UnFollow" asp-route-authorId="@Model.Author.Id" asp-route-followerId="@user.Id" asp-route-followingId="@Model.Author.Id"
-                                            class="btn btn-outline-secondary">
-                                        Following
-                                    </button>
-                                }
-                                else
-                                {
-                                    <button type="submit" asp-page-handler="Follow" asp-route-authorId="@Model.Author.Id" asp-route-followerId="@user.Id" asp-route-followingId="@Model.Author.Id"
-                                            class="btn btn-primary">
-                                        Follow
-                                    </button>
-                                }
+                                <button type="submit" asp-page-handler="UnFollow" asp-route-authorId="@Model.Author.Id" asp-route-followerId="@user.Id" asp-route-followingId="@Model.Author.Id"
+                                        class="btn btn-outline-secondary">
+                                    Following
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="submit" asp-page-handler="Follow" asp-route-authorId="@Model.Author.Id" asp-route-followerId="@user.Id" asp-route-followingId="@Model.Author.Id"
+                                        class="btn btn-primary">
+                                    Follow
+                                </button>
                             }
                         }
                     }

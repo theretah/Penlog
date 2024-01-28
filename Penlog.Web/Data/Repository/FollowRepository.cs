@@ -13,7 +13,7 @@ namespace Penlog.Data.Repository
         private readonly PenlogDbContext context;
         private readonly UserManager<AppUser> usermanager;
 
-        public FollowRepository(PenlogDbContext context,UserManager<AppUser> usermanager) : base(context)
+        public FollowRepository(PenlogDbContext context, UserManager<AppUser> usermanager) : base(context)
         {
             this.context = context;
             this.usermanager = usermanager;

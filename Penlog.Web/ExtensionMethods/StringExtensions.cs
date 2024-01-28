@@ -20,7 +20,7 @@ namespace Penlog.ExtensionMethods
             return count == limit ? result + "..." : result;
         }
 
-        public static string StripString(this string input)
+        private static string StripString(this string input)
         {
             return Regex.Replace(input, "<.*?>", string.Empty);
         }
