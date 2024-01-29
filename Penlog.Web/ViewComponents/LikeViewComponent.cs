@@ -2,7 +2,7 @@
 using Penlog.Data.Repository.IRepository;
 using Penlog.Entities;
 
-namespace Penlog.Pages.Shared.Components
+namespace Penlog.ViewComponents
 {
     public class LikeViewComponent : ViewComponent
     {

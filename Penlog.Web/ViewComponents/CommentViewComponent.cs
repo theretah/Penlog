@@ -3,7 +3,7 @@ using Penlog.Data.Repository.IRepository;
 using Penlog.Entities;
 using Penlog.ViewModels;
 
-namespace Penlog.Pages.Shared.Components
+namespace Penlog.ViewComponents
 {
     public class CommentViewComponent : ViewComponent
     {

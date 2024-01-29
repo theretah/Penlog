@@ -30,6 +30,13 @@ namespace Penlog.Pages
         public IActionResult OnPost()
         {
             var userId = userManager.GetUserAsync(User).Result.Id;
+
+            var currentFavoriteCategories = unit.FavoriteCategories.Find(fc => fc.UserId == userId);
+            if (currentFavoriteCategories != null)
+            {
+                unit.FavoriteCategories.RemoveRange(currentFavoriteCategories);
+            }
+
             foreach (var category in SelectedCategories)
             {
                 unit.FavoriteCategories.Add(new FavoriteCategory { CategoryId = category, UserId = userId });

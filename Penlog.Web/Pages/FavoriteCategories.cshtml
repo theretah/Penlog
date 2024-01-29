@@ -1,6 +1,18 @@
 ﻿@page
 @model Penlog.Pages.FavoriteCategoriesModel
+@inject Penlog.Data.Repository.IRepository.IUnitOfWork unit
+@inject Microsoft.AspNetCore.Identity.UserManager<AppUser> userManager
+@using Penlog.Entities
+@{
+    var alreadySelectedCategories = unit.FavoriteCategories
+        .Find(fc => fc.UserId == userManager.GetUserAsync(User).Result.Id);
 
+    List<int> ids = new List<int>();
+    foreach (var item in alreadySelectedCategories)
+    {
+        ids.Add(item.CategoryId);
+    }
+}
 <p>Please do not select more than 5</p>
 <div class="container">
     <div class="row">
@@ -10,7 +22,8 @@
                     @foreach (var category in Model.Categories)
                     {
                         <div class="col-4">
-                            <input class="form-check-input" type="checkbox" name="SelectedCategories" value="@category.Id" id="flexCheckDefault">
+                            <input class="form-check-input" type="checkbox" name="SelectedCategories"
+                                   value="@category.Id" id="flexCheckDefault" checked="@(ids.Contains(category.Id))">
                             <label class="form-check-label h5" for="flexCheckDefault">
                                 @category.Title
                             </label>

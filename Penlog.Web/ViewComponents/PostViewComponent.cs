@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Penlog.Data.Repository.IRepository;
 
-namespace Penlog.Pages.Shared.Components
+namespace Penlog.ViewComponents
 {
     public class PostViewComponent : ViewComponent
     {
