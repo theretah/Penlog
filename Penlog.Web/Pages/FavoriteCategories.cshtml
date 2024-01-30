@@ -7,7 +7,7 @@
     var alreadySelectedCategories = unit.FavoriteCategories
         .Find(fc => fc.UserId == userManager.GetUserAsync(User).Result.Id);
 
-    List<int> ids = new List<int>();
+    var ids = new List<int>();
     foreach (var item in alreadySelectedCategories)
     {
         ids.Add(item.CategoryId);

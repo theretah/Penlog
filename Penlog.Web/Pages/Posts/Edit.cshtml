@@ -32,16 +32,21 @@
         <select asp-for="SelectedCategories" class="form-control" multiple="multiple">
             <option value="@null"> - None - </option>
             @{
-                int i = 0;
-                foreach (var category in Model.CategoriesSelectList)
+                var titles = new List<string>();
+                foreach (var pc in Model.PostCategories.ToList())
                 {
-                    if (Model.PostCategories[i++].Category.Title == category.Text)
+                    titles.Add(pc.Category.Title);
+                }
+
+                foreach (var categoryItem in Model.CategoriesSelectList)
+                {
+                    if (titles.Contains(categoryItem.Text))
                     {
-                        <option selected value="@category.Value">@category.Text</option>
+                        <option selected value="@categoryItem.Value">@categoryItem.Text</option>
                     }
                     else
                     {
-                        <option value="@category.Value">@category.Text</option>
+                        <option value="@categoryItem.Value">@categoryItem.Text</option>
                     }
                 }
             }

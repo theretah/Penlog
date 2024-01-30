@@ -1,0 +1,16 @@
+﻿@page "{id}"
+@model Penlog.Pages.CategoryModel
+
+<div class="container px-0">
+    <div class="col-9 mx-0">
+        <h1>@Model.Category.Title</h1>
+        @foreach (var post in Model.Posts)
+        {
+            <div class="row">
+                @await Component.InvokeAsync("Post", new { postId = post.Id })
+            </div>
+        }
+    </div>
+    <div class="col-3">
+    </div>
+</div>

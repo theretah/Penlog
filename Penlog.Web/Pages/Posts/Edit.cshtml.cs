@@ -58,7 +58,6 @@ namespace Penlog.Pages.Posts
 
             var post = unit.Posts.Get(id);
             var postCategories = unit.PostCategories.Find(pc => pc.PostId == id);
-           
 
             var author = userManager.GetUserAsync(User).Result;
 

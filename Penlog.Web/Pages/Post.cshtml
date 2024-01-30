@@ -59,9 +59,9 @@
                 foreach (var postCategory in Model.PostCategories)
                 {
                     postCategories[i] = postCategory.Category.Title;
-                    <button class="btn btn-secondary fs-6 d-inline">
+                    <a href="/Category/@postCategory.CategoryId" class="btn btn-secondary fs-6 d-inline me-1">
                         @postCategories[i++]
-                    </button>
+                    </a>
                 }
             }
 
