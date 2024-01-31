@@ -1,23 +1,23 @@
 ﻿@page
 @using Microsoft.AspNetCore.Identity;
 @using Penlog.Entities;
-@using Penlog.ExtensionMethods;
-@using Penlog.Entities;
 @inject UserManager<AppUser> userManger
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
 }
 
-<div class="container px-0">
-    <div class="col-9 mx-0">
-        @foreach (var post in Model.Posts)
-        {
-            <div class="row">
-                @await Component.InvokeAsync("Post", new { postId = post.Id})
-            </div>
-        }
-    </div>
-    <div class="col-3">
+<div class="container">
+    <div class="row">
+        <div class="col-9">
+            @foreach (var post in Model.Posts)
+            {
+                <div class="row">
+                    @await Component.InvokeAsync("Post", new { postId = post.Id })
+                </div>
+            }
+        </div>
+        <div class="col-3">
+        </div>
     </div>
 </div>

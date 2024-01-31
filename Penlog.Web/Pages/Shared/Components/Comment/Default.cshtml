@@ -2,23 +2,19 @@
 @inject Microsoft.AspNetCore.Identity.UserManager<Entities.AppUser> UserManager
 @inject Penlog.Data.Repository.IRepository.IUnitOfWork unit
 
-@{ 
+@{
     var comment = Model.Comment;
 
     var lastUpdated = Model.Comment.Post.LastUpdated;
     var createdDate = Model.Comment.Post.CreatedDate;
-    var user = UserManager.GetUserAsync(User).Result;
     bool isAuthenticated = User.Identity.IsAuthenticated;
+    var user = UserManager.GetUserAsync(User).Result;
+    string userId = user != null ? user.Id : string.Empty;
     int profileImageWidthAndHeight = 70;
 
     var postId = Model.Comment.Post.Id;
-    var authorId = Model.Comment.Post.AuthorId;
     var author = Model.Comment.Post.Author;
-    string userId = "";
-    if (user != null)
-    {
-        userId = user.Id;
-    }
+    var authorId = Model.Comment.Post.AuthorId;
 
     int commentNumber = 1;
 }
