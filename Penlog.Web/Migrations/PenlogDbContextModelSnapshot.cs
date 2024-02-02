@@ -255,7 +255,7 @@ namespace Penlog.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Penlog.Entities.Comment", b =>
@@ -291,7 +291,7 @@ namespace Penlog.Data.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("Penlog.Entities.FavoriteCategory", b =>
@@ -306,7 +306,7 @@ namespace Penlog.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("FavoriteCategories");
+                    b.ToTable("FavoriteCategories", (string)null);
                 });
 
             modelBuilder.Entity("Penlog.Entities.Follow", b =>
@@ -321,7 +321,7 @@ namespace Penlog.Data.Migrations
 
                     b.HasIndex("FollowingId");
 
-                    b.ToTable("Follows");
+                    b.ToTable("Follows", (string)null);
                 });
 
             modelBuilder.Entity("Penlog.Entities.Image", b =>
@@ -349,7 +349,7 @@ namespace Penlog.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Images");
+                    b.ToTable("Images", (string)null);
                 });
 
             modelBuilder.Entity("Penlog.Entities.Like", b =>
@@ -364,7 +364,7 @@ namespace Penlog.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Likes");
+                    b.ToTable("Likes", (string)null);
                 });
 
             modelBuilder.Entity("Penlog.Entities.Post", b =>
@@ -402,7 +402,7 @@ namespace Penlog.Data.Migrations
 
                     b.HasIndex("PreviewImageId");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Posts", (string)null);
                 });
 
             modelBuilder.Entity("Penlog.Entities.PostCategory", b =>
@@ -417,7 +417,7 @@ namespace Penlog.Data.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("PostCategories");
+                    b.ToTable("PostCategories", (string)null);
                 });
 
             modelBuilder.Entity("Penlog.Entities.UserCategory", b =>
@@ -432,7 +432,7 @@ namespace Penlog.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserCategories");
+                    b.ToTable("UserCategories", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

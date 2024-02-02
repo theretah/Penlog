@@ -20,86 +20,125 @@
 </head>
 <body>
     <header>
-        <div class="row">
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
+        <div class="row m-0 w-100">
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <!-- Container wrapper -->
                 <div class="container">
-                    <div class="col-7">
-                        <div class="container">
-                            <ul class="navbar-nav flex-grow-1">
-                                <a class="navbar-brand p-0" asp-area="" asp-page="/Index">
-                                    <img src="/images/brand/Group 4.svg" width="41" height="46" alt="Alternate Text" />
-                                </a>
+                    <!-- Toggle button -->
+                    <button data-mdb-collapse-init
+                            class="navbar-toggler"
+                            type="button"
+                            data-mdb-target="#navbarSupportedContent"
+                            aria-controls="navbarSupportedContent"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <i class="fas fa-bars"></i>
+                    </button>
 
-                                @if (isAuthenticated)
-                                {
-                                    <li class="nav-item mx-1">
-                                        <a class="nav-link btn text-dark" asp-area="" asp-page="/Users/Profile" asp-route-id="@userManager.GetUserAsync(User).Result.Id">Profile</a>
-                                    </li>
-                                    <li class="nav-item mx-1">
-                                        <a class="nav-link btn text-primary" asp-area="" asp-page="/Posts/Create">Write a post</a>
-                                    </li>
-                                }
-                                else
-                                {
-                                    <li class="nav-item mx-1">
-                                        <a class="nav-link btn text-primary" asp-area="Identity" asp-page="/Account/Login">Write a post</a>
-                                    </li>
-                                }
-                                @if (isAuthenticated && isAdmin)
-                                {
-                                    <li class="nav-item mx-1">
-                                        <a class="nav-link btn text-dark" asp-area="" asp-page="/Admin/Index">Admin</a>
-                                    </li>
-                                }
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        @{
-                            string searchString = "";
-                        }
-                        <ul class="navbar-nav flex-grow-1">
-                            <form id="searchForm">
-                                <div class="input-group mb-3">
-                                    <input id="searchBox" asp-for="@searchString" size="35" class="form-control" placeholder="Search topics, categories, podcasts, authors...">
-                                    <button type="submit" asp-page="/Search" asp-route-searchString="@searchString" class="btn btn-outline-secondary">
-                                        <img src="~/icons/search.svg" alt="Alternate Text" />
-                                    </button>
-                                </div>
-                            </form>
-                            @if (isAuthenticated)
+                    <!-- Collapsible wrapper -->
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <!-- Navbar brand -->
+                        <a class="navbar-brand mt-2 mt-lg-0" asp-area="" asp-page="/Index">
+                            <img src="/images/brand/Group 4.svg"
+                                 height="40"
+                                 alt="MDB Logo"
+                                 loading="lazy" />
+                        </a>
+                        <!-- Left links -->
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            @if (isAuthenticated && isAdmin)
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index">
-                                        @await Component.InvokeAsync("ProfileImage", new { profileUser = user, widthAndHeight = 30 })
-                                        @User.Identity.Name
-                                    </a>
+                                <li class="nav-item mx-1">
+                                    <a class="nav-link btn" asp-area="" asp-page="/Admin/Index">Admin</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link btn btn-outline-danger text-dark" asp-area="Identity" asp-page="/Account/Logout">Logout</a>
+                            }
+                            else if (isAuthenticated)
+                            {
+                                <li class="nav-item mx-1">
+                                    <a class="nav-link btn text-primary" asp-area="" asp-page="/Posts/Create">Write a post</a>
                                 </li>
                             }
                             else
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link btn btn-primary text-light" asp-area="Identity" asp-page="/Account/Register">Register</a>
+                                <li class="nav-item mx-1">
+                                    <a class="nav-link btn text-primary" asp-area="Identity" asp-page="/Account/Login">Write a post</a>
                                 </li>
                             }
                         </ul>
+                        <!-- Left links -->
                     </div>
+                    <!-- Collapsible wrapper -->
+                    <!-- Right elements -->
+                    <div class="d-flex align-items-center">
+                        <!-- Search -->
+                        @{
+                            string searchString = "";
+                        }
+                        <form id="searchForm" class="input-group w-auto me-3">
+                            <input type="search"
+                                   class="form-control rounded"
+                                   placeholder="Search topics, categories, authors..."
+                                   aria-label="Search"
+                                   aria-describedby="search-addon"
+                                   size="35" />
+
+                            <button type="submit" asp-page="/Search" asp-route-searchString="@searchString" class="input-group-text border-0">
+                                <img src="~/icons/search.svg" alt="Alternate Text" />
+                            </button>
+                        </form>
+
+                        <!-- Avatar -->
+                        @if (isAuthenticated)
+                        {
+                            <div class="dropdown">
+                                <a data-bs-toggle="dropdown"
+                                   class="dropdown-toggle d-flex align-items-center hidden-arrow"
+                                   id="navbarDropdownMenuAvatar"
+                                   aria-expanded="false">
+                                    @await Component.InvokeAsync("ProfileImage", new { profileUser = user, widthAndHeight = 30 })
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-page="/Users/Profile" asp-route-id="@userManager.GetUserAsync(User).Result.Id">Profile</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-page="/FavoriteCategories">Favorite Categories</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">
+                                            Manage
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item text-danger" asp-area="Identity" asp-page="/Account/Logout">Logout</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                        else
+                        {
+                            <a type="button" class="btn btn-link px-3 me-2" asp-area="Identity" asp-page="/Account/Login">
+                                Login
+                            </a>
+                            <a type="button" class="btn btn-primary me-3" asp-area="Identity" asp-page="/Account/Register">
+                                Sign up for free
+                            </a>
+                        }
+                    </div>
+                    <!-- Right elements -->
                 </div>
+                <!-- Container wrapper -->
             </nav>
+            <!-- Navbar -->
         </div>
-        <div class="row">
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-primary border-bottom box-shadow mb-3">
+        <div class="row m-0 w-100">
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-primary border-bottom box-shadow">
                 <div class="container">
                     <div class="col">
-                        <div class="container">
                             <ul class="navbar-nav flex-grow-1">
                                 @{
+                                    var popularCategories = unit.Categories.Find(c => c.Posts.Count() != 0).Take(5).ToList();
                                     if (isAuthenticated)
                                     {
                                         var categories = new List<Category>();
@@ -108,16 +147,28 @@
                                             categories.Add(unit.Categories.Get(fc.CategoryId));
                                         }
 
-                                        foreach (var category in categories)
+                                        if (categories.Count == 0)
                                         {
-                                            <li class="nav-item">
-                                                <a class="nav-link btn text-light" href="/Category/@category.Id">@category.Title</a>
-                                            </li>
+                                            foreach (var category in popularCategories)
+                                            {
+                                                <li class="nav-item">
+                                                    <a class="nav-link btn text-light" href="/Category/@category.Id">@category.Title</a>
+                                                </li>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            foreach (var category in categories)
+                                            {
+                                                <li class="nav-item">
+                                                    <a class="nav-link btn text-light" href="/Category/@category.Id">@category.Title</a>
+                                                </li>
+                                            }
                                         }
                                     }
                                     else
                                     {
-                                        @foreach (var category in unit.Categories.Find(c => c.Posts.Count() != 0).Take(5).ToList())
+                                        foreach (var category in popularCategories)
                                         {
                                             <li class="nav-item">
                                                 <a class="nav-link btn text-light" href="/Category/@category.Id">@category.Title</a>
@@ -126,13 +177,12 @@
                                     }
                                 }
                             </ul>
-                        </div>
                     </div>
                 </div>
             </nav>
         </div>
     </header>
-    <div class="container">
+    <div class="container mt-3">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

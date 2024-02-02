@@ -2,11 +2,13 @@
 @model Penlog.Pages.CategoryModel
 
 <div class="container px-0">
-    <div class="col-9 mx-0">
+    <div class="col-9 mx-0 mt-3">
         <h1>@Model.Category.Title</h1>
-        @foreach (var post in Model.Posts)
+        @foreach (var post in Model.Posts
+           .OrderByDescending(p => (p.LastUpdated == null) ? p.CreatedDate : p.LastUpdated)
+           .ToList())
         {
-            <div class="row">
+            <div class="row mt-3">
                 @await Component.InvokeAsync("Post", new { postId = post.Id })
             </div>
         }

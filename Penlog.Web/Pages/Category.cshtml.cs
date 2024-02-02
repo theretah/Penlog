@@ -19,11 +19,9 @@ namespace Penlog.Pages
         public void OnGet(int id)
         {
             Category = unit.Categories.Get(id);
-            var postCategories = unit.PostCategories.Find(pc => pc.CategoryId == id).ToList();
-            foreach (var pc in postCategories)
+            foreach (var pc in unit.PostCategories.Find(pc => pc.CategoryId == id).ToList())
             {
-                var post = unit.Posts.GetWithAuthor(pc.PostId);
-                Posts.Add(post);
+                Posts.Add(unit.Posts.GetWithAuthor(pc.PostId));
             }
         }
     }

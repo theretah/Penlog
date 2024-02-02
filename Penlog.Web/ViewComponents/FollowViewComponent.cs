@@ -12,5 +12,4 @@ namespace Penlog.ViewComponents
             return View(followModel);
         }
     }
-
 }

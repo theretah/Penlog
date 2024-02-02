@@ -15,7 +15,9 @@ namespace Penlog.Pages
         public IEnumerable<Post> Posts { get; set; }
         public void OnGet()
         {
-            Posts = unit.Posts.GetAllWithAuthors().OrderByDescending(p => p.LastUpdated);
+            Posts = unit.Posts
+                .GetAllWithAuthors()
+                .OrderByDescending(p => (p.LastUpdated == null) ? p.CreatedDate : p.LastUpdated);
         }
     }
 }

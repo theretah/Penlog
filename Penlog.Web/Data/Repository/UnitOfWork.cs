@@ -28,11 +28,11 @@ namespace Penlog.Data.Repository
         public IImageRepository Images { get; private set; }
         public ILikeRepository Likes { get; private set; }
         public ICommentRepository Comments { get; private set; }
-        public IUserCategoryRepository UserCategories { get; private set; }
-        public IPostCategoryRepository PostCategories { get; private set; }
         public ICategoryRepository Categories { get; private set; }
+        public IPostCategoryRepository PostCategories { get; private set; }
+        public IUserCategoryRepository UserCategories { get; private set; }
         public IFavoriteCategoryRepository FavoriteCategories { get; private set; }
-
+            
         public int Complete()
         {
             return context.SaveChanges();

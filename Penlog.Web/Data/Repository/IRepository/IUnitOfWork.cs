@@ -8,9 +8,9 @@
         ILikeRepository Likes { get; }
         ICommentRepository Comments { get; }
         IUserCategoryRepository UserCategories { get; }
+        IFavoriteCategoryRepository FavoriteCategories { get; }
         IPostCategoryRepository PostCategories { get; }
         ICategoryRepository Categories { get; }
-        IFavoriteCategoryRepository FavoriteCategories { get; }
         int Complete();
     }
 }

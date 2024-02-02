@@ -9,17 +9,17 @@ namespace Penlog.Data.Mapping
         public void Configure(EntityTypeBuilder<FavoriteCategory> builder)
         {
             builder
-               .HasKey(fc => new { fc.CategoryId, fc.UserId });
+                .HasKey(pc => new { pc.CategoryId, pc.UserId });
 
             builder
-                .HasOne(fc => fc.Category)
+                .HasOne(pc => pc.Category)
                 .WithMany(c => c.FavoriteFollowers)
-                .HasForeignKey(fc => fc.CategoryId);
+                .HasForeignKey(pc => pc.CategoryId);
 
             builder
-                .HasOne(fc => fc.User)
+                 .HasOne(pc => pc.User)
                 .WithMany(p => p.FavoriteCategories)
-                .HasForeignKey(fc => fc.UserId);
+                .HasForeignKey(pc => pc.UserId);
         }
     }
 }
