@@ -15,5 +15,4 @@ namespace Penlog.Data.Mapping
                .IsRequired(false);
         }
     }
-
 }

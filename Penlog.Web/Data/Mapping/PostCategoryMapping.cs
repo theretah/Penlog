@@ -22,5 +22,4 @@ namespace Penlog.Data.Mapping
                 .HasForeignKey(pc => pc.PostId);
         }
     }
-
 }
