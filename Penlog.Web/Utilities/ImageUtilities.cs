@@ -1,4 +1,6 @@
-﻿namespace Penlog.Utilities
+﻿using Penlog.Entities;
+
+namespace Penlog.Utilities
 {
     public static class ImageUtilities
     {
@@ -8,6 +10,10 @@
             string imageDataUrl = string.Format("data:image/jpg;base64,{0}", imageBase64Data);
 
             return imageDataUrl;
+        }
+        public static string GeneratePreviewImageDataUrl(Image? image)
+        {
+            return (image != null) ? GenerateImageDataUrl(image.Bytes) : "";
         }
     }
 }

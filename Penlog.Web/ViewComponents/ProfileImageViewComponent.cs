@@ -26,8 +26,7 @@ namespace Penlog.ViewComponents
             return View(new ProfileImageVM
             {
                 ProfileImageDataUrl = profileImageDataUrl,
-                ImageWidth = widthAndHeight,
-                ImageHeight = widthAndHeight
+                ImageWidthAndHeight = widthAndHeight,
             });
         }
     }

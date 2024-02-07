@@ -14,7 +14,7 @@
     <div class="mb-3">
         <label for="SelectedCategories" class="form-label">Categories: </label>
         <select asp-for="SelectedCategories" asp-items="Model.CategoriesSelectList" class="form-control" multiple="multiple">
-            <option selected="selected" value="@null"> - None - </option>
+            <option value="@null"> - None - </option>
         </select>
         <span asp-validation-for="SelectedCategories" class="text-danger"></span>
     </div>

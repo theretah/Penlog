@@ -17,6 +17,8 @@
     {
         userId = user.Id;
     }
+
+    var userIsAuthor = (user == author);
 }
 <div class="container">
     <div class="row">
@@ -48,10 +50,30 @@
                 <img class="w-100" src="@Model.PreviewImageDataUrl" alt="Alternate Text" />
             }
 
+            <!--Post Content-->
             <p class="fs-5 lh-base">
                 @Html.Raw(Model.Post.Content)
             </p>
+
+            <!--Like & Comment-->
+            @if (isAuthenticated && !userIsAuthor)
+            {
+                @await Component.InvokeAsync("Like", new { postId = postId, userId = userId })
+            }
+            else
+            {
+                <a type="submit" asp-area="Identity" asp-page="/Account/Login" class="btn p-1">
+                    <img src="~/icons/heart.svg" />
+                </a>
+            }
+            <p class="d-inline">@Model.Likes.Count()</p>
+            <a class="btn p-1 d-inline ms-3">
+                <img src="~/icons/chat.svg" alt="Alternate Text" />
+            </a>
+            <p class="d-inline">@Model.Comments.Count()</p>
             <hr />
+
+            <!--Categories-->
             <p class="fs-5">Categories</p>
             @{
                 var postCategories = new string[Model.PostCategories.Count()];
@@ -66,22 +88,7 @@
             }
 
             <br />
-            @if (isAuthenticated && author != user)
-            {
-                @await Component.InvokeAsync("Like", new { postId = postId, userId = userId })
-            }
-            else
-            {
-                <a type="submit" asp-area="Identity" asp-page="/Account/Login" class="btn p-1">
-                    <img src="~/icons/heart.svg" />
-                </a>
-            }
-            <p class="d-inline">@Model.Likes.Count()</p>
 
-            <a class="btn p-1 d-inline ms-3">
-                <img src="~/icons/chat.svg" alt="Alternate Text" />
-            </a>
-            <p class="d-inline">@Model.Comments.Count()</p>
             <hr />
             @if (user != null)
             {
@@ -164,13 +171,16 @@
                         {
                             <p class="card-text text-secondary" style="font-size:.90rem;">@author.Biography.ShortenString(10)</p>
                         }
-                        @if (isAuthenticated && user != author)
+                        @if (!userIsAuthor)
                         {
-                            @await Component.InvokeAsync("Follow", new { postId = postId, followerId = userId, followingId = authorId });
-                        }
-                        else if (user != author)
-                        {
-                            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary">Follow</a>
+                            if (isAuthenticated)
+                            {
+                                @await Component.InvokeAsync("FollowFromPost", new { postId = postId, followerId = userId, followingId = authorId });
+                            }
+                            else
+                            {
+                                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary">Follow</a>
+                            }
                         }
                     </div>
                 </div>

@@ -14,4 +14,5 @@ A signed in user can visit their profile page, where all their posts are contain
 they are follow or are being followed by them. They also can see posts they have liked or saved.
 
 -Categories-
-A signed in user should recieve recommendations based on his interesting topics.
+A signed in user should recieve recommendations based on his interesting topics. Topics based on the categories 
+they stated as favorite, users they follow, or posts they have recently read about.

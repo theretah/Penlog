@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Penlog.Data.Repository.IRepository;
 using Penlog.Entities;
-using Penlog.Entities;
+using Penlog.Utilities;
 
 namespace Penlog.Pages.Users
 {
@@ -27,7 +27,7 @@ namespace Penlog.Pages.Users
         public IActionResult OnGet(string id)
         {
             Author = userManager.FindByIdAsync(id).Result;
-            Posts = unit.Posts.Find(p => p.AuthorId == Author.Id);
+            Posts = unit.Posts.Find(p => p.AuthorId == Author.Id).ToList();
 
             var user = userManager.GetUserAsync(User).Result;
             if (user != null)
@@ -37,10 +37,9 @@ namespace Penlog.Pages.Users
                         .FirstOrDefault() != null;
             }
 
-            if (Author.ProfileImage == null)
-                ProfileImageDataUrl = "default-profile.jpg";
-
-            OnPostRetrieveProfilePhoto();
+            var bytes = unit.Images.Find(i => i.Id == Author.ProfileImageId).FirstOrDefault().Bytes;
+            ProfileImageDataUrl = (Author.ProfileImage == null) ? "default-profile.jpg" :
+                ImageUtilities.GenerateImageDataUrl(bytes);
 
             return Page();
         }
@@ -65,14 +64,14 @@ namespace Penlog.Pages.Users
             unit.Follows.Follow(followerId, followingId);
             unit.Complete();
 
-            return OnGet(authorId);
+            return OnGet(authorId == null ? followingId : authorId);
         }
         public IActionResult OnPostUnFollow(string authorId, string followerId, string followingId)
         {
             unit.Follows.UnFollow(followerId, followingId);
             unit.Complete();
 
-            return OnGet(authorId);
+            return OnGet(authorId == null ? followingId : authorId);
         }
         public IActionResult OnPostUploadProfilePhoto()
         {
@@ -105,15 +104,6 @@ namespace Penlog.Pages.Users
             unit.Complete();
 
             return RedirectToPage();
-        }
-        public void OnPostRetrieveProfilePhoto()
-        {
-            var image = unit.Images.Find(i => i.Id == Author.ProfileImageId).FirstOrDefault();
-            if (image != null)
-            {
-                string imageBase64Data = Convert.ToBase64String(image.Bytes);
-                ProfileImageDataUrl = string.Format("data:image/jpg;base64,{0}", imageBase64Data);
-            }
         }
     }
 }

@@ -1,0 +1,29 @@
+﻿@model Penlog.Entities.Follow
+@using Penlog.Entities
+@inject Microsoft.AspNetCore.Identity.UserManager<AppUser> UserManager
+@inject Penlog.Data.Repository.IRepository.IUnitOfWork unit
+@{
+    var user = UserManager.GetUserAsync(User).Result;
+    var follow = unit.Follows.Find(f => f.FollowerId == Model.FollowerId && f.FollowingId == Model.FollowingId)
+        .FirstOrDefault();
+}
+<form method="post" class="d-inline">
+    @if (follow != null)
+    {
+        <button type="submit" asp-page-handler="UnFollow"
+                asp-route-followerId="@user.Id"
+                asp-route-followingId="@Model.FollowingId"
+                class="btn btn-outline-secondary p-1">
+            Following
+        </button>
+    }
+    else
+    {
+        <button type="submit" asp-page-handler="Follow"
+                asp-route-followerId="@user.Id"
+                asp-route-followingId="@Model.FollowingId"
+                class="btn btn-primary p-1">
+            Follow
+        </button>
+    }
+</form>

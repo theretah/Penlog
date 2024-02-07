@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Penlog.Entities;
 using Penlog.ViewModels;
 
 namespace Penlog.ViewComponents
 {
-    public class FollowViewComponent : ViewComponent
+    public class FollowFromPostViewComponent : ViewComponent
     {
         public async Task<IViewComponentResult> InvokeAsync(int postId, string followerId, string followingId)
         {

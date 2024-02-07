@@ -1,10 +1,5 @@
 ﻿@model Penlog.ViewModels.ProfileImageVM
 
-@if (Model.ProfileImageDataUrl == "default-profile.jpg")
-{
-    <img width="@Model.ImageWidth" height="@Model.ImageHeight" style="border-radius:50%;" src="~/images/@Model.ProfileImageDataUrl" alt="Alternate Text" />
-}
-else
-{
-    <img width="@Model.ImageWidth" height="@Model.ImageHeight" style="border-radius:50%;" src="@Model.ProfileImageDataUrl" alt="Alternate Text" />
-}
+
+<img width="@Model.ImageWidthAndHeight" height="@Model.ImageWidthAndHeight"  class="border rounded-circle"
+     src="@((Model.ProfileImageDataUrl == "default-profile.jpg")? "~/images/": "")@Model.ProfileImageDataUrl" />

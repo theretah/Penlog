@@ -6,18 +6,11 @@
 @using Penlog.Entities
 
 @{
-    string imageBase64Data = string.Empty;
-    string imageDataUrl = "default-profile.jpg";
-
     var date = (Model.LastUpdated == null) ? Model.CreatedDate : Model.LastUpdated;
     var span = DateTimeUtilities.Span(date.Value);
 
-    var previewImageDataUrl = "";
-    var previewImage = unit.Images.Find(p => p.Id == Model.PreviewImageId).SingleOrDefault();
-    if (previewImage != null)
-    {
-        previewImageDataUrl = ImageUtilities.GenerateImageDataUrl(previewImage.Bytes);
-    }
+    var previewImageDataUrl = ImageUtilities.GeneratePreviewImageDataUrl
+        (unit.Images.Find(p => p.Id == Model.PreviewImageId).SingleOrDefault());
 }
 <div class="card">
     <div class="row g-0">

@@ -33,14 +33,16 @@ namespace Penlog.Pages.Posts
 
         public SelectList CategoriesSelectList { get; set; }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
             CategoriesSelectList = new SelectList(unit.Categories.GetAll(), nameof(Category.Id), nameof(Category.Title));
+
+            return Page();
         }
         public IActionResult OnPost()
         {
             if (!ModelState.IsValid)
-                return Page();
+                return OnGet();
 
             var author = userManager.GetUserAsync(User).Result;
 

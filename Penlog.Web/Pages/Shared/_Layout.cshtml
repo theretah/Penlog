@@ -47,14 +47,14 @@
                         </a>
                         <!-- Left links -->
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            @if (isAuthenticated && isAdmin)
+                            @if (isAuthenticated)
                             {
-                                <li class="nav-item mx-1">
-                                    <a class="nav-link btn" asp-area="" asp-page="/Admin/Index">Admin</a>
-                                </li>
-                            }
-                            else if (isAuthenticated)
-                            {
+                                if (isAdmin)
+                                {
+                                    <li class="nav-item mx-1">
+                                        <a class="nav-link btn" asp-area="" asp-page="/Admin/Index">Admin</a>
+                                    </li>
+                                }
                                 <li class="nav-item mx-1">
                                     <a class="nav-link btn text-primary" asp-area="" asp-page="/Posts/Create">Write a post</a>
                                 </li>
@@ -136,37 +136,18 @@
             <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-primary border-bottom box-shadow">
                 <div class="container p-0">
                     <div class="col">
-                            <ul class="navbar-nav flex-grow-1">
-                                @{
-                                    var popularCategories = unit.Categories.Find(c => c.Posts.Count() != 0).Take(5).ToList();
-                                    if (isAuthenticated)
+                        <ul class="navbar-nav flex-grow-1">
+                            @{
+                                var popularCategories = unit.Categories.Find(c => c.Posts.Count() != 0).Take(5).ToList();
+                                if (isAuthenticated)
+                                {
+                                    var categories = new List<Category>();
+                                    foreach (var fc in unit.FavoriteCategories.Find(fc => fc.UserId == user.Id).ToList())
                                     {
-                                        var categories = new List<Category>();
-                                        foreach (var fc in unit.FavoriteCategories.Find(fc => fc.UserId == user.Id).ToList())
-                                        {
-                                            categories.Add(unit.Categories.Get(fc.CategoryId));
-                                        }
-
-                                        if (categories.Count == 0)
-                                        {
-                                            foreach (var category in popularCategories)
-                                            {
-                                                <li class="nav-item">
-                                                    <a class="nav-link btn text-light" href="/Category/@category.Id">@category.Title</a>
-                                                </li>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            foreach (var category in categories)
-                                            {
-                                                <li class="nav-item">
-                                                    <a class="nav-link btn text-light" href="/Category/@category.Id">@category.Title</a>
-                                                </li>
-                                            }
-                                        }
+                                        categories.Add(unit.Categories.Get(fc.CategoryId));
                                     }
-                                    else
+
+                                    if (categories.Count == 0)
                                     {
                                         foreach (var category in popularCategories)
                                         {
@@ -175,15 +156,34 @@
                                             </li>
                                         }
                                     }
+                                    else
+                                    {
+                                        foreach (var category in categories)
+                                        {
+                                            <li class="nav-item">
+                                                <a class="nav-link btn text-light" href="/Category/@category.Id">@category.Title</a>
+                                            </li>
+                                        }
+                                    }
                                 }
-                            </ul>
+                                else
+                                {
+                                    foreach (var category in popularCategories)
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link btn text-light" href="/Category/@category.Id">@category.Title</a>
+                                        </li>
+                                    }
+                                }
+                            }
+                        </ul>
                     </div>
                 </div>
             </nav>
         </div>
     </header>
     <div class="container">
-        <main role="main" >
+        <main role="main">
             @RenderBody()
         </main>
     </div>

@@ -1,20 +1,28 @@
 ﻿@page "{id}"
 @inject Microsoft.AspNetCore.Identity.UserManager<AppUser> userManager
+@inject Penlog.Data.Repository.IRepository.IUnitOfWork unit
 @using Penlog.ExtensionMethods;
 @using Penlog.Entities;
+@using Penlog.Utilities;
 @model Penlog.Pages.Users.ProfileModel
 @{
+    var isAuthenticated = User.Identity.IsAuthenticated;
     var user = userManager.GetUserAsync(User).Result;
-    int profileImageWidthAndHeight = 100;
+    var author = Model.Author;
+    var userIsAuthor = (user == author);
+
+    int profileImageWidthAndHeight = 150;
+
+    var previewImageDataUrl = "";
 }
 <div class="container">
     <div class="row">
         <div class="col-4"></div>
         <div class="col-4">
             <div class="text-center">
-                @await Component.InvokeAsync("ProfileImage", new { profileUser = Model.Author, widthAndHeight = profileImageWidthAndHeight })
+                @await Component.InvokeAsync("ProfileImage", new { profileUser = author, widthAndHeight = profileImageWidthAndHeight })
 
-                @if (Model.Author == userManager.GetUserAsync(User).Result)
+                @if (userIsAuthor)
                 {
                     <form method="post" asp-page-handler="UploadProfilePhoto" enctype="multipart/form-data">
                         <input asp-for="File" accept="image/jpg, image/png" />
@@ -22,27 +30,14 @@
                     </form>
                 }
                 <h4>
-                    @Model.Author.UserName
+                    @author.UserName
                 </h4>
                 <form method="post">
-                    @if (User.Identity.IsAuthenticated)
+                    @if (isAuthenticated)
                     {
-                        if (user != Model.Author)
+                        if (!userIsAuthor)
                         {
-                            if (Model.IsFollowing)
-                            {
-                                <button type="submit" asp-page-handler="UnFollow" asp-route-authorId="@Model.Author.Id" asp-route-followerId="@user.Id" asp-route-followingId="@Model.Author.Id"
-                                        class="btn btn-outline-secondary">
-                                    Following
-                                </button>
-                            }
-                            else
-                            {
-                                <button type="submit" asp-page-handler="Follow" asp-route-authorId="@Model.Author.Id" asp-route-followerId="@user.Id" asp-route-followingId="@Model.Author.Id"
-                                        class="btn btn-primary">
-                                    Follow
-                                </button>
-                            }
+                            @await Component.InvokeAsync("FollowFromProfile", new { followerId = user.Id, followingId = author.Id })
                         }
                     }
                 </form>
@@ -53,16 +48,17 @@
     <div class="row text-center">
         <div class="col-4"></div>
         <div class="col-4">
-            <p>@Model.Author.FollowersCount Followers &nbsp;&nbsp; @Model.Author.FollowingsCount Followings</p>
+            <p>@author.FollowersCount Followers &nbsp;&nbsp; @author.FollowingsCount Followings</p>
             <p>
-                @Model.Author.Biography
+                @author.Biography
             </p>
-            @if (Model.Author == userManager.GetUserAsync(User).Result)
+            @if (userIsAuthor)
             {
-                <a class="btn btn-outline-dark" asp-page="EditBiography" asp-route-authorId="@Model.Author.Id">Edit Biography</a>
+                <a class="btn btn-outline-dark" asp-page="EditBiography" asp-route-authorId="@author.Id">Edit Biography</a>
             }
+        <hr />
             <p>
-                Posts: (@Model.Author.PostsCount)
+                Posts: (@author.PostsCount)
             </p>
         </div>
         <div class="col-4"></div>
@@ -70,48 +66,56 @@
     <div class="row text-center">
         @foreach (var post in Model.Posts)
         {
+            var previewImage = unit.Images.Find(p => p.Id == post.PreviewImageId).SingleOrDefault();
+            if (previewImage != null)
+            {
+                previewImageDataUrl = ImageUtilities.GenerateImageDataUrl(previewImage.Bytes);
+            }
             var firstSentence = Html.Raw(post.Content.ShortenString(30));
-            <div class="card my-3">
-                <div class="card-body">
-                    <a asp-page="/Post" asp-route-id="@post.Id" class="text-decoration-none link-dark">
-                        <h5 class="card-title">@post.Title</h5>
-                        <p class="card-text">@firstSentence</p>
-                    </a>
-                    @if (userManager.GetUserId(User) == post.AuthorId)
-                    {
-                        <br />
-                        <a asp-page="/Posts/Edit" asp-route-id="@post.Id" class="btn btn-outline-dark btn-light">Edit</a>
+            <div class="col-4">
+                <div class="card my-3">
+                    <img src="@previewImageDataUrl" style="height:200px;" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <a asp-page="/Post" asp-route-id="@post.Id" class="text-decoration-none link-dark">
+                            <h5 class="card-title">@post.Title</h5>
+                            <p class="card-text">@firstSentence</p>
+                        </a>
+                        @if (userIsAuthor)
+                        {
+                            <br />
+                            <a asp-page="/Posts/Edit" asp-route-id="@post.Id" class="btn btn-outline-dark btn-light">Edit</a>
 
-                        string modalId = "deleteModal" + post.Id;
+                            string modalId = "deleteModal" + post.Id;
 
-                        <!-- Button trigger modal -->
-                        <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@modalId">
-                            Delete
-                        </button>
+                            <!-- Button trigger modal -->
+                            <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#@modalId">
+                                Delete
+                            </button>
 
-                        <!-- Modal -->
-                        <div class="modal fade" id="@modalId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete @post.Title?</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Are you sure you want to delete this post?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <form method="post" asp-page-handler="Delete" asp-route-id="@post.Id" class="m-0 p-0">
-                                            <button type="submit" class="btn btn-danger">Confirm Delete</button>
-                                        </form>
+                            <!-- Modal -->
+                            <div class="modal fade" id="@modalId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Delete @post.Title?</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to delete this post?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <form method="post" asp-page-handler="Delete" asp-route-id="@post.Id" class="m-0 p-0">
+                                                <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    }
-                    <br />
-                    <p style="font-size:.85rem;" class="text-secondary my-0">@((post.LastUpdated == null) ? post.CreatedDate : post.LastUpdated)</p>
+                        }
+                        <br />
+                        <p style="font-size:.85rem;" class="text-secondary my-0">@((post.LastUpdated == null) ? post.CreatedDate : post.LastUpdated)</p>
+                    </div>
                 </div>
             </div>
         }
