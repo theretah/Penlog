@@ -15,7 +15,7 @@ namespace Penlog.ViewComponents
         }
         public async Task<IViewComponentResult> InvokeAsync(AppUser profileUser, int widthAndHeight)
         {
-            var profileImageDataUrl = "default-profile.jpg";
+            var profileImageDataUrl = "/images/default-profile.jpg";
             var profileImage = unit.Images.Find(i => i.Id == profileUser.ProfileImageId).FirstOrDefault();
             if (profileImage != null)
             {

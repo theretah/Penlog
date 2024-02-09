@@ -1,10 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Penlog.Data.Repository.IRepository;
 using Penlog.Entities;
-using System.Data;
 
 namespace Penlog.Pages.Admin.Users
 {

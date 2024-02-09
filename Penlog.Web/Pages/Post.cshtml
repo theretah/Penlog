@@ -27,14 +27,14 @@
                 <div class="row g-0">
                     <div class="col-md-2 text-center">
                         <div class="mt-3">
-                            <a asp-page="Users/Profile" asp-route-id="@authorId">
+                            <a asp-page="Profile" asp-route-id="@authorId">
                                 @await Component.InvokeAsync("ProfileImage", new { profileUser = author, widthAndHeight = profileImageWidthAndHeight })
                             </a>
                         </div>
                     </div>
                     <div class="col-md-8">
                         <div class="card-body p-1">
-                            <a class="text-decoration-none text-dark d-inline-block mt-3" asp-page="Users/Profile" asp-route-id="@authorId">
+                            <a class="text-decoration-none text-dark d-inline-block mt-3" asp-page="Profile" asp-route-id="@authorId">
                                 <h6 class="card-title fw-bold">@author.UserName</h6>
                             </a>
                             <p class="card-text " style="font-size:.80rem;">
@@ -74,7 +74,7 @@
             <hr />
 
             <!--Categories-->
-            <p class="fs-5">Categories</p>
+            <h3>Categories</h3>
             @{
                 var postCategories = new string[Model.PostCategories.Count()];
                 int i = 0;
@@ -86,48 +86,37 @@
                     </a>
                 }
             }
-
-            <br />
-
             <hr />
+
+            <!-- Comment -->
+            <h3>Reply to this post</h3>
             @if (user != null)
             {
-                <div class="mt-5 p-4 bg-light">
-                    <form method="post" asp-page-handler="Comment" asp-route-postId="@postId">
-                        <div class="row g-0">
-                            <div class="col-1 text-start">
-                                <a asp-page="Users/Profile" asp-route-id="@userId">
-                                    @await Component.InvokeAsync("ProfileImage", new
-                                    {
-                                        profileUser = user,
-                                        widthAndHeight = profileImageWidthAndHeight
-                                    })
+                <form method="post" class="p-4 bg-light" asp-page-handler="Comment" asp-route-postId="@postId">
+                    <div class="card border-0 bg-light">
+                        <div class="mb-2">
+                            <h5 class="text-primary">
+                                <a class="text-decoration-none" asp-page="/Profile" asp-route-id="@user.Id">
+                                    @await Component.InvokeAsync("ProfileImage", new { profileUser = user, widthAndHeight = profileImageWidthAndHeight })
+                                    @user.UserName (You)
                                 </a>
-                            </div>
-                            <div class="col-10 ms-2">
-                                <div class="card-body p-1 mt-3">
-                                    <a class="text-decoration-none text-dark d-inline-block" asp-page="Users/Profile" asp-route-id="@userId">
-                                        <h6 class="card-title fw-bold">@user.UserName (You)</h6>
-                                    </a>
-                                </div>
-                            </div>
+                            </h5>
                         </div>
                         <div class="mb-3">
-                            <textarea asp-for="CommentText" type="text" class="form-control" id="contentInput" placeholder="Write your opinion"></textarea>
+                            <textarea asp-for="CommentText" class="form-control" rows="3" placeholder="Write your opinion"></textarea>
                             <span asp-validation-for="CommentText" class="text-danger"></span>
                         </div>
-                        <button type="submit" class="btn btn-primary float-end">Submit</button>
-                    </form>
-                </div>
-                <br />
-                <br />
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
             }
             else
             {
                 <h5>You must be signed in to comment.</h5>
             }
-
             <hr />
+
+            <!-- Comments -->
             <h3>Comments</h3>
             @{
                 var comments = Model.Comments.Where(c => c.ParentId == null).OrderBy(c => c.PublishDate);
@@ -154,14 +143,14 @@
             <div class="card mb-3 border-0" style="max-width: 540px;">
                 <div class="col-md-2 text-center">
                     <div class="mt-3">
-                        <a asp-page="Users/Profile" asp-route-id="@authorId">
+                        <a asp-page="Profile" asp-route-id="@authorId">
                             @await Component.InvokeAsync("ProfileImage", new { profileUser = author, widthAndHeight = profileImageWidthAndHeight })
                         </a>
                     </div>
                 </div>
                 <div class="col-md-8">
                     <div class="card-body p-1">
-                        <a class="text-decoration-none text-dark" asp-page="Users/Profile" asp-route-id="@authorId">
+                        <a class="text-decoration-none text-dark" asp-page="Profile" asp-route-id="@authorId">
                             <h6 class="card-title fw-bold">@author.UserName</h6>
                         </a>
                         <p class="card-text" style="font-size:.80rem;">

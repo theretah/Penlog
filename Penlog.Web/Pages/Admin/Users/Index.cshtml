@@ -1,14 +1,18 @@
 ﻿@page
 @model Penlog.Pages.Admin.Users.IndexModel
-
-@foreach(var user in Model.Users)
-{
-    <div class="card my-2">
-        <div class="card-body">
-            <h5 class="card-title">@user.UserName</h5>
-            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-            <p>@user.PostsCount Posts</p>
-            <a asp-page="/Users/Profile" asp-route-id="@user.Id" class="btn btn-primary">Profile</a>
+@inject Microsoft.AspNetCore.Identity.UserManager<Penlog.Entities.AppUser> userManager
+<div class="row">
+    @foreach (var user in Model.Users)
+    {
+        <div class="col-2">
+            <div class="card text-center my-2">
+                <div class="card-body">
+                    @await Component.InvokeAsync("ProfileImage", new { profileUser = user, widthAndHeight = 100 })
+                    <h5 class="card-title mt-3">@user.UserName</h5>
+                    <p>@user.PostsCount Posts</p>
+                    <a asp-page="/Profile" asp-route-id="@user.Id" class="btn btn-primary">Profile</a>
+                </div>
+            </div>
         </div>
-    </div>
-}
+    }
+</div>

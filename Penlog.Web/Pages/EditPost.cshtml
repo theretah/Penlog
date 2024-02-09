@@ -1,0 +1,71 @@
+﻿@page "{id}"
+@model Penlog.Pages.EditPostModel
+<form method="post" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="titleInput" class="form-label">Title: </label>
+        <input asp-for="Post.Title" type="text" class="form-control form-control-lg" id="titleInput">
+        <span asp-validation-for="Post.Title" class="text-danger"></span>
+    </div>
+    @if (Model.Post.PreviewImage != null)
+    {
+        <div class="mb-3">
+            <label class="form-label d-block">Current File:</label>
+            <img width="1000" height="600" src="@Model.PreviewImageDataUrl" alt="Alternate Text" class="d-block" />
+            <br />
+
+            <label for="previewPhotoInput" class="form-label">Change Preview Image: </label>
+            <input asp-for="File" type="file" class="form-control" id="previewPhotoInput" />
+            <span asp-validation-for="File" class="text-danger"></span>
+        </div>
+    }
+    else
+    {
+        <div class="mb-3">
+            <label for="previewPhotoInput" class="form-label">Preview Photo: </label>
+            <input asp-for="File" type="file" class="form-control" id="previewPhotoInput" />
+            <span asp-validation-for="File" class="text-danger"></span>
+        </div>
+    }
+    <div class="mb-3">
+        <label for="SelectedCategories" class="form-label">Categories: </label>
+        <select asp-for="SelectedCategories" class="form-select" multiple="multiple" size="@(Model.CategoriesSelectList.Count()+1)">
+            <option value="@null"> - None - </option>
+            @{
+                var titles = new List<string>();
+                foreach (var pc in Model.PostCategories.ToList())
+                {
+                    titles.Add(pc.Category.Title);
+                }
+
+                foreach (var categoryItem in Model.CategoriesSelectList)
+                {
+                    if (titles.Contains(categoryItem.Text))
+                    {
+                        <option selected value="@categoryItem.Value">@categoryItem.Text</option>
+                    }
+                    else
+                    {
+                        <option value="@categoryItem.Value">@categoryItem.Text</option>
+                    }
+                }
+            }
+        </select>
+        <span asp-validation-for="SelectedCategories" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label for="contentInput" class="form-label">Content: </label>
+        <textarea asp-for="Post.Content" class="form-control" id="contentInput" rows="15"></textarea>
+        <span asp-validation-for="Post.Content" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
+
+@section Scripts{
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+        });
+    </script>
+}

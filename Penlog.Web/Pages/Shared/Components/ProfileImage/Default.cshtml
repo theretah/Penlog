@@ -1,5 +1,7 @@
 ﻿@model Penlog.ViewModels.ProfileImageVM
-
-
-<img width="@Model.ImageWidthAndHeight" height="@Model.ImageWidthAndHeight"  class="border rounded-circle"
-     src="@((Model.ProfileImageDataUrl == "default-profile.jpg")? "~/images/": "")@Model.ProfileImageDataUrl" />
+@{
+    string Url = Model.ProfileImageDataUrl;
+    string preText = (Url == "default-profile.jpg") ? "~/images/" : "";
+}
+<img width="@Model.ImageWidthAndHeight" height="@Model.ImageWidthAndHeight" class="border border-dark rounded-circle"
+     src="@(preText + Url)" />

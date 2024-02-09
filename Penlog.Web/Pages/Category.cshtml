@@ -2,7 +2,7 @@
 @model Penlog.Pages.CategoryModel
 
 <div class="container px-0">
-    <div class="col-9 mx-0 mt-3">
+    <div class="col-9 ">
         <h1>@Model.Category.Title</h1>
         @foreach (var post in Model.Posts
            .OrderByDescending(p => (p.LastUpdated == null) ? p.CreatedDate : p.LastUpdated)

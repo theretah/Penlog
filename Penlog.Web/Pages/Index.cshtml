@@ -9,10 +9,11 @@
 
 <div class="container">
     <div class="row">
+        <h1>Penlog's Suggestions for You</h1>
         <div class="col-9">
             @foreach (var post in Model.Posts)
             {
-                <div class="row mt-3">
+                <div class="row mb-3">
                     @await Component.InvokeAsync("Post", new { postId = post.Id })
                 </div>
             }

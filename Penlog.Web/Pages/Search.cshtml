@@ -1,18 +1,18 @@
 ﻿@page "{searchString?}"
 @model Penlog.Pages.SearchModel
 <div class="container">
-    <h3 class="text-secondary">Browse posts, categories, users</h3>
+    <h3 class="text-secondary text-center">Browse posts, categories, users</h3>
     @if (!string.IsNullOrEmpty(Model.SearchString))
     {
         if (Model.Posts.Count() != 0)
         {
-            <div class="row mt-3">
+            <div class="row">
                 <h3>Posts</h3>
                 <div class="container px-0">
                     <div class="col-9 mx-0">
                         @foreach (var post in Model.Posts)
                         {
-                            <div class="row">
+                            <div class="row mb-3">
                                 @await Component.InvokeAsync("Post", new { postId = post.Id })
                             </div>
                         }

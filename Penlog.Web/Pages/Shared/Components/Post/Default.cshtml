@@ -25,7 +25,7 @@
                     <h5 class="card-title text-primary">@Model.Title</h5>
                     <p class="card-text">@Html.Raw(Model.Content.ShortenString(35))</p>
                 </a>
-                <a asp-page="/Users/Profile" asp-route-id="@Model.AuthorId" class="text-decoration-none text-dark fw-bold">
+                <a asp-page="/Profile" asp-route-id="@Model.AuthorId" class="text-decoration-none text-dark fw-bold">
                     @await Component.InvokeAsync("ProfileImage", new { profileUser = Model.Author, widthAndHeight = 30 })
                     <span style="font-size:.85rem;">@Model.Author.UserName</span>
                 </a>
