@@ -16,19 +16,21 @@
     var previewImageDataUrl = "";
 }
 <div class="container">
+    @if (User.IsInRole("Admin"))
+    {
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-page="Admin/Index">Admin</a></li>
+                <li class="breadcrumb-item"><a asp-page="Admin/Users/Index">Users</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@author.UserName</li>
+            </ol>
+        </nav>
+    }
     <div class="row">
         <div class="col-4"></div>
         <div class="col-4">
             <div class="text-center">
                 @await Component.InvokeAsync("ProfileImage", new { profileUser = author, widthAndHeight = profileImageWidthAndHeight })
-
-                @if (userIsAuthor)
-                {
-                    <form method="post" asp-page-handler="UploadProfilePhoto" enctype="multipart/form-data">
-                        <input asp-for="File" accept="image/jpg, image/png" />
-                        <input type="submit" />
-                    </form>
-                }
                 <h4>
                     @author.UserName
                 </h4>
@@ -54,9 +56,9 @@
             </p>
             @if (userIsAuthor)
             {
-                <a class="btn btn-outline-dark" asp-page="EditBiography" asp-route-authorId="@author.Id">Edit Biography</a>
+                <a class="btn btn-outline-dark" asp-page="EditProfile" asp-route-authorId="@author.Id">Edit Profile</a>
             }
-        <hr />
+            <hr />
             <p>
                 Posts: (@author.PostsCount)
             </p>

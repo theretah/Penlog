@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Data;
 
 namespace Penlog.Pages.Admin.Roles
 {
@@ -15,12 +14,16 @@ namespace Penlog.Pages.Admin.Roles
         {
             this.roleManager = roleManager;
         }
+
         public IEnumerable<IdentityRole> Roles { get; set; }
+
         [BindProperty]
         public string RoleName { get; set; }
-        public void OnGet()
+
+        public IActionResult OnGet()
         {
             Roles = roleManager.Roles;
+            return Page();
         }
         public async Task<IActionResult> OnPostCreate()
         {
@@ -32,6 +35,7 @@ namespace Penlog.Pages.Admin.Roles
                     return RedirectToPage("Index");
                 }
             }
+
             return Page();
         }
 
@@ -40,6 +44,7 @@ namespace Penlog.Pages.Admin.Roles
             var role = await roleManager.FindByIdAsync(roleId);
             if (role != null)
                 await roleManager.DeleteAsync(role);
+
             return RedirectToPage("Index");
         }
     }

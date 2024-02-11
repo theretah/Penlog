@@ -14,12 +14,14 @@ namespace Penlog.Pages.Admin.Roles
         {
             this.roleManager = roleManager;
         }
+
         [BindProperty]
-        public string RoleName { get; set; }
-        public async void OnGet(string roleId)
+        public IdentityRole Role { get; set; }
+
+        public async Task<IActionResult> OnGet(string roleId)
         {
-            var role = await roleManager.FindByIdAsync(roleId);
-            RoleName = role.Name;
+            Role = await roleManager.FindByIdAsync(roleId);
+            return Page();
         }
 
         public async Task<IActionResult> OnPost(string roleId)
@@ -28,7 +30,7 @@ namespace Penlog.Pages.Admin.Roles
                 return Page();
 
             var role = await roleManager.FindByIdAsync(roleId);
-            role.Name = RoleName;
+            role.Name = Role.Name;
             await roleManager.UpdateAsync(role);
 
             return RedirectToPage("Index");

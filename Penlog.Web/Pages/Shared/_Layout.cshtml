@@ -5,7 +5,7 @@
     var isAuthenticated = User.Identity.IsAuthenticated;
     var isAdmin = User.IsInRole("Admin");
 
-    var user = userManager.GetUserAsync(User).Result;
+    var user = isAuthenticated ? userManager.GetUserAsync(User).Result : null;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Penlog</title>
 
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/journal/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Penlog.styles.css" asp-append-version="true" />
 </head>
@@ -22,7 +22,7 @@
     <header>
         <div class="row m-0 w-100">
             <!-- Navbar -->
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <nav class="navbar navbar-expand-lg">
                 <!-- Container wrapper -->
                 <div class="container p-0">
                     <!-- Toggle button -->
@@ -77,13 +77,13 @@
                         }
                         <form id="searchForm" class="input-group w-auto me-3">
                             <input type="search" asp-for="@searchString"
-                                   class="form-control rounded"
+                                   class="form-control rounded-start"
                                    placeholder="Search topics, categories, authors..."
                                    aria-label="Search"
                                    aria-describedby="search-addon"
                                    size="35" />
 
-                            <button type="submit" asp-page="/Search" asp-route-searchString="@searchString" class="input-group-text border-0">
+                            <button type="submit" asp-page="/Search" asp-route-searchString="@searchString" class="input-group-text" id="search-addon">
                                 <img src="~/icons/search.svg" alt="Alternate Text" />
                             </button>
                         </form>

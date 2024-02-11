@@ -1,0 +1,28 @@
+﻿@page "{authorId}"
+@model Penlog.Pages.EditProfileModel
+
+<h1>Editing @Model.Username's profile</h1>
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger" role="alert"></div>
+    <div class="mb-3">
+        <label for="userNameInput" class="form-label">Username</label>
+        <input asp-for="Username" type="text" class="form-control" id="userNameInput" placeholder="Your username is shown to everyone.">
+    </div>
+    <div class="mb-3">
+        <label for="phoneNumberInput" class="form-label">Phone</label>
+        <input asp-for="PhoneNumber" type="text" class="form-control" id="phoneNumberInput" placeholder="Country code + your phone number.">
+    </div>
+    <div class="mb-3">
+        <label for="emailInput" class="form-label">Email</label>
+        <input disabled asp-for="Email" type="email" class="form-control" id="emailInput" placeholder="example@gmail.com">
+    </div>
+    <div class="mb-3">
+        <label for="bioInput" class="form-label">Biography</label>
+        <textarea asp-for="Biography" class="form-control" id="bioInput" rows="3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

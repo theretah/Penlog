@@ -1,18 +1,46 @@
 ﻿@page
 @model Penlog.Pages.Admin.Users.IndexModel
 @inject Microsoft.AspNetCore.Identity.UserManager<Penlog.Entities.AppUser> userManager
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="../Index">Admin</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Users</li>
+    </ol>
+</nav>
+
 <div class="row">
-    @foreach (var user in Model.Users)
-    {
-        <div class="col-2">
-            <div class="card text-center my-2">
-                <div class="card-body">
-                    @await Component.InvokeAsync("ProfileImage", new { profileUser = user, widthAndHeight = 100 })
-                    <h5 class="card-title mt-3">@user.UserName</h5>
-                    <p>@user.PostsCount Posts</p>
-                    <a asp-page="/Profile" asp-route-id="@user.Id" class="btn btn-primary">Profile</a>
-                </div>
-            </div>
-        </div>
-    }
+    <h5>All users</h5>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Username</th>
+                <th scope="col">Email</th>
+                <th scope="col">Email Confirmed</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Phone Confirmed</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var i = 1;
+                foreach (var user in Model.Users)
+                {
+                    <tr>
+                        <th scope="row">@(i++)</th>
+                        <td>
+                            <a asp-page="/Profile" asp-route-id="@user.Id" class="text-primary text-decoration-none">
+                                @user.UserName
+                            </a>
+                        </td>
+                        <td>@user.Email</td>
+                        <td>@user.EmailConfirmed</td>
+                        <td>@user.PhoneNumber</td>
+                        <td>@user.PhoneNumberConfirmed</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
 </div>

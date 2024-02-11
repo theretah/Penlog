@@ -1,10 +1,19 @@
 ﻿@page
 @model Penlog.Pages.Admin.Categories.DetailsModel
+
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="../Index">Admin</a></li>
+        <li class="breadcrumb-item"><a asp-page="Index">Categories</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.Category.Title</li>
+    </ol>
+</nav>
+
 <div class="row">
     <h3>@Model.Category.Title</h3>
 </div>
 
 @foreach (var post in Model.Posts)
 {
-    @post.PostId
+    <p>@post.PostId</p>
 }

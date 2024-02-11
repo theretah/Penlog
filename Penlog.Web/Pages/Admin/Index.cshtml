@@ -1,14 +1,20 @@
 ﻿@page
 @model Penlog.Pages.Admin.IndexModel
 
-<ul class="list-group">
-    <li class="list-group-item">
-        <a asp-page="/Admin/Roles/Index" asp-area="">Roles</a>
-    </li>
-    <li class="list-group-item">
-        <a asp-page="/Admin/Users/Index" asp-area="">Users</a>
-    </li>
-    <li class="list-group-item">
-        <a asp-page="/Admin/Categories/Index" asp-area="">Categories</a>
-    </li>
-</ul>
+    <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">Admin</li>
+        </ol>
+    </nav>
+
+    <ul class="list-group">
+        <li class="list-group-item">
+            <a asp-page="/Admin/Roles/Index" asp-area="" class="text-decoration-none">Roles</a>
+        </li>
+        <li class="list-group-item">
+            <a asp-page="/Admin/Users/Index" asp-area="" class="text-decoration-none">Users</a>
+        </li>
+        <li class="list-group-item">
+            <a asp-page="/Admin/Categories/Index" asp-area="" class="text-decoration-none">Categories</a>
+        </li>
+    </ul>

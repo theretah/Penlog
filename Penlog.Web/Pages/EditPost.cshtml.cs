@@ -25,7 +25,7 @@ namespace Penlog.Pages
         public Post Post { get; set; }
 
         [BindProperty]
-        public IFormFile File { get; set; }
+        public IFormFile? File { get; set; }
 
         [BindProperty]
         public int?[] SelectedCategories { get; set; }
@@ -92,7 +92,7 @@ namespace Penlog.Pages
             unit.Posts.Update(post);
             unit.Complete();
 
-            return RedirectToPage("../Profile/", new { id = author.Id });
+            return RedirectToPage("Profile/", new { id = author.Id });
         }
     }
 }

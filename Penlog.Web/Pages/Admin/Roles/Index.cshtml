@@ -1,24 +1,42 @@
 ﻿@page
 @model Penlog.Pages.Admin.Roles.IndexModel
 
-@foreach (var role in Model.Roles)
-{
-    <div class="card my-2">
-        <div class="card-body">
-            <h5 class="card-title">@role.Name</h5>
-            <form method="post">
-                <button type="submit" asp-page-handler="Delete" asp-route-roleId="@role.Id" class="btn btn-danger">Delete @role.Name</button>
-            </form>
-            <a type="button" asp-page="Edit/" asp-route-roleId="@role.Id" class="btn btn-secondary">Edit</a>
-        </div>
-    </div>
-}
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="../Index">Admin</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Roles</li>
+    </ol>
+</nav>
 
-<form method="post">
-    <div class="mb-3">
-        <label for="roleNameInput" class="form-label">Role Name: </label>
-        <input asp-for="RoleName" type="text" class="form-control form-control-lg" id="roleNameInput">
+<div class="row">
+    <h5>All roles</h5>
+    @foreach (var role in Model.Roles)
+    {
+        <div class="col-2">
+            <div class="card text-center" style="width: 8rem;">
+                <div class="card-header">
+                    @role.Name
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <form method="post">
+                            <button type="submit" asp-page-handler="Delete" asp-route-roleId="@role.Id" class="btn btn-outline-danger">Remove</button>
+                        </form>
+                    </li>
+                    <li class="list-group-item">
+                        <a type="button" asp-page="Edit/" asp-route-roleId="@role.Id" class="btn btn-outline-secondary">Update</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    }
+</div>
+<form class="w-25 mt-3" method="post">
+    <h5>Create new role</h5>
+    <div class="input-group">
+        <input asp-for="RoleName" type="text" class="form-control" placeholder="Role name" aria-describedby="create-role-addon">
+        <button class="btn btn-primary rounded-end" type="submit" asp-page-handler="Create" id="create-role-addon">Create Role</button>
         <span asp-validation-for="RoleName" class="text-danger"></span>
     </div>
-    <button type="submit" asp-page-handler="Create" class="btn btn-primary">Create Role</button>
 </form>
+

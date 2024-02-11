@@ -1,11 +1,12 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Penlog.Data.Repository.IRepository;
 using Penlog.Entities;
-using Penlog.Entities;
 
 namespace Penlog.Pages.Admin.Categories
 {
+    [Authorize(Roles = "Admin")]
     public class EditModel : PageModel
     {
         private readonly IUnitOfWork unit;
@@ -14,8 +15,7 @@ namespace Penlog.Pages.Admin.Categories
         {
             this.unit = unit;
         }
-        [BindProperty]
-        public IFormFile File { get; set; }
+
         [BindProperty]
         public Category Category { get; set; }
         public void OnGet(int id)
