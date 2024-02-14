@@ -1,6 +1,7 @@
 ﻿@page "{id}"
 @model Penlog.Pages.EditPostModel
 <form method="post" enctype="multipart/form-data">
+    <h5>Editing '@Model.Post.Title'</h5>
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="mb-3">
         <label for="titleInput" class="form-label">Title: </label>

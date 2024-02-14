@@ -1,15 +1,88 @@
 ﻿@page
 @using Microsoft.AspNetCore.Identity;
 @using Penlog.Entities;
+@using Penlog.Utilities;
+@using Penlog.ExtensionMethods;
 @inject UserManager<AppUser> userManger
+@inject Penlog.Data.Repository.IRepository.IUnitOfWork unit
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
+
+    var firstPost = Model.Posts[0];
+    var firstPostPreviewImageDataUrl = ImageUtilities.GeneratePreviewImageDataUrl(unit.Images.Find(p => p.Id == firstPost.PreviewImageId).SingleOrDefault());
+    var firstPostDate = (firstPost.LastUpdated == null) ? firstPost.CreatedDate : firstPost.LastUpdated;
+    var firstPostSpan = DateTimeUtilities.Span(firstPostDate.Value);
+
+    var secondAndThird = new List<Post>();
+    secondAndThird.Add(Model.Posts[1]);
+    secondAndThird.Add(Model.Posts[2]);
 }
 
 <div class="container">
     <div class="row">
-        <h1>Penlog's Suggestions for You</h1>
+        <h1 class="p-0">Penlog's Suggestions for You</h1>
+        <div class="col-5 p-1">
+            <a asp-page="Post" asp-route-id="@firstPost.Id" class="text-decoration-none">
+                <div class="card mw-100 h-100 p-0 m-0">
+                    <img src="@firstPostPreviewImageDataUrl" class="card-img-top object-fit-cover" style="height:240px;">
+                    <div class="card-body">
+                        <h4 class="card-title text-primary">@firstPost.Title</h4>
+                        <p class="card-text text-dark">@Html.Raw(firstPost.Content.ShortenString(15))</p>
+                        <a asp-page="/Profile" asp-route-id="@firstPost.AuthorId" class="text-decoration-none text-dark fw-bold">
+                            @await Component.InvokeAsync("ProfileImage", new { profileUser = firstPost.Author, widthAndHeight = 30 })
+                            <span style="font-size:.85rem;">@firstPost.Author.UserName</span>
+                        </a>
+                        <p class="card-text"><small class="text-muted">Last updated: @firstPostSpan</small></p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-5">
+            @foreach (var item in secondAndThird)
+            {
+                var itemPreviewImageDataUrl = ImageUtilities.GeneratePreviewImageDataUrl(unit.Images.Find(p => p.Id == item.PreviewImageId).SingleOrDefault());
+                var itemDate = (item.LastUpdated == null) ? item.CreatedDate : item.LastUpdated;
+                var itemSpan = DateTimeUtilities.Span(itemDate.Value);
+
+                <div class="row h-50 p-1">
+                    <div class="card p-0">
+                        <div class="row g-0 h-100">
+                            <div class="col-md-4">
+                                <a asp-page="Post" asp-route-id="@item.Id" class="text-decoration-none">
+                                    <img src="@itemPreviewImageDataUrl" class="h-100 w-100 bg-black rounded-start object-fit-cover"/>
+                                </a>
+                            </div>
+                            <div class="col-md-8 my-auto">
+                                <a asp-page="Post" asp-route-id="@item.Id" class="text-decoration-none">
+                                    <div class="card-body">
+                                        <h4 class="card-title">@item.Title</h4>
+                                        <p class="card-text text-dark">@Html.Raw(item.Content.ShortenString(20))</p>
+                                        <a asp-page="/Profile" asp-route-id="@item.AuthorId" class="text-decoration-none text-dark fw-bold">
+                                            @await Component.InvokeAsync("ProfileImage", new { profileUser = item.Author, widthAndHeight = 30 })
+                                            <span style="font-size:.85rem;">@item.Author.UserName</span>
+                                        </a>
+                                        <p class="card-text"><small class="text-muted">Last updated: @itemSpan</small></p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="col-2 p-1">
+            <div class="card w-100 h-100" style="height:445px;">
+                <div class="card-body">
+                    <h5 class="card-title">Something in your mind?</h5>
+                    <button asp-page="CreatePost" class="btn btn-primary">Write it!</button>
+                </div>
+                <img src="/images/istockphoto-1340986732-170667a.webp" class="card-img-bottom" alt="...">
+            </div>
+        </div>
+    </div>
+</div>
+@*<div class="row">
         <div class="col-9">
             @foreach (var post in Model.Posts)
             {
@@ -20,5 +93,4 @@
         </div>
         <div class="col-3">
         </div>
-    </div>
-</div>
+    </div>*@

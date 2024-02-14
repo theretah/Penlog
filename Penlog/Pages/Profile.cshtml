@@ -15,10 +15,10 @@
 
     var previewImageDataUrl = "";
 }
-<div class="container">
+<div class="container p-0">
     @if (User.IsInRole("Admin"))
     {
-        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+        <nav class="bg-light p-0 rounded" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a asp-page="Admin/Index">Admin</a></li>
                 <li class="breadcrumb-item"><a asp-page="Admin/Users/Index">Users</a></li>

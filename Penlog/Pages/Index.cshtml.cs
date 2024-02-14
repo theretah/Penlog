@@ -12,12 +12,13 @@ namespace Penlog.Pages
         {
             this.unit = unit;
         }
-        public IEnumerable<Post> Posts { get; set; }
+        public IList<Post> Posts { get; set; }
         public void OnGet()
         {
             Posts = unit.Posts
                 .GetAllWithAuthors()
-                .OrderByDescending(p => (p.LastUpdated == null) ? p.CreatedDate : p.LastUpdated);
+                .OrderByDescending(p => (p.LastUpdated == null) ? p.CreatedDate : p.LastUpdated)
+                .ToList();
         }
     }
 }

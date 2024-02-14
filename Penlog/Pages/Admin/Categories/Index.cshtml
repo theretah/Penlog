@@ -1,7 +1,7 @@
 ﻿@page
 @model Penlog.Pages.Admin.Categories.IndexModel
 
-<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+<nav class="bg-light p-0 rounded" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a asp-page="../Index">Admin</a></li>
         <li class="breadcrumb-item active" aria-current="page">Categories</li>
@@ -21,7 +21,7 @@
      </textarea>
     </div>
     <button type="submit" class="btn btn-primary" asp-page-handler="Add">Create</button>
-</form>     
+</form>
 <br />
 <hr />
 
@@ -34,8 +34,8 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Title</th>
-                        <th scope="col">Delete</th>
-                        <th scope="col">Edit</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -50,11 +50,11 @@
                                 </td>
                                 <td>
                                     <form method="post" class="d-inline m-0">
-                                        <button asp-page-handler="Delete" asp-route-categoryId="@category.Id" class="btn btn-danger p-1">Delete</button>
+                                        <button asp-page-handler="Delete" asp-route-categoryId="@category.Id" class="p-0 border-0 bg-transparent text-danger text-decoration-none p-1">Delete</button>
                                     </form>
                                 </td>
                                 <td>
-                                    <a asp-page="Edit" asp-route-id="@category.Id" class="btn btn-secondary p-1 m-0">Edit</a>
+                                    <a asp-page="Edit" asp-route-id="@category.Id" class="text-secondary text-decoration-none p-1 m-0">Edit</a>
                                 </td>
                             </tr>
                         }
