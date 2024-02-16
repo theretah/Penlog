@@ -12,24 +12,29 @@
     var previewImageDataUrl = ImageUtilities.GeneratePreviewImageDataUrl
         (unit.Images.Find(p => p.Id == Model.PreviewImageId).SingleOrDefault());
 }
-<div class="card">
+<div class="card p-0">
     <div class="row g-0">
         <div class="col-md-4">
             <a asp-page="Post" asp-route-id="@Model.Id">
-                <img src="@previewImageDataUrl" class="bg-black" style="width:300px; height:210px;" alt="...">
+                @*<img src="@previewImageDataUrl" class="bg-black" style="width:300px; height:210px;" alt="...">*@
+                <img src="@previewImageDataUrl" class="w-100 bg-black rounded-start object-fit-cover" style="height:210px;" />
             </a>
         </div>
         <div class="col-md-8">
             <div class="card-body">
-                <a asp-page="Post" asp-route-id="@Model.Id" class="text-decoration-none text-dark">
-                    <h5 class="card-title text-primary">@Model.Title</h5>
-                    <p class="card-text">@Html.Raw(Model.Content.ShortenString(35))</p>
-                </a>
-                <a asp-page="/Profile" asp-route-id="@Model.AuthorId" class="text-decoration-none text-dark fw-bold">
-                    @await Component.InvokeAsync("ProfileImage", new { profileUser = Model.Author, widthAndHeight = 30 })
-                    <span style="font-size:.85rem;">@Model.Author.UserName</span>
-                </a>
-                <p class="card-text"><small class="text-muted">Last updated: @span</small></p>
+                <div class="row">
+                    <a asp-page="Post" asp-route-id="@Model.Id" class="text-decoration-none text-dark">
+                        <h5 class="card-title text-primary">@Model.Title</h5>
+                        <p class="card-text">@Html.Raw(Model.Content.ShortenString(15))</p>
+                    </a>
+                </div>
+                <div class="row mt-2">
+                    <a asp-page="/Profile" asp-route-id="@Model.AuthorId" class="text-decoration-none text-dark fw-bold">
+                        @await Component.InvokeAsync("ProfileImage", new { profileUser = Model.Author, widthAndHeight = 30 })
+                        <span style="font-size:.85rem;">@Model.Author.UserName</span>
+                    </a>
+                    <p class="card-text"><small class="text-muted">Last updated: @span</small></p>
+                </div>
             </div>
         </div>
     </div>

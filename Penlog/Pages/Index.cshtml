@@ -3,7 +3,7 @@
 @using Penlog.Entities;
 @using Penlog.Utilities;
 @using Penlog.ExtensionMethods;
-@inject UserManager<AppUser> userManger
+@inject UserManager<AppUser> userManager
 @inject Penlog.Data.Repository.IRepository.IUnitOfWork unit
 @model IndexModel
 @{
@@ -17,80 +17,132 @@
     var secondAndThird = new List<Post>();
     secondAndThird.Add(Model.Posts[1]);
     secondAndThird.Add(Model.Posts[2]);
+
+    var isAuthenticated = User.Identity.IsAuthenticated;
+    var user = new AppUser();
+    if (isAuthenticated)
+    {
+        user = userManager.GetUserAsync(User).Result;
+    }
 }
 
-<div class="container">
-    <div class="row">
-        <h1 class="p-0">Penlog's Suggestions for You</h1>
-        <div class="col-5 p-1">
-            <a asp-page="Post" asp-route-id="@firstPost.Id" class="text-decoration-none">
-                <div class="card mw-100 h-100 p-0 m-0">
-                    <img src="@firstPostPreviewImageDataUrl" class="card-img-top object-fit-cover" style="height:240px;">
-                    <div class="card-body">
-                        <h4 class="card-title text-primary">@firstPost.Title</h4>
-                        <p class="card-text text-dark">@Html.Raw(firstPost.Content.ShortenString(15))</p>
-                        <a asp-page="/Profile" asp-route-id="@firstPost.AuthorId" class="text-decoration-none text-dark fw-bold">
-                            @await Component.InvokeAsync("ProfileImage", new { profileUser = firstPost.Author, widthAndHeight = 30 })
-                            <span style="font-size:.85rem;">@firstPost.Author.UserName</span>
-                        </a>
-                        <p class="card-text"><small class="text-muted">Last updated: @firstPostSpan</small></p>
-                    </div>
+<div class="row">
+    <h1 class="p-0">Penlog's Suggestions for You</h1>
+    <div class="col-5 p-1">
+        <a asp-page="Post" asp-route-id="@firstPost.Id" class="text-decoration-none">
+            <div class="card mw-100 h-100 p-0 m-0">
+                <img src="@firstPostPreviewImageDataUrl" class="card-img-top object-fit-cover" style="height:240px;">
+                <div class="card-body">
+                    <h4 class="card-title text-primary">@firstPost.Title</h4>
+                    <p class="card-text text-dark">@Html.Raw(firstPost.Content.ShortenString(25))</p>
+                    <a asp-page="/Profile" asp-route-id="@firstPost.AuthorId" class="text-decoration-none text-dark fw-bold">
+                        @await Component.InvokeAsync("ProfileImage", new { profileUser = firstPost.Author, widthAndHeight = 30 })
+                        <span style="font-size:.85rem;">@firstPost.Author.UserName</span>
+                    </a>
+                    <p class="card-text"><small class="text-muted">Last updated: @firstPostSpan</small></p>
                 </div>
-            </a>
-        </div>
-        <div class="col-5">
-            @foreach (var item in secondAndThird)
-            {
-                var itemPreviewImageDataUrl = ImageUtilities.GeneratePreviewImageDataUrl(unit.Images.Find(p => p.Id == item.PreviewImageId).SingleOrDefault());
-                var itemDate = (item.LastUpdated == null) ? item.CreatedDate : item.LastUpdated;
-                var itemSpan = DateTimeUtilities.Span(itemDate.Value);
+            </div>
+        </a>
+    </div>
+    <div class="col-5">
+        @foreach (var item in secondAndThird)
+        {
+            var itemPreviewImageDataUrl = ImageUtilities.GeneratePreviewImageDataUrl(unit.Images.Find(p => p.Id == item.PreviewImageId).SingleOrDefault());
+            var itemDate = (item.LastUpdated == null) ? item.CreatedDate : item.LastUpdated;
+            var itemSpan = DateTimeUtilities.Span(itemDate.Value);
 
-                <div class="row h-50 p-1">
-                    <div class="card p-0">
-                        <div class="row g-0 h-100">
-                            <div class="col-md-4">
-                                <a asp-page="Post" asp-route-id="@item.Id" class="text-decoration-none">
-                                    <img src="@itemPreviewImageDataUrl" class="h-100 w-100 bg-black rounded-start object-fit-cover"/>
-                                </a>
-                            </div>
-                            <div class="col-md-8 my-auto">
-                                <a asp-page="Post" asp-route-id="@item.Id" class="text-decoration-none">
-                                    <div class="card-body">
-                                        <h4 class="card-title">@item.Title</h4>
-                                        <p class="card-text text-dark">@Html.Raw(item.Content.ShortenString(20))</p>
-                                        <a asp-page="/Profile" asp-route-id="@item.AuthorId" class="text-decoration-none text-dark fw-bold">
-                                            @await Component.InvokeAsync("ProfileImage", new { profileUser = item.Author, widthAndHeight = 30 })
-                                            <span style="font-size:.85rem;">@item.Author.UserName</span>
-                                        </a>
-                                        <p class="card-text"><small class="text-muted">Last updated: @itemSpan</small></p>
-                                    </div>
-                                </a>
-                            </div>
+            <div class="row h-50 p-1">
+                <div class="card p-0">
+                    <div class="row g-0 h-100">
+                        <div class="col-md-4">
+                            <a asp-page="Post" asp-route-id="@item.Id" class="text-decoration-none">
+                                <img src="@itemPreviewImageDataUrl" class="h-100 w-100 bg-black rounded-start object-fit-cover" />
+                            </a>
+                        </div>
+                        <div class="col-md-8 my-auto">
+                            <a asp-page="Post" asp-route-id="@item.Id" class="text-decoration-none">
+                                <div class="card-body">
+                                    <h4 class="card-title">@item.Title</h4>
+                                    <p class="card-text text-dark">@Html.Raw(item.Content.ShortenString(20))</p>
+                                    <a asp-page="/Profile" asp-route-id="@item.AuthorId" class="text-decoration-none text-dark fw-bold">
+                                        @await Component.InvokeAsync("ProfileImage", new { profileUser = item.Author, widthAndHeight = 30 })
+                                        <span style="font-size:.85rem;">@item.Author.UserName</span>
+                                    </a>
+                                    <p class="card-text"><small class="text-muted">Last updated: @itemSpan</small></p>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>
-            }
-        </div>
-        <div class="col-2 p-1">
-            <div class="card w-100 h-100" style="height:445px;">
-                <div class="card-body">
-                    <h5 class="card-title">Something in your mind?</h5>
-                    <button asp-page="CreatePost" class="btn btn-primary">Write it!</button>
-                </div>
-                <img src="/images/istockphoto-1340986732-170667a.webp" class="card-img-bottom" alt="...">
             </div>
+        }
+    </div>
+    <div class="col-2 p-1">
+        <div class="card w-100 h-100" style="height:445px;">
+            <div class="card-body">
+                <h5 class="card-title">Something in your mind?</h5>
+                @if (isAuthenticated)
+                {
+                    <a asp-page="CreatePost" class="btn btn-primary">Write it!</a>
+                }
+                else
+                {
+                    <a asp-area="Identity" asp-page="Account/Login" class="btn btn-primary">Write it!</a>
+                }
+            </div>
+            <img src="/images/istockphoto-1340986732-170667a.webp" class="card-img-bottom" alt="...">
         </div>
     </div>
 </div>
-@*<div class="row">
-        <div class="col-9">
-            @foreach (var post in Model.Posts)
+
+<hr />
+
+<div class="row mx-auto mt-5">
+    <div class="col-1"></div>
+    <div class="col-10">
+        <div class="row">
+            <div class="col-8">
+                @foreach (var post in Model.Posts.Skip(3))
+                {
+                    <div class="row mx-auto mb-3 w-100">
+                        @await Component.InvokeAsync("Post", new { postId = post.Id })
+                    </div>
+                }
+            </div>
+            @if (isAuthenticated)
             {
-                <div class="row mb-3">
-                    @await Component.InvokeAsync("Post", new { postId = post.Id })
+                List<AppUser> followings = new();
+
+                var follows = unit.Follows.Find(f => f.FollowerId == user.Id);
+                foreach (var f in follows)
+                    followings.Add(userManager.FindByIdAsync(f.FollowingId).Result);
+
+                List<Post> posts = new();
+                foreach (var f in followings)
+                    posts.AddRange(f.Posts);
+
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-header h5">
+                            From the People You Follow
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            @foreach (var p in posts.OrderBy(p => p.LastUpdated))
+                            {
+                                var date = p.LastUpdated == null ? p.CreatedDate : p.LastUpdated;
+                                var span = DateTimeUtilities.Span(date.Value);
+                                <li class="list-group-item">
+                                    <h5><a class="h5 text-decoration-none text-primary" asp-page="Post" asp-route-id="@p.Id">@p.Title</a></h5>
+                                    @await Component.InvokeAsync("ProfileImage", new { profileUser = p.Author, widthAndHeight = 30 })
+                                    <a class="text-decoration-none text-dark fw-bold" asp-page="Profile" asp-route-id="@p.AuthorId">@p.Author.UserName</a>
+                                    <p>@(span)</p>
+                                </li>
+                            }
+                        </ul>
+                    </div>
                 </div>
             }
         </div>
-        <div class="col-3">
-        </div>
-    </div>*@
+    </div>
+    <div class="col-1"></div>
+</div>
