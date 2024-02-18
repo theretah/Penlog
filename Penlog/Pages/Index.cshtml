@@ -135,7 +135,7 @@
                                     <h5><a class="h5 text-decoration-none text-primary" asp-page="Post" asp-route-id="@p.Id">@p.Title</a></h5>
                                     @await Component.InvokeAsync("ProfileImage", new { profileUser = p.Author, widthAndHeight = 30 })
                                     <a class="text-decoration-none text-dark fw-bold" asp-page="Profile" asp-route-id="@p.AuthorId">@p.Author.UserName</a>
-                                    <p>@(span)</p>
+                                    <p class="card-text"><small class="text-muted">@span</small></p>
                                 </li>
                             }
                         </ul>
