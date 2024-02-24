@@ -36,13 +36,22 @@
             {
                 string commentId = "comment" + commentNumber;
 
-                <p class="d-inline-flex gap-1">
+                <p class="d-inline-flex">
                     <button class="btn btn-primary p-1" type="button"
                             data-bs-toggle="collapse" data-bs-target="#@commentId" aria-expanded="false"
                             aria-controls="replyCollapse">
                         Reply
                     </button>
                 </p>
+                @if (user == comment.Author)
+                {
+                    <form method="post" class="d-inline">
+                        <button class="btn btn-danger p-1" asp-page-handler="DeleteComment" asp-route-postId="@postId"
+                                asp-route-commentId="@comment.Id">
+                            Delete
+                        </button>
+                    </form>
+                }
                 <div class="collapse" id="@commentId">
                     <div class="card card-body">
                         <form method="post" asp-page-handler="ReplyComment" asp-route-postId="@postId"
@@ -59,15 +68,7 @@
                     </div>
                 </div>
                 commentNumber++;
-                @if (user == comment.Author)
-                {
-                    <form method="post">
-                        <button class="btn btn-danger p-1" asp-page-handler="DeleteComment" asp-route-postId="@postId"
-                                asp-route-commentId="@comment.Id">
-                            Delete
-                        </button>
-                    </form>
-                }
+
             }
             @{
                 int replyNumber = 1;
